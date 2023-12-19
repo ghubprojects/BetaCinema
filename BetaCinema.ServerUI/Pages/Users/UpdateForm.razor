@@ -1,0 +1,6 @@
+﻿@page "/user/edit/{userId}"
+@inherits UpdateFormBase
+
+<h3 class="mb-8">Update User Info</h3>
+
+<Form ButtonText="Update" User="user" OnValidSubmit="@EditUser" />

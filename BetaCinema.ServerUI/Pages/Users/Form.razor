@@ -1,0 +1,42 @@
+﻿@inherits FormBase
+
+<EditForm Model="@User" OnValidSubmit="@OnValidSubmit">
+    <DataAnnotationsValidator />
+    <MudGrid xs="12">
+        <MudContainer MaxWidth="MaxWidth.Medium">
+            <MudCard Class="p-4">
+                <MudCardContent Class="p-0 mb-4 d-flex flex-column gap-2">
+                    <MudTextField @bind-Value="@User.Fullname"
+                                  Label="FirstName"
+                                  Variant="Variant.Outlined"
+                                  Margin="Margin.Dense"
+                                  For="@(()=>User.Fullname)">
+                    </MudTextField>
+                    <MudTextField @bind-Value="@User.Email"
+                                  Label="Email"
+                                  Variant="Variant.Outlined"
+                                  Margin="Margin.Dense">
+                    </MudTextField>
+                    <MudTextField @bind-Value="@User.Password"
+                                  Label="Password"
+                                  Variant="Variant.Outlined"
+                                  Margin="Margin.Dense">
+                    </MudTextField>
+                    <MudTextField @bind-Value="@User.Role"
+                                  Label="Role"
+                                  Variant="Variant.Outlined"
+                                  Margin="Margin.Dense">
+                    </MudTextField>
+                </MudCardContent>
+                <MudCardActions Class="p-0">
+                    <MudButton ButtonType="ButtonType.Submit"
+                               Variant="Variant.Filled"
+                               Color="Color.Primary"
+                               Class="ml-auto">
+                        @ButtonText
+                    </MudButton>
+                </MudCardActions>
+            </MudCard>
+        </MudContainer>
+    </MudGrid>
+</EditForm>

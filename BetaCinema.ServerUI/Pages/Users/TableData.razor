@@ -1,0 +1,57 @@
+﻿@page "/user"
+@inherits TableDataBase
+
+<MudPaper Elevation="0">
+    <MudPaper Elevation="0" Class="d-flex gap-4 justify-space-between align-items-center">
+        <h3 class="mb-0">Users</h3>
+        <div class="form-group">
+            <MudButton Size="@Size.Medium"
+                       Variant="@Variant.Filled"
+                       Color="@Color.Primary"
+                       OnClick="@NavigateToCreateForm">
+                <MudIcon Size="Size.Medium" Icon="@Icons.Material.Filled.Add" Class="mr-1" />
+                Create New
+            </MudButton>
+        </div>
+    </MudPaper>
+</MudPaper>
+<br>
+
+@if (users == null)
+{
+    <text>Loading...</text>
+}
+else if (users.Count == 0)
+{
+    <text>No Records Found.</text>
+}
+else
+{
+    <MudDataGrid Items="@users" Elevation="0" Filterable="false" SortMode="@SortMode.None" Groupable="false">
+        <Columns>
+            <PropertyColumn Property="x => x.Id" />
+            <PropertyColumn Property="x => x.Fullname" />
+            <PropertyColumn Property="x => x.Email" />
+            <PropertyColumn Property="x => x.Password" />
+            <PropertyColumn Property="x => x.Role" />
+            <TemplateColumn CellClass="justify-end">
+                <CellTemplate>
+                    <MudStack Row>
+                     <MudButton Size="@Size.Small"
+                                Variant="@Variant.Filled"
+                                Color="@Color.Primary"
+                                OnClick="@(()=>Navigation.NavigateTo($"user/edit/{context.Item.Id}"))">
+                         Edit
+                     </MudButton>
+                     <MudButton Size="@Size.Small"
+                                Variant="@Variant.Filled"
+                                Color="@Color.Error"
+                                OnClick="@(() => Delete(context.Item.Id))">
+                         Delete
+                     </MudButton>
+                 </MudStack>
+             </CellTemplate>
+         </TemplateColumn>
+     </Columns>
+ </MudDataGrid>
+}
