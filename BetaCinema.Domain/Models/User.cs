@@ -1,14 +1,10 @@
-﻿using BetaCinema.Domain.Contracts;
+﻿using Microsoft.AspNetCore.Identity;
 
 namespace BetaCinema.Domain.Models;
 
-public partial class User : IEntity
+public partial class User : IdentityUser
 {
-    public Guid Id { get; set; }
-
     public string Fullname { get; set; } = null!;
-
-    public string Email { get; set; } = null!;
 
     public string Password { get; set; } = null!;
 
@@ -27,12 +23,4 @@ public partial class User : IEntity
     public string? ModifiedBy { get; set; }
 
     public virtual ICollection<Reservation> Reservations { get; set; } = new List<Reservation>();
-
-    public bool GetDeleteFlag() => DeleteFlag;
-
-    public Guid GetId() => Id;
-
-    public void SetDeleteFlag(bool deleteFlag) => DeleteFlag = deleteFlag;
-
-    public void SetId(Guid id) => Id = id;
 }

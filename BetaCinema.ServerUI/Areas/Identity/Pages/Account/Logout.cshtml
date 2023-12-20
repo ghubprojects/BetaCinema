@@ -1,0 +1,17 @@
+﻿@page "/logout"
+@using BetaCinema.Domain.Models;
+@using Microsoft.AspNetCore.Identity;
+@attribute [IgnoreAntiforgeryToken]
+@inject SignInManager<User> SignInManager
+
+@functions {
+    public async Task<IActionResult> OnGet()
+    {
+        if (SignInManager.IsSignedIn(User))
+        {
+            await SignInManager.SignOutAsync();
+        }
+
+        return Redirect("~/");
+    }
+}

@@ -29,7 +29,7 @@ namespace BetaCinema.ServerUI.Pages.Users
             Navigation.NavigateTo("user/create");
         }
 
-        protected async Task Delete(Guid userId)
+        protected async Task Delete(string userId)
         {
             var user = users.First(x => x.Id == userId);
             if (await js.InvokeAsync<bool>("confirm", $"Do you want to delete User <{user.Fullname}>?"))

@@ -21,7 +21,7 @@ namespace BetaCinema.Application.Features.Users.Commands
 
         public async Task Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
-            request.Data.Id = Guid.NewGuid();
+            request.Data.Id = Guid.NewGuid().ToString();
             await _unitOfWork.Repository<User>().AddAsync(request.Data);
         }
     }

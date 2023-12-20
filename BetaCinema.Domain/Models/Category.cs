@@ -1,12 +1,10 @@
-﻿using BetaCinema.Domain.Contracts;
+﻿namespace BetaCinema.Domain.Models;
 
-namespace BetaCinema.Domain.Models;
-
-public partial class Category : IEntity
+public partial class Category
 {
-    public Guid Id { get; set; }
+    public string Id { get; set; } = null!;
 
-    public string Name { get; set; } = null!;
+    public string CategoryName { get; set; } = null!;
 
     public bool DeleteFlag { get; set; }
 
@@ -19,12 +17,4 @@ public partial class Category : IEntity
     public string? ModifiedBy { get; set; }
 
     public virtual ICollection<MovieCategory> MovieCategories { get; set; } = new List<MovieCategory>();
-
-    public bool GetDeleteFlag() => DeleteFlag;
-
-    public Guid GetId() => Id;
-
-    public void SetDeleteFlag(bool deleteFlag) => DeleteFlag = deleteFlag;
-
-    public void SetId(Guid id) => Id = id;
 }

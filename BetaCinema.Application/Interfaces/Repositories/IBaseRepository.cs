@@ -4,7 +4,7 @@
     {
         IQueryable<T> Entities { get; }
 
-        Task<T> GetByIdAsync(Guid id);
+        Task<T> GetByIdAsync(string id);
 
         Task<List<T>> GetAllAsync();
 

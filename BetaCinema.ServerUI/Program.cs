@@ -10,7 +10,7 @@ builder.Services.AddServerSideBlazor();
 
 builder.Services.AddMudServices();
 
-builder.Services.AddInfrastructure().AddApplication();
+builder.Services.AddInfrastructure(builder.Configuration).AddApplication();
 
 var app = builder.Build();
 
@@ -27,6 +27,9 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");

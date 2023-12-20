@@ -6,9 +6,9 @@ namespace BetaCinema.Infrastructure.Repositories
 {
     public class BaseRepository<T> : IBaseRepository<T> where T : class
     {
-        private readonly ApplicationDbContext _dbContext;
+        private readonly AppDbContext _dbContext;
 
-        public BaseRepository(ApplicationDbContext dbContext)
+        public BaseRepository(AppDbContext dbContext)
         {
             _dbContext = dbContext;
         }
@@ -31,7 +31,7 @@ namespace BetaCinema.Infrastructure.Repositories
             return entities;
         }
 
-        public async Task<T> GetByIdAsync(Guid id)
+        public async Task<T> GetByIdAsync(string id)
         {
             return await _dbContext.Set<T>().FindAsync(id);
         }

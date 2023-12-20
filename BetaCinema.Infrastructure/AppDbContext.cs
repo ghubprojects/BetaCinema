@@ -1,11 +1,19 @@
 ﻿using BetaCinema.Domain.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace BetaCinema.Infrastructure
 {
-    public partial class ApplicationDbContext : DbContext
+    public partial class AppDbContext : IdentityDbContext<User>
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
+        public AppDbContext()
+        {
+        }
+
+        public AppDbContext(DbContextOptions<AppDbContext> options)
+            : base(options)
+        {
+        }
 
         public virtual DbSet<Category> Categories { get; set; }
 
@@ -28,10 +36,24 @@ namespace BetaCinema.Infrastructure
         public virtual DbSet<User> Users { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseNpgsql("Server=localhost;Port=5432;Database=beta_cinema;Uid=postgres;Pwd=MyAl1705!!!;");
+            => optionsBuilder.UseNpgsql("Server=localhost;Port=5432;Database=beta_cinema;Uid=postgres;Pwd=MyAl1705!!!;");
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
+            // Bỏ tiền tố AspNet của các bảng: mặc định các bảng trong IdentityDbContext có
+            // tên với tiền tố AspNet như: AspNetUserRoles, AspNetUser ...
+            // Đoạn mã sau chạy khi khởi tạo DbContext, tạo database sẽ loại bỏ tiền tố đó
+            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+            {
+                var tableName = entityType.GetTableName();
+                if (tableName.StartsWith("AspNet"))
+                {
+                    entityType.SetTableName(tableName.Substring(6));
+                }
+            }
+
             modelBuilder.Entity<Category>(entity =>
             {
                 entity.HasKey(e => e.Id).HasName("category_pkey");
@@ -41,6 +63,9 @@ namespace BetaCinema.Infrastructure
                 entity.Property(e => e.Id)
                     .ValueGeneratedNever()
                     .HasColumnName("id");
+                entity.Property(e => e.CategoryName)
+                    .HasMaxLength(255)
+                    .HasColumnName("category_name");
                 entity.Property(e => e.CreatedBy)
                     .HasMaxLength(100)
                     .HasDefaultValueSql("NULL::character varying")
@@ -56,9 +81,6 @@ namespace BetaCinema.Infrastructure
                 entity.Property(e => e.ModifiedDate)
                     .HasColumnType("timestamp without time zone")
                     .HasColumnName("modified_date");
-                entity.Property(e => e.Name)
-                    .HasMaxLength(255)
-                    .HasColumnName("name");
             });
 
             modelBuilder.Entity<Cinema>(entity =>
@@ -70,6 +92,12 @@ namespace BetaCinema.Infrastructure
                 entity.Property(e => e.Id)
                     .ValueGeneratedNever()
                     .HasColumnName("id");
+                entity.Property(e => e.CinemaLocation)
+                    .HasMaxLength(255)
+                    .HasColumnName("cinema_location");
+                entity.Property(e => e.CinemaName)
+                    .HasMaxLength(50)
+                    .HasColumnName("cinema_name");
                 entity.Property(e => e.CreatedBy)
                     .HasMaxLength(100)
                     .HasDefaultValueSql("NULL::character varying")
@@ -78,9 +106,6 @@ namespace BetaCinema.Infrastructure
                     .HasColumnType("timestamp without time zone")
                     .HasColumnName("created_date");
                 entity.Property(e => e.DeleteFlag).HasColumnName("delete_flag");
-                entity.Property(e => e.Location)
-                    .HasMaxLength(255)
-                    .HasColumnName("location");
                 entity.Property(e => e.ModifiedBy)
                     .HasMaxLength(100)
                     .HasDefaultValueSql("NULL::character varying")
@@ -88,9 +113,6 @@ namespace BetaCinema.Infrastructure
                 entity.Property(e => e.ModifiedDate)
                     .HasColumnType("timestamp without time zone")
                     .HasColumnName("modified_date");
-                entity.Property(e => e.Name)
-                    .HasMaxLength(50)
-                    .HasColumnName("name");
             });
 
             modelBuilder.Entity<Movie>(entity =>
@@ -127,9 +149,9 @@ namespace BetaCinema.Infrastructure
                 entity.Property(e => e.ModifiedDate)
                     .HasColumnType("timestamp without time zone")
                     .HasColumnName("modified_date");
-                entity.Property(e => e.Name)
+                entity.Property(e => e.MovieName)
                     .HasMaxLength(255)
-                    .HasColumnName("name");
+                    .HasColumnName("movie_name");
                 entity.Property(e => e.Poster).HasColumnName("poster");
                 entity.Property(e => e.ReleaseDate).HasColumnName("release_date");
             });
@@ -162,12 +184,12 @@ namespace BetaCinema.Infrastructure
                 entity.Property(e => e.MovieId).HasColumnName("movie_id");
 
                 entity.HasOne(d => d.Category).WithMany(p => p.MovieCategories)
-                    .HasForeignKey(d => d.CategoryId)
+                    .HasForeignKey(d => d.Id)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_movie_category_category_id");
 
                 entity.HasOne(d => d.Movie).WithMany(p => p.MovieCategories)
-                    .HasForeignKey(d => d.MovieId)
+                    .HasForeignKey(d => d.Id)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_movie_category_movie_id");
             });
@@ -203,7 +225,7 @@ namespace BetaCinema.Infrastructure
                 entity.Property(e => e.TotalPrice).HasColumnName("total_price");
 
                 entity.HasOne(d => d.Reservation).WithMany(p => p.Payments)
-                    .HasForeignKey(d => d.ReservationId)
+                    .HasForeignKey(d => d.Id)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_payment_reservation_id");
             });
@@ -236,12 +258,12 @@ namespace BetaCinema.Infrastructure
                 entity.Property(e => e.UserId).HasColumnName("user_id");
 
                 entity.HasOne(d => d.Showtime).WithMany(p => p.Reservations)
-                    .HasForeignKey(d => d.ShowtimeId)
+                    .HasForeignKey(d => d.Id)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_reservation_showtime_id");
 
                 entity.HasOne(d => d.User).WithMany(p => p.Reservations)
-                    .HasForeignKey(d => d.UserId)
+                    .HasForeignKey(d => d.Id)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_reservation_user_id");
             });
@@ -274,12 +296,12 @@ namespace BetaCinema.Infrastructure
                 entity.Property(e => e.SeatId).HasColumnName("seat_id");
 
                 entity.HasOne(d => d.Reservation).WithMany(p => p.ReservationItems)
-                    .HasForeignKey(d => d.ReservationId)
+                    .HasForeignKey(d => d.Id)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_reservation_item_reservation_id");
 
                 entity.HasOne(d => d.Seat).WithMany(p => p.ReservationItems)
-                    .HasForeignKey(d => d.SeatId)
+                    .HasForeignKey(d => d.Id)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_reservation_item_seat_id");
             });
@@ -340,18 +362,18 @@ namespace BetaCinema.Infrastructure
                     .HasColumnType("timestamp without time zone")
                     .HasColumnName("modified_date");
                 entity.Property(e => e.MovieId).HasColumnName("movie_id");
-                entity.Property(e => e.Price).HasColumnName("price");
                 entity.Property(e => e.StartTime)
                     .HasColumnType("timestamp without time zone")
                     .HasColumnName("start_time");
+                entity.Property(e => e.TicketPrice).HasColumnName("ticket_price");
 
                 entity.HasOne(d => d.Cinema).WithMany(p => p.Showtimes)
-                    .HasForeignKey(d => d.CinemaId)
+                    .HasForeignKey(d => d.Id)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_showtime_cinema_id");
 
                 entity.HasOne(d => d.Movie).WithMany(p => p.Showtimes)
-                    .HasForeignKey(d => d.MovieId)
+                    .HasForeignKey(d => d.Id)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_showtime_movie_id");
             });
@@ -371,6 +393,7 @@ namespace BetaCinema.Infrastructure
                     .HasDefaultValueSql("NULL::character varying")
                     .HasColumnName("created_by");
                 entity.Property(e => e.CreatedDate)
+                    .HasDefaultValueSql("now()")
                     .HasColumnType("timestamp without time zone")
                     .HasColumnName("created_date");
                 entity.Property(e => e.DeleteFlag).HasColumnName("delete_flag");
@@ -385,6 +408,7 @@ namespace BetaCinema.Infrastructure
                     .HasDefaultValueSql("NULL::character varying")
                     .HasColumnName("modified_by");
                 entity.Property(e => e.ModifiedDate)
+                    .HasDefaultValueSql("now()")
                     .HasColumnType("timestamp without time zone")
                     .HasColumnName("modified_date");
                 entity.Property(e => e.Password)

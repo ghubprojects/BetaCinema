@@ -1,12 +1,10 @@
-﻿using BetaCinema.Domain.Contracts;
+﻿namespace BetaCinema.Domain.Models;
 
-namespace BetaCinema.Domain.Models;
-
-public partial class Movie : IEntity
+public partial class Movie
 {
-    public Guid Id { get; set; }
+    public string Id { get; set; } = null!;
 
-    public string Name { get; set; } = null!;
+    public string MovieName { get; set; } = null!;
 
     public string? Poster { get; set; }
 
@@ -33,12 +31,4 @@ public partial class Movie : IEntity
     public virtual ICollection<MovieCategory> MovieCategories { get; set; } = new List<MovieCategory>();
 
     public virtual ICollection<Showtime> Showtimes { get; set; } = new List<Showtime>();
-
-    public bool GetDeleteFlag() => DeleteFlag;
-
-    public Guid GetId() => Id;
-
-    public void SetDeleteFlag(bool deleteFlag) => DeleteFlag = deleteFlag;
-
-    public void SetId(Guid id) => Id = id;
 }

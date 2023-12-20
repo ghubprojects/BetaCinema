@@ -5,10 +5,10 @@ namespace BetaCinema.Infrastructure.Repositories
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private readonly ApplicationDbContext _dbContext;
+        private readonly AppDbContext _dbContext;
         private Hashtable _repositories;
 
-        public UnitOfWork(ApplicationDbContext dbContext)
+        public UnitOfWork(AppDbContext dbContext)
         {
             _dbContext = dbContext;
         }

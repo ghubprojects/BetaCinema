@@ -1,10 +1,8 @@
-﻿using BetaCinema.Domain.Contracts;
+﻿namespace BetaCinema.Domain.Models;
 
-namespace BetaCinema.Domain.Models;
-
-public partial class Reservation : IEntity
+public partial class Reservation
 {
-    public Guid Id { get; set; }
+    public string Id { get; set; } = null!;
 
     public Guid ShowtimeId { get; set; }
 
@@ -27,12 +25,4 @@ public partial class Reservation : IEntity
     public virtual Showtime Showtime { get; set; } = null!;
 
     public virtual User User { get; set; } = null!;
-
-    public bool GetDeleteFlag() => DeleteFlag;
-
-    public Guid GetId() => Id;
-
-    public void SetDeleteFlag(bool deleteFlag) => DeleteFlag = deleteFlag;
-
-    public void SetId(Guid id) => Id = id;
 }

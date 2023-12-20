@@ -24,7 +24,7 @@ namespace BetaCinema.ServerUI.Pages.Users
 
         protected async override Task OnParametersSetAsync()
         {
-            user = await Mediator.Send(new GetUserByIdQuery() { Id = Guid.Parse(userId) });
+            user = await Mediator.Send(new GetUserByIdQuery() { Id = userId });
         }
 
         protected async Task EditUser()

@@ -6,7 +6,7 @@ namespace BetaCinema.Application.Features.Users.Commands
 {
     public class GetUserByIdQuery : IRequest<User>
     {
-        public Guid Id { get; set; }
+        public string Id { get; set; } = null!;
     }
 
     public class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery, User>
