@@ -1,7 +1,7 @@
-﻿using BetaCinema.Application.Features.Users.Commands;
+﻿using BetaCinema.Domain.Enums;
 using BetaCinema.Domain.Models;
-using MediatR;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.JSInterop;
 using MudBlazor;
 
@@ -15,23 +15,39 @@ namespace BetaCinema.ServerUI.Pages.Users
 
         [Inject] protected ISnackbar SnackBar { get; set; }
 
-        [Inject] private IMediator Mediator { get; set; }
+        [Inject] protected SignInManager<User> SignInManager { get; set; }
 
-        protected User user = new();
+        [Inject] protected UserManager<User> UserManager { get; set; }
+
+        protected User userData = new();
 
         protected async Task CreateUser()
         {
-            await Mediator.Send(new CreateUserCommand() { Data = user });
-
-            SnackBar.Configuration.PositionClass = Defaults.Classes.Position.BottomRight;
-            SnackBar.Add("Add successfully", Severity.Success, config =>
+            var user = new User
             {
-                config.VisibleStateDuration = 3000;
-                config.HideTransitionDuration = 300;
-                config.ShowTransitionDuration = 300;
-                config.SnackbarVariant = Variant.Filled;
-            });
-            Navigation.NavigateTo("user");
+                UserName = userData.Email,
+                Email = userData.Email,
+                Fullname = userData.Email,
+                Role = userData.Role.ToString() ?? UserRole.Customer.ToString(),
+                DeleteFlag = false,
+                Password = userData.Password,
+            };
+
+            var addUserResult = await UserManager.CreateAsync(user, user.Password);
+            var addUserRoleResult = await UserManager.AddToRoleAsync(user, user.Role.ToString());
+
+            if (addUserResult.Succeeded && addUserRoleResult.Succeeded)
+            {
+                SnackBar.Configuration.PositionClass = Defaults.Classes.Position.BottomRight;
+                SnackBar.Add("Add new user successfully", Severity.Success, config =>
+                {
+                    config.VisibleStateDuration = 3000;
+                    config.HideTransitionDuration = 300;
+                    config.ShowTransitionDuration = 300;
+                    config.SnackbarVariant = Variant.Filled;
+                });
+                Navigation.NavigateTo("users");
+            }
         }
     }
 }

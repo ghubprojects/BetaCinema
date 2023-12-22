@@ -1,4 +1,5 @@
-﻿using BetaCinema.Domain.Models;
+﻿using BetaCinema.Domain.Enums;
+using BetaCinema.Domain.Models;
 using Microsoft.AspNetCore.Components;
 
 namespace BetaCinema.ServerUI.Pages.Users
@@ -13,5 +14,10 @@ namespace BetaCinema.ServerUI.Pages.Users
 
         [Parameter]
         public EventCallback OnValidSubmit { get; set; }
+
+        [Parameter]
+        public FormMode Mode { get; set; }
+
+        protected bool AllowChangeRole { get => Mode.Equals(FormMode.Create); }
     }
 }

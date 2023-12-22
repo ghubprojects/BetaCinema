@@ -1,9 +1,9 @@
-﻿@page "/user"
+﻿@page "/users"
 @inherits TableDataBase
 
-<AuthorizeView>
+<AuthorizeView Roles="Admin">
     <NotAuthorized>
-        <MudText>You cannot access</MudText>
+        <MudText>You need to authorize</MudText>
     </NotAuthorized>
     <Authorized>
         <MudPaper Elevation="0">
@@ -36,7 +36,6 @@
             <MudDataGrid Items="@users" Elevation="0" Filterable="false" SortMode="@SortMode.None" Groupable="false">
                 <Columns>
                     <PropertyColumn Property="x => x.Id" />
-                    <PropertyColumn Property="x => x.Fullname" />
                     <PropertyColumn Property="x => x.Email" />
                     <PropertyColumn Property="x => x.Password" />
                     <PropertyColumn Property="x => x.Role" />
@@ -46,7 +45,7 @@
                              <MudButton Size="@Size.Small"
                                         Variant="@Variant.Filled"
                                         Color="@Color.Primary"
-                                        OnClick="@(()=>Navigation.NavigateTo($"user/edit/{TableContext.Item.Id}"))">
+                                        OnClick="@(()=>Navigation.NavigateTo($"users/edit/{TableContext.Item.Id}"))">
                                  Edit
                              </MudButton>
                              <MudButton Size="@Size.Small"

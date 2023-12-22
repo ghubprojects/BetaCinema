@@ -7,10 +7,18 @@
         <NavMenu />
     </div>
 
-    <main role="main" class="pb-3">
-        @Body
+    <main class="main">
+        <div class="top-row px-4 auth">
+            <AuthorizeMenu />
+            <a href="#" target="_blank">About</a>
+        </div>
+
+        <div class="content px-4">
+            @Body
+        </div>
     </main>
 </div>
+
 
 <MudThemeProvider />
 <MudSnackbarProvider />

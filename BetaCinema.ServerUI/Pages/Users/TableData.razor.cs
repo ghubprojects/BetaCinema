@@ -26,7 +26,7 @@ namespace BetaCinema.ServerUI.Pages.Users
 
         protected void NavigateToCreateForm()
         {
-            Navigation.NavigateTo("user/create");
+            Navigation.NavigateTo("users/create");
         }
 
         protected async Task Delete(string userId)

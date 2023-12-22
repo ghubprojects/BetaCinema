@@ -1,6 +1,7 @@
-﻿@page "/user/edit/{userId}"
+﻿@page "/users/edit/{userId}"
+@using BetaCinema.Domain.Enums;
 @inherits UpdateFormBase
 
 <h3 class="mb-8">Update User Info</h3>
 
-<Form ButtonText="Update" User="user" OnValidSubmit="@EditUser" />
+<Form Mode="FormMode.Update" ButtonText="Update" User="user" OnValidSubmit="@EditUser" />

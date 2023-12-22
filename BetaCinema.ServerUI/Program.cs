@@ -22,6 +22,13 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+// Seeding database
+using (var scope = app.Services.CreateScope())
+{
+    var initializer = scope.ServiceProvider.GetService<AppDbContextSeeder>();
+    await initializer.InitilizeAsync();
+};
+
 app.UseHttpsRedirection();
 
 app.UseStaticFiles();

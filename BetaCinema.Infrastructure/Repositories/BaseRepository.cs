@@ -1,5 +1,6 @@
 ﻿using BetaCinema.Application.Interfaces.Repositories;
 using BetaCinema.Domain.Contracts;
+using BetaCinema.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace BetaCinema.Infrastructure.Repositories
@@ -22,9 +23,14 @@ namespace BetaCinema.Infrastructure.Repositories
             // Check if T implements IEntity
             if (typeof(IEntity).IsAssignableFrom(typeof(T)))
             {
-                // Filter entities based on the DeleteFlag property
                 entities = entities
                     .Where(entity => !(bool)typeof(T).GetMethod("GetDeleteFlag")?.Invoke(entity, null))
+                    .ToList();
+            }
+            else if (typeof(User).IsAssignableFrom(typeof(T)))
+            {
+                entities = entities
+                    .Where(entity => !(bool)typeof(T).GetProperty("DeleteFlag").GetValue(entity))
                     .ToList();
             }
 
@@ -53,6 +59,11 @@ namespace BetaCinema.Infrastructure.Repositories
             if (entity is IEntity entityInstance)
             {
                 entityInstance.SetDeleteFlag(true);
+                _dbContext.Entry(entity).State = EntityState.Modified;
+            }
+            else if (entity is User user)
+            {
+                user.DeleteFlag = true;
                 _dbContext.Entry(entity).State = EntityState.Modified;
             }
 

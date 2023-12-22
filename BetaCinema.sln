@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BetaCinema.Domain", "BetaCi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BetaCinema.Infrastructure", "BetaCinema.Infrastructure\BetaCinema.Infrastructure.csproj", "{77145963-664E-4495-855A-94E6BA052CAB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BetaCinema.SQL", "BetaCinema.SQL\BetaCinema.SQL.csproj", "{C4184CC3-CD08-4ED3-BF3A-B0B18C49D9A4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BetaCinema.SQL", "BetaCinema.SQL\BetaCinema.SQL.csproj", "{C4184CC3-CD08-4ED3-BF3A-B0B18C49D9A4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

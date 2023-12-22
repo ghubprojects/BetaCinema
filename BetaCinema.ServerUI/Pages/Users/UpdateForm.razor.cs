@@ -39,7 +39,7 @@ namespace BetaCinema.ServerUI.Pages.Users
                 config.ShowTransitionDuration = 300;
                 config.SnackbarVariant = Variant.Filled;
             });
-            Navigation.NavigateTo("user");
+            Navigation.NavigateTo("users");
         }
     }
 }

@@ -7,5 +7,4 @@
         Update,
         Hide
     }
-
 }

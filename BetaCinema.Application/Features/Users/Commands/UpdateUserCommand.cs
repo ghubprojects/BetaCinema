@@ -20,6 +20,10 @@ namespace BetaCinema.Application.Features.Users.Commands
 
         public async Task Handle(UpdateUserCommand request, CancellationToken cancellationToken)
         {
+            request.Data.Fullname = request.Data.Email;
+            request.Data.UserName = request.Data.Email;
+            request.Data.NormalizedEmail = request.Data.Email.ToUpper();
+            request.Data.NormalizedUserName = request.Data.Email.ToUpper();
             await _unitOfWork.Repository<User>().UpdateAsync(request.Data);
         }
     }
