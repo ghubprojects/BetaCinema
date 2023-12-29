@@ -4,9 +4,9 @@ public partial class Reservation
 {
     public string Id { get; set; } = null!;
 
-    public Guid ShowtimeId { get; set; }
+    public string ShowtimeId { get; set; }
 
-    public Guid UserId { get; set; }
+    public string UserId { get; set; }
 
     public bool DeleteFlag { get; set; }
 

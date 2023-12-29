@@ -6,9 +6,13 @@
 
         Task<T> GetByIdAsync(string id);
 
+        Task<List<T>> GetAllByAdminAsync();
+
         Task<List<T>> GetAllAsync();
 
         Task AddAsync(T entity);
+
+        Task AddMultipleAsync(List<T> entities);
 
         Task UpdateAsync(T entity);
 

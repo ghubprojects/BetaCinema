@@ -62,7 +62,7 @@ namespace BetaCinema.ServerUI.Areas.Identity.Pages.Account
 
             if (result.Succeeded)
             {
-                return RedirectToPage("~/");
+                return LocalRedirect("~/");
             }
             else
             {
@@ -74,15 +74,15 @@ namespace BetaCinema.ServerUI.Areas.Identity.Pages.Account
                     {
                         UserName = externalMail,
                         Email = externalMail,
-                        Fullname = externalMail,
+                        FullName = externalMail,
+                        Password = externalMail,
                         Role = UserRole.Customer.ToString(),
                         DeleteFlag = false,
-                        Password = externalMail,
                     };
 
                     // User đăng nhập thành công vào hệ thống theo thông tin externalLoginInfo
                     var addUserResult = await _userManager.CreateAsync(newUser);
-                    var addUserRoleResult = await _userManager.AddToRoleAsync(newUser, newUser.Role.ToString());
+                    var addUserRoleResult = await _userManager.AddToRoleAsync(newUser, newUser.Role);
                     var identityResult = await _userManager.AddLoginAsync(newUser, externalLoginInfo);
 
                     if (addUserResult.Succeeded && addUserRoleResult.Succeeded && identityResult.Succeeded)

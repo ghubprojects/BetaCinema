@@ -10,7 +10,7 @@ public partial class Movie
 
     public int Duration { get; set; }
 
-    public DateOnly ReleaseDate { get; set; }
+    public DateTime? ReleaseDate { get; set; }
 
     public string? Director { get; set; }
 

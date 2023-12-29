@@ -7,6 +7,9 @@ namespace BetaCinema.Application
     {
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
+            // Cấu hình AutoMapper để ánh xạ các đối tượng.
+            services.AddAutoMapper(Assembly.GetExecutingAssembly());
+
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 
             return services;

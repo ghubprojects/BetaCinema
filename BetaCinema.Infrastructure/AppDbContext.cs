@@ -58,130 +58,106 @@ namespace BetaCinema.Infrastructure
             {
                 entity.HasKey(e => e.Id).HasName("category_pkey");
 
-                entity.ToTable("category");
+                entity.ToTable("Category");
 
                 entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("id");
+                    .ValueGeneratedNever();
                 entity.Property(e => e.CategoryName)
-                    .HasMaxLength(255)
-                    .HasColumnName("category_name");
+                    .HasMaxLength(255);
                 entity.Property(e => e.CreatedBy)
                     .HasMaxLength(100)
-                    .HasDefaultValueSql("NULL::character varying")
-                    .HasColumnName("created_by");
+                    .HasDefaultValueSql("NULL::character varying");
                 entity.Property(e => e.CreatedDate)
-                    .HasColumnType("timestamp without time zone")
-                    .HasColumnName("created_date");
-                entity.Property(e => e.DeleteFlag).HasColumnName("delete_flag");
+                    .HasColumnType("timestamp without time zone");
+                entity.Property(e => e.DeleteFlag);
                 entity.Property(e => e.ModifiedBy)
                     .HasMaxLength(100)
-                    .HasDefaultValueSql("NULL::character varying")
-                    .HasColumnName("modified_by");
+                    .HasDefaultValueSql("NULL::character varying");
                 entity.Property(e => e.ModifiedDate)
-                    .HasColumnType("timestamp without time zone")
-                    .HasColumnName("modified_date");
+                    .HasColumnType("timestamp without time zone");
             });
 
             modelBuilder.Entity<Cinema>(entity =>
             {
                 entity.HasKey(e => e.Id).HasName("cinema_pkey");
 
-                entity.ToTable("cinema");
+                entity.ToTable("Cinema");
 
                 entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("id");
+                    .ValueGeneratedNever();
                 entity.Property(e => e.CinemaLocation)
-                    .HasMaxLength(255)
-                    .HasColumnName("cinema_location");
+                    .HasMaxLength(255);
                 entity.Property(e => e.CinemaName)
-                    .HasMaxLength(50)
-                    .HasColumnName("cinema_name");
+                    .HasMaxLength(50);
                 entity.Property(e => e.CreatedBy)
                     .HasMaxLength(100)
-                    .HasDefaultValueSql("NULL::character varying")
-                    .HasColumnName("created_by");
+                    .HasDefaultValueSql("NULL::character varying");
                 entity.Property(e => e.CreatedDate)
-                    .HasColumnType("timestamp without time zone")
-                    .HasColumnName("created_date");
-                entity.Property(e => e.DeleteFlag).HasColumnName("delete_flag");
+                    .HasColumnType("timestamp without time zone");
+                entity.Property(e => e.DeleteFlag);
                 entity.Property(e => e.ModifiedBy)
                     .HasMaxLength(100)
-                    .HasDefaultValueSql("NULL::character varying")
-                    .HasColumnName("modified_by");
+                    .HasDefaultValueSql("NULL::character varying");
                 entity.Property(e => e.ModifiedDate)
-                    .HasColumnType("timestamp without time zone")
-                    .HasColumnName("modified_date");
+                    .HasColumnType("timestamp without time zone");
             });
 
             modelBuilder.Entity<Movie>(entity =>
             {
                 entity.HasKey(e => e.Id).HasName("movie_pkey");
 
-                entity.ToTable("movie");
+                entity.ToTable("Movie");
 
                 entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("id");
+                    .ValueGeneratedNever();
                 entity.Property(e => e.Actor)
                     .HasMaxLength(255)
-                    .HasDefaultValueSql("NULL::character varying")
-                    .HasColumnName("actor");
+                    .HasDefaultValueSql("NULL::character varying");
                 entity.Property(e => e.CreatedBy)
                     .HasMaxLength(100)
-                    .HasDefaultValueSql("NULL::character varying")
-                    .HasColumnName("created_by");
+                    .HasDefaultValueSql("NULL::character varying");
                 entity.Property(e => e.CreatedDate)
-                    .HasColumnType("timestamp without time zone")
-                    .HasColumnName("created_date");
-                entity.Property(e => e.DeleteFlag).HasColumnName("delete_flag");
-                entity.Property(e => e.Description).HasColumnName("description");
+                    .HasColumnType("timestamp without time zone");
+                entity.Property(e => e.DeleteFlag);
+                entity.Property(e => e.Description);
                 entity.Property(e => e.Director)
                     .HasMaxLength(255)
-                    .HasDefaultValueSql("NULL::character varying")
-                    .HasColumnName("director");
-                entity.Property(e => e.Duration).HasColumnName("duration");
+                    .HasDefaultValueSql("NULL::character varying");
+                entity.Property(e => e.Duration);
                 entity.Property(e => e.ModifiedBy)
                     .HasMaxLength(100)
-                    .HasDefaultValueSql("NULL::character varying")
-                    .HasColumnName("modified_by");
+                    .HasDefaultValueSql("NULL::character varying");
                 entity.Property(e => e.ModifiedDate)
-                    .HasColumnType("timestamp without time zone")
-                    .HasColumnName("modified_date");
+                    .HasColumnType("timestamp without time zone");
                 entity.Property(e => e.MovieName)
-                    .HasMaxLength(255)
-                    .HasColumnName("movie_name");
-                entity.Property(e => e.Poster).HasColumnName("poster");
-                entity.Property(e => e.ReleaseDate).HasColumnName("release_date");
+                    .HasMaxLength(255);
+                entity.Property(e => e.Poster);
+                entity.Property(e => e.ReleaseDate)
+                    .HasDefaultValueSql("now()")
+                    .HasColumnType("timestamp without time zone");
             });
 
             modelBuilder.Entity<MovieCategory>(entity =>
             {
                 entity.HasKey(e => e.Id).HasName("movie_category_pkey");
 
-                entity.ToTable("movie_category");
+                entity.ToTable("MovieCategory");
 
                 entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("id");
-                entity.Property(e => e.CategoryId).HasColumnName("category_id");
+                    .ValueGeneratedNever();
+                entity.Property(e => e.CategoryId);
                 entity.Property(e => e.CreatedBy)
                     .HasMaxLength(100)
-                    .HasDefaultValueSql("NULL::character varying")
-                    .HasColumnName("created_by");
+                    .HasDefaultValueSql("NULL::character varying");
                 entity.Property(e => e.CreatedDate)
-                    .HasColumnType("timestamp without time zone")
-                    .HasColumnName("created_date");
-                entity.Property(e => e.DeleteFlag).HasColumnName("delete_flag");
+                    .HasColumnType("timestamp without time zone");
+                entity.Property(e => e.DeleteFlag);
                 entity.Property(e => e.ModifiedBy)
                     .HasMaxLength(100)
-                    .HasDefaultValueSql("NULL::character varying")
-                    .HasColumnName("modified_by");
+                    .HasDefaultValueSql("NULL::character varying");
                 entity.Property(e => e.ModifiedDate)
-                    .HasColumnType("timestamp without time zone")
-                    .HasColumnName("modified_date");
-                entity.Property(e => e.MovieId).HasColumnName("movie_id");
+                    .HasColumnType("timestamp without time zone");
+                entity.Property(e => e.MovieId);
 
                 entity.HasOne(d => d.Category).WithMany(p => p.MovieCategories)
                     .HasForeignKey(d => d.Id)
@@ -198,31 +174,25 @@ namespace BetaCinema.Infrastructure
             {
                 entity.HasKey(e => e.Id).HasName("payment_pkey");
 
-                entity.ToTable("payment");
+                entity.ToTable("Payment");
 
                 entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("id");
+                    .ValueGeneratedNever();
                 entity.Property(e => e.CreatedBy)
                     .HasMaxLength(100)
-                    .HasDefaultValueSql("NULL::character varying")
-                    .HasColumnName("created_by");
+                    .HasDefaultValueSql("NULL::character varying");
                 entity.Property(e => e.CreatedDate)
-                    .HasColumnType("timestamp without time zone")
-                    .HasColumnName("created_date");
-                entity.Property(e => e.DeleteFlag).HasColumnName("delete_flag");
+                    .HasColumnType("timestamp without time zone");
+                entity.Property(e => e.DeleteFlag);
                 entity.Property(e => e.ModifiedBy)
                     .HasMaxLength(100)
-                    .HasDefaultValueSql("NULL::character varying")
-                    .HasColumnName("modified_by");
+                    .HasDefaultValueSql("NULL::character varying");
                 entity.Property(e => e.ModifiedDate)
-                    .HasColumnType("timestamp without time zone")
-                    .HasColumnName("modified_date");
+                    .HasColumnType("timestamp without time zone");
                 entity.Property(e => e.PaymentMethod)
-                    .HasMaxLength(255)
-                    .HasColumnName("payment_method");
-                entity.Property(e => e.ReservationId).HasColumnName("reservation_id");
-                entity.Property(e => e.TotalPrice).HasColumnName("total_price");
+                    .HasMaxLength(255);
+                entity.Property(e => e.ReservationId);
+                entity.Property(e => e.TotalPrice);
 
                 entity.HasOne(d => d.Reservation).WithMany(p => p.Payments)
                     .HasForeignKey(d => d.Id)
@@ -234,28 +204,23 @@ namespace BetaCinema.Infrastructure
             {
                 entity.HasKey(e => e.Id).HasName("reservation_pkey");
 
-                entity.ToTable("reservation");
+                entity.ToTable("Reservation");
 
                 entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("id");
+                    .ValueGeneratedNever();
                 entity.Property(e => e.CreatedBy)
                     .HasMaxLength(100)
-                    .HasDefaultValueSql("NULL::character varying")
-                    .HasColumnName("created_by");
+                    .HasDefaultValueSql("NULL::character varying");
                 entity.Property(e => e.CreatedDate)
-                    .HasColumnType("timestamp without time zone")
-                    .HasColumnName("created_date");
-                entity.Property(e => e.DeleteFlag).HasColumnName("delete_flag");
+                    .HasColumnType("timestamp without time zone");
+                entity.Property(e => e.DeleteFlag);
                 entity.Property(e => e.ModifiedBy)
                     .HasMaxLength(100)
-                    .HasDefaultValueSql("NULL::character varying")
-                    .HasColumnName("modified_by");
+                    .HasDefaultValueSql("NULL::character varying");
                 entity.Property(e => e.ModifiedDate)
-                    .HasColumnType("timestamp without time zone")
-                    .HasColumnName("modified_date");
-                entity.Property(e => e.ShowtimeId).HasColumnName("showtime_id");
-                entity.Property(e => e.UserId).HasColumnName("user_id");
+                    .HasColumnType("timestamp without time zone");
+                entity.Property(e => e.ShowtimeId);
+                entity.Property(e => e.UserId);
 
                 entity.HasOne(d => d.Showtime).WithMany(p => p.Reservations)
                     .HasForeignKey(d => d.Id)
@@ -272,28 +237,23 @@ namespace BetaCinema.Infrastructure
             {
                 entity.HasKey(e => e.Id).HasName("reservation_item_pkey");
 
-                entity.ToTable("reservation_item");
+                entity.ToTable("ReservationItem");
 
                 entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("id");
+                    .ValueGeneratedNever();
                 entity.Property(e => e.CreatedBy)
                     .HasMaxLength(100)
-                    .HasDefaultValueSql("NULL::character varying")
-                    .HasColumnName("created_by");
+                    .HasDefaultValueSql("NULL::character varying");
                 entity.Property(e => e.CreatedDate)
-                    .HasColumnType("timestamp without time zone")
-                    .HasColumnName("created_date");
-                entity.Property(e => e.DeleteFlag).HasColumnName("delete_flag");
+                    .HasColumnType("timestamp without time zone");
+                entity.Property(e => e.DeleteFlag);
                 entity.Property(e => e.ModifiedBy)
                     .HasMaxLength(100)
-                    .HasDefaultValueSql("NULL::character varying")
-                    .HasColumnName("modified_by");
+                    .HasDefaultValueSql("NULL::character varying");
                 entity.Property(e => e.ModifiedDate)
-                    .HasColumnType("timestamp without time zone")
-                    .HasColumnName("modified_date");
-                entity.Property(e => e.ReservationId).HasColumnName("reservation_id");
-                entity.Property(e => e.SeatId).HasColumnName("seat_id");
+                    .HasColumnType("timestamp without time zone");
+                entity.Property(e => e.ReservationId);
+                entity.Property(e => e.SeatId);
 
                 entity.HasOne(d => d.Reservation).WithMany(p => p.ReservationItems)
                     .HasForeignKey(d => d.Id)
@@ -310,63 +270,52 @@ namespace BetaCinema.Infrastructure
             {
                 entity.HasKey(e => e.Id).HasName("seat_pkey");
 
-                entity.ToTable("seat");
+                entity.ToTable("Seat");
 
                 entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("id");
+                    .ValueGeneratedNever();
                 entity.Property(e => e.CreatedBy)
                     .HasMaxLength(100)
-                    .HasDefaultValueSql("NULL::character varying")
-                    .HasColumnName("created_by");
+                    .HasDefaultValueSql("NULL::character varying");
                 entity.Property(e => e.CreatedDate)
-                    .HasColumnType("timestamp without time zone")
-                    .HasColumnName("created_date");
-                entity.Property(e => e.DeleteFlag).HasColumnName("delete_flag");
+                    .HasColumnType("timestamp without time zone");
+                entity.Property(e => e.DeleteFlag);
                 entity.Property(e => e.ModifiedBy)
                     .HasMaxLength(100)
-                    .HasDefaultValueSql("NULL::character varying")
-                    .HasColumnName("modified_by");
+                    .HasDefaultValueSql("NULL::character varying");
                 entity.Property(e => e.ModifiedDate)
-                    .HasColumnType("timestamp without time zone")
-                    .HasColumnName("modified_date");
+                    .HasColumnType("timestamp without time zone");
                 entity.Property(e => e.RowNum)
-                    .HasMaxLength(1)
-                    .HasColumnName("row_num");
-                entity.Property(e => e.SeatNum).HasColumnName("seat_num");
+                    .HasMaxLength(1);
+                entity.Property(e => e.SeatNum);
             });
 
             modelBuilder.Entity<Showtime>(entity =>
             {
                 entity.HasKey(e => e.Id).HasName("showtime_pkey");
 
-                entity.ToTable("showtime");
+                entity.ToTable("Showtime");
 
                 entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("id");
-                entity.Property(e => e.CinemaId).HasColumnName("cinema_id");
+                    .ValueGeneratedNever();
+                entity.Property(e => e.CinemaId);
                 entity.Property(e => e.CreatedBy)
                     .HasMaxLength(100)
-                    .HasDefaultValueSql("NULL::character varying")
-                    .HasColumnName("created_by");
+                    .HasDefaultValueSql("NULL::character varying");
                 entity.Property(e => e.CreatedDate)
-                    .HasColumnType("timestamp without time zone")
-                    .HasColumnName("created_date");
-                entity.Property(e => e.DeleteFlag).HasColumnName("delete_flag");
+                    .HasColumnType("timestamp without time zone");
+                entity.Property(e => e.DeleteFlag);
                 entity.Property(e => e.ModifiedBy)
                     .HasMaxLength(100)
-                    .HasDefaultValueSql("NULL::character varying")
-                    .HasColumnName("modified_by");
+                    .HasDefaultValueSql("NULL::character varying");
                 entity.Property(e => e.ModifiedDate)
-                    .HasColumnType("timestamp without time zone")
-                    .HasColumnName("modified_date");
-                entity.Property(e => e.MovieId).HasColumnName("movie_id");
+                    .HasColumnType("timestamp without time zone");
+                entity.Property(e => e.MovieId);
                 entity.Property(e => e.StartTime)
-                    .HasColumnType("timestamp without time zone")
-                    .HasColumnName("start_time");
-                entity.Property(e => e.TicketPrice).HasColumnName("ticket_price");
+                    .HasDefaultValueSql("now()")
+                    .HasColumnType("timestamp without time zone");
 
+                entity.Property(e => e.TicketPrice);
                 entity.HasOne(d => d.Cinema).WithMany(p => p.Showtimes)
                     .HasForeignKey(d => d.Id)
                     .OnDelete(DeleteBehavior.ClientSetNull)
@@ -382,41 +331,32 @@ namespace BetaCinema.Infrastructure
             {
                 entity.HasKey(e => e.Id).HasName("user_pkey");
 
-                entity.ToTable("user");
+                entity.ToTable("User");
 
                 entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("id");
-                entity.Property(e => e.Avatar).HasColumnName("avatar");
+                    .ValueGeneratedNever();
+                entity.Property(e => e.Avatar);
                 entity.Property(e => e.CreatedBy)
                     .HasMaxLength(100)
-                    .HasDefaultValueSql("NULL::character varying")
-                    .HasColumnName("created_by");
+                    .HasDefaultValueSql("NULL::character varying");
                 entity.Property(e => e.CreatedDate)
                     .HasDefaultValueSql("now()")
-                    .HasColumnType("timestamp without time zone")
-                    .HasColumnName("created_date");
-                entity.Property(e => e.DeleteFlag).HasColumnName("delete_flag");
+                    .HasColumnType("timestamp without time zone");
+                entity.Property(e => e.DeleteFlag);
                 entity.Property(e => e.Email)
-                    .HasMaxLength(100)
-                    .HasColumnName("email");
-                entity.Property(e => e.Fullname)
-                    .HasMaxLength(100)
-                    .HasColumnName("fullname");
+                    .HasMaxLength(100);
+                entity.Property(e => e.FullName)
+                    .HasMaxLength(100);
                 entity.Property(e => e.ModifiedBy)
                     .HasMaxLength(100)
-                    .HasDefaultValueSql("NULL::character varying")
-                    .HasColumnName("modified_by");
+                    .HasDefaultValueSql("NULL::character varying");
                 entity.Property(e => e.ModifiedDate)
                     .HasDefaultValueSql("now()")
-                    .HasColumnType("timestamp without time zone")
-                    .HasColumnName("modified_date");
+                    .HasColumnType("timestamp without time zone");
                 entity.Property(e => e.Password)
-                    .HasMaxLength(25)
-                    .HasColumnName("password");
+                    .HasMaxLength(100);
                 entity.Property(e => e.Role)
-                    .HasMaxLength(25)
-                    .HasColumnName("role");
+                    .HasMaxLength(25);
             });
 
             OnModelCreatingPartial(modelBuilder);

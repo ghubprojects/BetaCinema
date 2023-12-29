@@ -8,8 +8,15 @@ using System.ComponentModel.DataAnnotations;
 
 namespace BetaCinema.ServerUI.Areas.Identity.Pages.Account
 {
-    public class InputModel
+    public class RegisterInput
     {
+        [Required]
+        [RegularExpression(@"^[a-zA-Z0-9_]*$", ErrorMessage = "Username can only contain letters, numbers, and underscores.")]
+        public string UserName { get; set; }
+
+        [Required]
+        public string FullName { get; set; }
+
         [Required]
         [EmailAddress]
         public string Email { get; set; }
@@ -25,20 +32,20 @@ namespace BetaCinema.ServerUI.Areas.Identity.Pages.Account
     public class RegisterModel : PageModel
     {
         private readonly SignInManager<User> _signInManager;
+
         private readonly UserManager<User> _userManager;
 
-        public RegisterModel(UserManager<User> userManager, SignInManager<User> signInManager)
+        public RegisterModel(SignInManager<User> signInManager, UserManager<User> userManager)
         {
-            _userManager = userManager;
             _signInManager = signInManager;
+            _userManager = userManager;
         }
 
         [BindProperty]
-        public InputModel Input { get; set; }
+        public RegisterInput Input { get; set; }
 
         public string ReturnUrl { get; set; }
 
-        // Xác th?c t? d?ch v? ngoài
         public IList<AuthenticationScheme> ExternalLogins { get; set; }
 
         public async Task OnGetAsync()
@@ -54,9 +61,9 @@ namespace BetaCinema.ServerUI.Areas.Identity.Pages.Account
 
             var user = new User
             {
-                UserName = Input.Email,
+                UserName = Input.UserName,
+                FullName = Input.FullName,
                 Email = Input.Email,
-                Fullname = Input.Email,
                 Role = UserRole.Customer.ToString(),
                 DeleteFlag = false,
                 Password = Input.Password,

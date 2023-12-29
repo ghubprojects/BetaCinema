@@ -1,5 +1,5 @@
 ﻿@page "/users"
-@inherits TableDataBase
+@inherits TableBase
 
 <AuthorizeView Roles="Admin">
     <NotAuthorized>
@@ -9,17 +9,50 @@
         <MudPaper Elevation="0">
             <MudPaper Elevation="0" Class="d-flex gap-4 justify-space-between align-items-center">
                 <h3 class="mb-0">Users</h3>
-                <div class="form-group">
-                    <MudButton Size="@Size.Medium"
-                               Variant="@Variant.Filled"
+                <div class="form-group d-flex gap-2">
+                    <MudButton Variant="@Variant.Filled"
                                Color="@Color.Primary"
                                OnClick="@NavigateToCreateForm">
-                        <MudIcon Size="Size.Medium" Icon="@Icons.Material.Filled.Add" Class="mr-1" />
-                        Create New
+                        <MudText>Create</MudText>
+                        <MudIcon Size="Size.Medium" Icon="@Icons.Material.Filled.Add" />
                     </MudButton>
+                    <MudButton Variant="@Variant.Filled"
+                               Color="@Color.Primary"
+                               OnClick="@DownloadExcelFile">
+                        <MudText>Export</MudText>
+                        <MudIcon Size="Size.Medium" Icon="@Icons.Material.Filled.CloudDownload" Class="ml-2" />
+                    </MudButton>
+
+                    <MudFileUpload T="IBrowserFile"
+                                   Accept=".xlsx"
+                                   FilesChanged="UploadFiles"
+                                   Context="uploadContext"
+                                   Class="mt-0">
+                        <ButtonTemplate>
+                            <MudButton HtmlTag="label"
+                                       Variant="Variant.Filled"
+                                       Color="Color.Primary"
+                                       EndIcon="@Icons.Material.Filled.CloudUpload"
+                                       for="@uploadContext.Id">
+                                <MudText>Import</MudText>
+                            </MudButton>
+                        </ButtonTemplate>
+                    </MudFileUpload>
                 </div>
             </MudPaper>
         </MudPaper>
+
+       @*  @if (files != null)
+        {
+            <MudList>
+                @foreach (var file in files)
+                {
+                    <MudListItem Icon="@Icons.Material.Filled.AttachFile">
+                        @file.Name <code>@file.Size bytes</code>
+                    </MudListItem>
+                }
+            </MudList>
+        } *@
 
         <br>
 
@@ -36,6 +69,8 @@
             <MudDataGrid Items="@users" Elevation="0" Filterable="false" SortMode="@SortMode.None" Groupable="false">
                 <Columns>
                     <PropertyColumn Property="x => x.Id" />
+                    <PropertyColumn Property="x => x.UserName" />
+                    <PropertyColumn Property="x => x.FullName" />
                     <PropertyColumn Property="x => x.Email" />
                     <PropertyColumn Property="x => x.Password" />
                     <PropertyColumn Property="x => x.Role" />

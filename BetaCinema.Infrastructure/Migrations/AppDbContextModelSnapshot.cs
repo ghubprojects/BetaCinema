@@ -25,475 +25,407 @@ namespace BetaCinema.Infrastructure.Migrations
             modelBuilder.Entity("BetaCinema.Domain.Models.Category", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("text")
-                        .HasColumnName("id");
+                        .HasColumnType("text");
 
                     b.Property<string>("CategoryName")
                         .IsRequired()
                         .HasMaxLength(255)
-                        .HasColumnType("character varying(255)")
-                        .HasColumnName("category_name");
+                        .HasColumnType("character varying(255)");
 
                     b.Property<string>("CreatedBy")
                         .ValueGeneratedOnAdd()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)")
-                        .HasColumnName("created_by")
                         .HasDefaultValueSql("NULL::character varying");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp without time zone")
-                        .HasColumnName("created_date");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<bool>("DeleteFlag")
-                        .HasColumnType("boolean")
-                        .HasColumnName("delete_flag");
+                        .HasColumnType("boolean");
 
                     b.Property<string>("ModifiedBy")
                         .ValueGeneratedOnAdd()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)")
-                        .HasColumnName("modified_by")
                         .HasDefaultValueSql("NULL::character varying");
 
                     b.Property<DateTime>("ModifiedDate")
-                        .HasColumnType("timestamp without time zone")
-                        .HasColumnName("modified_date");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id")
                         .HasName("category_pkey");
 
-                    b.ToTable("category", (string)null);
+                    b.ToTable("Category", (string)null);
                 });
 
             modelBuilder.Entity("BetaCinema.Domain.Models.Cinema", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("text")
-                        .HasColumnName("id");
+                        .HasColumnType("text");
 
                     b.Property<string>("CinemaLocation")
                         .IsRequired()
                         .HasMaxLength(255)
-                        .HasColumnType("character varying(255)")
-                        .HasColumnName("cinema_location");
+                        .HasColumnType("character varying(255)");
 
                     b.Property<string>("CinemaName")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
-                        .HasColumnName("cinema_name");
+                        .HasColumnType("character varying(50)");
 
                     b.Property<string>("CreatedBy")
                         .ValueGeneratedOnAdd()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)")
-                        .HasColumnName("created_by")
                         .HasDefaultValueSql("NULL::character varying");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp without time zone")
-                        .HasColumnName("created_date");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<bool>("DeleteFlag")
-                        .HasColumnType("boolean")
-                        .HasColumnName("delete_flag");
+                        .HasColumnType("boolean");
 
                     b.Property<string>("ModifiedBy")
                         .ValueGeneratedOnAdd()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)")
-                        .HasColumnName("modified_by")
                         .HasDefaultValueSql("NULL::character varying");
 
                     b.Property<DateTime>("ModifiedDate")
-                        .HasColumnType("timestamp without time zone")
-                        .HasColumnName("modified_date");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id")
                         .HasName("cinema_pkey");
 
-                    b.ToTable("cinema", (string)null);
+                    b.ToTable("Cinema", (string)null);
                 });
 
             modelBuilder.Entity("BetaCinema.Domain.Models.Movie", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("text")
-                        .HasColumnName("id");
+                        .HasColumnType("text");
 
                     b.Property<string>("Actor")
                         .ValueGeneratedOnAdd()
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)")
-                        .HasColumnName("actor")
                         .HasDefaultValueSql("NULL::character varying");
 
                     b.Property<string>("CreatedBy")
                         .ValueGeneratedOnAdd()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)")
-                        .HasColumnName("created_by")
                         .HasDefaultValueSql("NULL::character varying");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp without time zone")
-                        .HasColumnName("created_date");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<bool>("DeleteFlag")
-                        .HasColumnType("boolean")
-                        .HasColumnName("delete_flag");
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Description")
-                        .HasColumnType("text")
-                        .HasColumnName("description");
+                        .HasColumnType("text");
 
                     b.Property<string>("Director")
                         .ValueGeneratedOnAdd()
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)")
-                        .HasColumnName("director")
                         .HasDefaultValueSql("NULL::character varying");
 
                     b.Property<int>("Duration")
-                        .HasColumnType("integer")
-                        .HasColumnName("duration");
+                        .HasColumnType("integer");
 
                     b.Property<string>("ModifiedBy")
                         .ValueGeneratedOnAdd()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)")
-                        .HasColumnName("modified_by")
                         .HasDefaultValueSql("NULL::character varying");
 
                     b.Property<DateTime>("ModifiedDate")
-                        .HasColumnType("timestamp without time zone")
-                        .HasColumnName("modified_date");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("MovieName")
                         .IsRequired()
                         .HasMaxLength(255)
-                        .HasColumnType("character varying(255)")
-                        .HasColumnName("movie_name");
+                        .HasColumnType("character varying(255)");
 
                     b.Property<string>("Poster")
-                        .HasColumnType("text")
-                        .HasColumnName("poster");
+                        .HasColumnType("text");
 
-                    b.Property<DateOnly>("ReleaseDate")
-                        .HasColumnType("date")
-                        .HasColumnName("release_date");
+                    b.Property<DateTime?>("ReleaseDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp without time zone")
+                        .HasDefaultValueSql("now()");
 
                     b.HasKey("Id")
                         .HasName("movie_pkey");
 
-                    b.ToTable("movie", (string)null);
+                    b.ToTable("Movie", (string)null);
                 });
 
             modelBuilder.Entity("BetaCinema.Domain.Models.MovieCategory", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("text")
-                        .HasColumnName("id");
+                        .HasColumnType("text");
 
-                    b.Property<Guid>("CategoryId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("category_id");
+                    b.Property<string>("CategoryId")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("CreatedBy")
                         .ValueGeneratedOnAdd()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)")
-                        .HasColumnName("created_by")
                         .HasDefaultValueSql("NULL::character varying");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp without time zone")
-                        .HasColumnName("created_date");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<bool>("DeleteFlag")
-                        .HasColumnType("boolean")
-                        .HasColumnName("delete_flag");
+                        .HasColumnType("boolean");
 
                     b.Property<string>("ModifiedBy")
                         .ValueGeneratedOnAdd()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)")
-                        .HasColumnName("modified_by")
                         .HasDefaultValueSql("NULL::character varying");
 
                     b.Property<DateTime>("ModifiedDate")
-                        .HasColumnType("timestamp without time zone")
-                        .HasColumnName("modified_date");
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("MovieId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("movie_id");
+                    b.Property<string>("MovieId")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("Id")
                         .HasName("movie_category_pkey");
 
-                    b.ToTable("movie_category", (string)null);
+                    b.ToTable("MovieCategory", (string)null);
                 });
 
             modelBuilder.Entity("BetaCinema.Domain.Models.Payment", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("text")
-                        .HasColumnName("id");
+                        .HasColumnType("text");
 
                     b.Property<string>("CreatedBy")
                         .ValueGeneratedOnAdd()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)")
-                        .HasColumnName("created_by")
                         .HasDefaultValueSql("NULL::character varying");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp without time zone")
-                        .HasColumnName("created_date");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<bool>("DeleteFlag")
-                        .HasColumnType("boolean")
-                        .HasColumnName("delete_flag");
+                        .HasColumnType("boolean");
 
                     b.Property<string>("ModifiedBy")
                         .ValueGeneratedOnAdd()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)")
-                        .HasColumnName("modified_by")
                         .HasDefaultValueSql("NULL::character varying");
 
                     b.Property<DateTime>("ModifiedDate")
-                        .HasColumnType("timestamp without time zone")
-                        .HasColumnName("modified_date");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("PaymentMethod")
                         .IsRequired()
                         .HasMaxLength(255)
-                        .HasColumnType("character varying(255)")
-                        .HasColumnName("payment_method");
+                        .HasColumnType("character varying(255)");
 
-                    b.Property<Guid>("ReservationId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("reservation_id");
+                    b.Property<string>("ReservationId")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<int>("TotalPrice")
-                        .HasColumnType("integer")
-                        .HasColumnName("total_price");
+                        .HasColumnType("integer");
 
                     b.HasKey("Id")
                         .HasName("payment_pkey");
 
-                    b.ToTable("payment", (string)null);
+                    b.ToTable("Payment", (string)null);
                 });
 
             modelBuilder.Entity("BetaCinema.Domain.Models.Reservation", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("text")
-                        .HasColumnName("id");
+                        .HasColumnType("text");
 
                     b.Property<string>("CreatedBy")
                         .ValueGeneratedOnAdd()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)")
-                        .HasColumnName("created_by")
                         .HasDefaultValueSql("NULL::character varying");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp without time zone")
-                        .HasColumnName("created_date");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<bool>("DeleteFlag")
-                        .HasColumnType("boolean")
-                        .HasColumnName("delete_flag");
+                        .HasColumnType("boolean");
 
                     b.Property<string>("ModifiedBy")
                         .ValueGeneratedOnAdd()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)")
-                        .HasColumnName("modified_by")
                         .HasDefaultValueSql("NULL::character varying");
 
                     b.Property<DateTime>("ModifiedDate")
-                        .HasColumnType("timestamp without time zone")
-                        .HasColumnName("modified_date");
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("ShowtimeId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("showtime_id");
+                    b.Property<string>("ShowtimeId")
+                        .IsRequired()
+                        .HasColumnType("text");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("user_id");
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("Id")
                         .HasName("reservation_pkey");
 
-                    b.ToTable("reservation", (string)null);
+                    b.ToTable("Reservation", (string)null);
                 });
 
             modelBuilder.Entity("BetaCinema.Domain.Models.ReservationItem", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("text")
-                        .HasColumnName("id");
+                        .HasColumnType("text");
 
                     b.Property<string>("CreatedBy")
                         .ValueGeneratedOnAdd()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)")
-                        .HasColumnName("created_by")
                         .HasDefaultValueSql("NULL::character varying");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp without time zone")
-                        .HasColumnName("created_date");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<bool>("DeleteFlag")
-                        .HasColumnType("boolean")
-                        .HasColumnName("delete_flag");
+                        .HasColumnType("boolean");
 
                     b.Property<string>("ModifiedBy")
                         .ValueGeneratedOnAdd()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)")
-                        .HasColumnName("modified_by")
                         .HasDefaultValueSql("NULL::character varying");
 
                     b.Property<DateTime>("ModifiedDate")
-                        .HasColumnType("timestamp without time zone")
-                        .HasColumnName("modified_date");
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("ReservationId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("reservation_id");
+                    b.Property<string>("ReservationId")
+                        .IsRequired()
+                        .HasColumnType("text");
 
-                    b.Property<Guid>("SeatId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("seat_id");
+                    b.Property<string>("SeatId")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("Id")
                         .HasName("reservation_item_pkey");
 
-                    b.ToTable("reservation_item", (string)null);
+                    b.ToTable("ReservationItem", (string)null);
                 });
 
             modelBuilder.Entity("BetaCinema.Domain.Models.Seat", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("text")
-                        .HasColumnName("id");
+                        .HasColumnType("text");
 
                     b.Property<string>("CreatedBy")
                         .ValueGeneratedOnAdd()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)")
-                        .HasColumnName("created_by")
                         .HasDefaultValueSql("NULL::character varying");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp without time zone")
-                        .HasColumnName("created_date");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<bool>("DeleteFlag")
-                        .HasColumnType("boolean")
-                        .HasColumnName("delete_flag");
+                        .HasColumnType("boolean");
 
                     b.Property<string>("ModifiedBy")
                         .ValueGeneratedOnAdd()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)")
-                        .HasColumnName("modified_by")
                         .HasDefaultValueSql("NULL::character varying");
 
                     b.Property<DateTime>("ModifiedDate")
-                        .HasColumnType("timestamp without time zone")
-                        .HasColumnName("modified_date");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("RowNum")
                         .IsRequired()
                         .HasMaxLength(1)
-                        .HasColumnType("character varying(1)")
-                        .HasColumnName("row_num");
+                        .HasColumnType("character varying(1)");
 
                     b.Property<int>("SeatNum")
-                        .HasColumnType("integer")
-                        .HasColumnName("seat_num");
+                        .HasColumnType("integer");
 
                     b.HasKey("Id")
                         .HasName("seat_pkey");
 
-                    b.ToTable("seat", (string)null);
+                    b.ToTable("Seat", (string)null);
                 });
 
             modelBuilder.Entity("BetaCinema.Domain.Models.Showtime", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("text")
-                        .HasColumnName("id");
+                        .HasColumnType("text");
 
-                    b.Property<Guid>("CinemaId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("cinema_id");
+                    b.Property<string>("CinemaId")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("CreatedBy")
                         .ValueGeneratedOnAdd()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)")
-                        .HasColumnName("created_by")
                         .HasDefaultValueSql("NULL::character varying");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp without time zone")
-                        .HasColumnName("created_date");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<bool>("DeleteFlag")
-                        .HasColumnType("boolean")
-                        .HasColumnName("delete_flag");
+                        .HasColumnType("boolean");
 
                     b.Property<string>("ModifiedBy")
                         .ValueGeneratedOnAdd()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)")
-                        .HasColumnName("modified_by")
                         .HasDefaultValueSql("NULL::character varying");
 
                     b.Property<DateTime>("ModifiedDate")
-                        .HasColumnType("timestamp without time zone")
-                        .HasColumnName("modified_date");
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("MovieId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("movie_id");
+                    b.Property<string>("MovieId")
+                        .IsRequired()
+                        .HasColumnType("text");
 
-                    b.Property<DateTime>("StartTime")
+                    b.Property<DateTime?>("StartTime")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp without time zone")
-                        .HasColumnName("start_time");
+                        .HasDefaultValueSql("now()");
 
                     b.Property<int>("TicketPrice")
-                        .HasColumnType("integer")
-                        .HasColumnName("ticket_price");
+                        .HasColumnType("integer");
 
                     b.HasKey("Id")
                         .HasName("showtime_pkey");
 
-                    b.ToTable("showtime", (string)null);
+                    b.ToTable("Showtime", (string)null);
                 });
 
             modelBuilder.Entity("BetaCinema.Domain.Models.User", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("text")
-                        .HasColumnName("id");
+                        .HasColumnType("text");
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("integer");
 
                     b.Property<string>("Avatar")
-                        .HasColumnType("text")
-                        .HasColumnName("avatar");
+                        .HasColumnType("text");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -503,32 +435,27 @@ namespace BetaCinema.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)")
-                        .HasColumnName("created_by")
                         .HasDefaultValueSql("NULL::character varying");
 
                     b.Property<DateTime>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp without time zone")
-                        .HasColumnName("created_date")
                         .HasDefaultValueSql("now()");
 
                     b.Property<bool>("DeleteFlag")
-                        .HasColumnType("boolean")
-                        .HasColumnName("delete_flag");
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Email")
                         .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
-                        .HasColumnName("email");
+                        .HasColumnType("character varying(100)");
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("boolean");
 
-                    b.Property<string>("Fullname")
+                    b.Property<string>("FullName")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
-                        .HasColumnName("fullname");
+                        .HasColumnType("character varying(100)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("boolean");
@@ -540,13 +467,11 @@ namespace BetaCinema.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)")
-                        .HasColumnName("modified_by")
                         .HasDefaultValueSql("NULL::character varying");
 
                     b.Property<DateTime>("ModifiedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp without time zone")
-                        .HasColumnName("modified_date")
                         .HasDefaultValueSql("now()");
 
                     b.Property<string>("NormalizedEmail")
@@ -559,9 +484,8 @@ namespace BetaCinema.Infrastructure.Migrations
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasMaxLength(25)
-                        .HasColumnType("character varying(25)")
-                        .HasColumnName("password");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("PasswordHash")
                         .HasColumnType("text");
@@ -575,8 +499,7 @@ namespace BetaCinema.Infrastructure.Migrations
                     b.Property<string>("Role")
                         .IsRequired()
                         .HasMaxLength(25)
-                        .HasColumnType("character varying(25)")
-                        .HasColumnName("role");
+                        .HasColumnType("character varying(25)");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("text");
@@ -598,7 +521,7 @@ namespace BetaCinema.Infrastructure.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex");
 
-                    b.ToTable("user", (string)null);
+                    b.ToTable("User", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

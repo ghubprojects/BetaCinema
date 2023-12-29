@@ -4,9 +4,9 @@ public partial class MovieCategory
 {
     public string Id { get; set; } = null!;
 
-    public Guid MovieId { get; set; }
+    public string MovieId { get; set; }
 
-    public Guid CategoryId { get; set; }
+    public string CategoryId { get; set; }
 
     public bool DeleteFlag { get; set; }
 

@@ -4,7 +4,7 @@ public partial class Payment
 {
     public string Id { get; set; } = null!;
 
-    public Guid ReservationId { get; set; }
+    public string ReservationId { get; set; }
 
     public int TotalPrice { get; set; }
 

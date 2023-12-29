@@ -7,7 +7,7 @@ using MudBlazor;
 
 namespace BetaCinema.ServerUI.Pages.Users
 {
-    public class UpdateFormBase : ComponentBase
+    public class UpdateBase : ComponentBase
     {
         [Inject] protected IJSRuntime js { get; set; }
 
@@ -18,18 +18,19 @@ namespace BetaCinema.ServerUI.Pages.Users
         [Inject] private IMediator Mediator { get; set; }
 
         [Parameter]
-        public string userId { get; set; }
+        public string UserId { get; set; }
 
-        protected User user = new();
+        [Parameter]
+        public User UserData { get; set; }
 
         protected async override Task OnParametersSetAsync()
         {
-            user = await Mediator.Send(new GetUserByIdQuery() { Id = userId });
+            UserData = await Mediator.Send(new GetUserByIdQuery() { Id = UserId });
         }
 
-        protected async Task EditUser()
+        protected async Task SaveUser()
         {
-            await Mediator.Send(new UpdateUserCommand() { Data = user });
+            await Mediator.Send(new UpdateUserCommand() { Data = UserData });
 
             SnackBar.Configuration.PositionClass = Defaults.Classes.Position.BottomRight;
             SnackBar.Add("Update successfully", Severity.Success, config =>

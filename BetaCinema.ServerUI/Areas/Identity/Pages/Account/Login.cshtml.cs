@@ -7,6 +7,16 @@ using System.ComponentModel.DataAnnotations;
 
 namespace BetaCinema.ServerUI.Areas.Identity.Pages.Account
 {
+    public class LoginInput
+    {
+        [Required]
+        public string UserName { set; get; }
+
+        [Required]
+        [DataType(DataType.Password)]
+        public string Password { get; set; }
+    }
+
     public class LoginModel : PageModel
     {
         private readonly SignInManager<User> _signInManager;
@@ -17,23 +27,11 @@ namespace BetaCinema.ServerUI.Areas.Identity.Pages.Account
         }
 
         [BindProperty]
-        public InputModel Input { get; set; }
+        public LoginInput Input { get; set; }
+
         public string ReturnUrl { get; set; }
 
         public IList<AuthenticationScheme> ExternalLogins { get; set; }
-
-        [TempData]
-        public string ErrorMessage { get; set; }
-
-        public class InputModel
-        {
-            [Required]
-            public string Email { set; get; }
-
-            [Required]
-            [DataType(DataType.Password)]
-            public string Password { get; set; }
-        }
 
         public async Task OnGetAsync()
         {
@@ -42,7 +40,7 @@ namespace BetaCinema.ServerUI.Areas.Identity.Pages.Account
             // Clear the existing external cookie to ensure a clean login process
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
 
-            ExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+            ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
         }
 
         public async Task<IActionResult> OnPostAsync()
@@ -51,14 +49,14 @@ namespace BetaCinema.ServerUI.Areas.Identity.Pages.Account
 
             if (ModelState.IsValid)
             {
-                var result = await _signInManager.PasswordSignInAsync(
-                Input.Email,
+                var signInResult = await _signInManager.PasswordSignInAsync(
+                Input.UserName,
                 Input.Password,
-                false,
+                isPersistent: false,
                 lockoutOnFailure: false
             );
 
-                if (result.Succeeded)
+                if (signInResult.Succeeded)
                 {
                     return LocalRedirect(ReturnUrl);
                 }

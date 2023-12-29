@@ -1,0 +1,61 @@
+﻿@page "/movies/create"
+@using BetaCinema.Domain.Enums;
+@inherits CreateBase
+
+<h3 class="mb-8">Thêm dữ liệu phim</h3>
+
+<EditForm Model="@MovieData" OnValidSubmit="@CreateMovie">
+    <DataAnnotationsValidator />
+    <MudGrid xs="12">
+        <MudContainer MaxWidth="MaxWidth.Medium">
+            <MudCard Class="p-4">
+                <MudCardContent Class="p-0 mb-4 d-flex flex-column gap-2">
+                    <MudTextField @bind-Value="@MovieData.MovieName"
+                                  Label="MovieName"
+                                  Variant="Variant.Outlined"
+                                  Margin="Margin.Dense">
+                    </MudTextField>
+                    <MudTextField @bind-Value="@MovieData.Poster"
+                                  Label="Poster"
+                                  Variant="Variant.Outlined"
+                                  Margin="Margin.Dense">
+                    </MudTextField>
+                    <MudTextField @bind-Value="@MovieData.Duration"
+                                  Label="Duration"
+                                  Variant="Variant.Outlined"
+                                  Margin="Margin.Dense">
+                    </MudTextField>
+                    <MudDatePicker @bind-Date="@MovieData.ReleaseDate"
+                                   Label="ReleaseDate"
+                                   MinDate="DateTime.Now"
+                                   DisableToolbar="true"
+                                   Variant="Variant.Outlined"
+                                   Margin="Margin.Dense" />
+                    <MudTextField @bind-Value="@MovieData.Director"
+                                  Label="Director"
+                                  Variant="Variant.Outlined"
+                                  Margin="Margin.Dense">
+                    </MudTextField>
+                    <MudTextField @bind-Value="@MovieData.Actor"
+                                  Label="Actor"
+                                  Variant="Variant.Outlined"
+                                  Margin="Margin.Dense">
+                    </MudTextField>
+                    <MudTextField @bind-Value="@MovieData.Description"
+                                  Label="Description"
+                                  Variant="Variant.Outlined"
+                                  Margin="Margin.Dense">
+                    </MudTextField>
+                </MudCardContent>
+                <MudCardActions Class="p-0">
+                    <MudButton ButtonType="ButtonType.Submit"
+                               Variant="Variant.Filled"
+                               Color="Color.Primary"
+                               Class="ml-auto">
+                        Thêm
+                    </MudButton>
+                </MudCardActions>
+            </MudCard>
+        </MudContainer>
+    </MudGrid>
+</EditForm>

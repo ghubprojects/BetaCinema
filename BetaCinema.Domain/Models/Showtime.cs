@@ -4,11 +4,11 @@ public partial class Showtime
 {
     public string Id { get; set; } = null!;
 
-    public Guid MovieId { get; set; }
+    public string MovieId { get; set; }
 
-    public Guid CinemaId { get; set; }
+    public string CinemaId { get; set; }
 
-    public DateTime StartTime { get; set; }
+    public DateTime? StartTime { get; set; }
 
     public int TicketPrice { get; set; }
 

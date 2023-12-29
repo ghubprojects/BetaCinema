@@ -1,44 +1,65 @@
-using BetaCinema.Application;
+﻿using BetaCinema.Application;
+using BetaCinema.Domain.Exceptions;
 using BetaCinema.Infrastructure;
+using BetaCinema.ServerUI.Middlewares;
 using MudBlazor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
-builder.Services.AddRazorPages();
-builder.Services.AddServerSideBlazor();
-
-builder.Services.AddMudServices();
-
-builder.Services.AddInfrastructure(builder.Configuration).AddApplication();
-
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
+    // Add services to the container.
+    builder.Services.AddRazorPages();
+    builder.Services.AddServerSideBlazor();
+
+    builder.Services.AddMudServices();
+
+    builder.Services.AddInfrastructure(builder.Configuration).AddApplication();
+
+    builder.Services.AddMvc().ConfigureApiBehaviorOptions(options =>
+    {
+        options.InvalidModelStateResponseFactory = context =>
+        {
+            throw new ValidateException()
+            {
+                ErrorCode = StatusCodes.Status400BadRequest,
+                UserMessage = "Yêu cầu không hợp lệ",
+                DevMessage = "Bad request",
+                TraceId = context.HttpContext.TraceIdentifier,
+                Errors = context.ModelState.ToDictionary(kvp => kvp.Key, kvp => kvp.Value.Errors.Select(error => error.ErrorMessage).ToArray())
+            };
+        };
+    });
 }
 
-// Seeding database
-using (var scope = app.Services.CreateScope())
+var app = builder.Build();
 {
-    var initializer = scope.ServiceProvider.GetService<AppDbContextSeeder>();
-    await initializer.InitilizeAsync();
-};
+    // Configure the HTTP request pipeline.
+    if (!app.Environment.IsDevelopment())
+    {
+        app.UseExceptionHandler("/Error");
+        // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+        app.UseHsts();
+    }
 
-app.UseHttpsRedirection();
+    // Seeding database
+    using (var scope = app.Services.CreateScope())
+    {
+        var initializer = scope.ServiceProvider.GetService<AppDbContextSeeder>();
+        await initializer.InitilizeAsync();
+    };
 
-app.UseStaticFiles();
+    app.UseHttpsRedirection();
 
-app.UseRouting();
+    app.UseStaticFiles();
 
-app.UseAuthentication();
-app.UseAuthorization();
+    app.UseRouting();
 
-app.MapBlazorHub();
-app.MapFallbackToPage("/_Host");
+    app.UseAuthentication();
+    app.UseAuthorization();
 
-app.Run();
+    app.MapBlazorHub();
+    app.MapFallbackToPage("/_Host");
+
+    app.UseMiddleware<ErrorHandlerMiddleware>();
+
+    app.Run();
+}

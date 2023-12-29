@@ -4,7 +4,7 @@ namespace BetaCinema.Domain.Models;
 
 public partial class User : IdentityUser
 {
-    public string Fullname { get; set; } = null!;
+    public string FullName { get; set; } = null!;
 
     public string Password { get; set; } = null!;
 
