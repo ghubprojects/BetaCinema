@@ -1,0 +1,40 @@
+﻿.page {
+    height: 100vh;
+    position: relative;
+    display: flex;
+    flex-direction: column
+}
+
+header {
+    position: sticky;
+    z-index: 100
+}
+
+.main-section {
+    display: flex;
+    height: calc(100vh - 100px);
+}
+
+main {
+    flex: 1;
+    width: calc(100% - 200px);
+    padding: 20px 24px 24px;
+    background-color: #f5f5f5;
+    font-family: 'Source Sans Pro', sans-serif;
+    font-size: 16px;
+}
+
+.sidebar {
+    width: 200px;
+    height: 100%;
+    position: sticky;
+    top: 0;
+    background-color: #004991;
+}
+
+/* Mud Blazor Custom Styles */
+.mud-typography {
+    font-family: 'Source Sans Pro', sans-serif;
+    font-size: 16px;
+}
+

@@ -6,7 +6,9 @@
 
         public bool IsSuccess { get; set; }
 
-        public string Error { get; set; }
+        public string Message { get; set; }
+
+        public dynamic Data { get; set; }
 
         #endregion
 
@@ -15,10 +17,17 @@
             IsSuccess = isSuccess;
         }
 
-        public ServiceResult(bool isSuccess, string error)
+        public ServiceResult(bool isSuccess, string message)
         {
             IsSuccess = isSuccess;
-            Error = error;
+            Message = message;
+        }
+
+        public ServiceResult(bool isSuccess, string message, dynamic data)
+        {
+            IsSuccess = isSuccess;
+            Message = message;
+            Data = data;
         }
     }
 }

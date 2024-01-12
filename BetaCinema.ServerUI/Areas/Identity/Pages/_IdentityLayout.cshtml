@@ -8,8 +8,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="css/bootstrap/bootstrap.min.css" />
     <link href="css/site.css" rel="stylesheet" />
+    <link href="css/identity.css" rel="stylesheet" />
 </head>
 <body>
-    @RenderBody()
+    <div class="page">
+        <header>
+            <div class="authorize-menu">
+                <div class="not-authorized-wrapper">
+                    <a href="login" class="auth-link login-link">Đăng nhập</a>
+                    <a href="register" class="auth-link register-link">Đăng ký</a>
+                </div>
+            </div>
+
+            <div class="navbar">
+                <a href="home">
+                    <img src="/assets/images/logo.jpg" height="55" alt="Beta Cinema Logo" />
+                </a>
+
+                <div class="nav-items">
+                    <a href="showtimes" class="nav-item-title">Lịch chiếu theo rạp</a>
+                    <a href="movies" class="nav-item-title">Phim</a>
+                    <a href="ticket-price" class="nav-item-title">Giá vé</a>
+                    <a href="member" class="nav-item-title">Thành viên</a>
+                </div>
+            </div>
+        </header>
+
+        <main class="main">
+            @RenderBody()
+        </main>
+    </div>
 </body>
 </html>

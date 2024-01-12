@@ -20,4 +20,8 @@
     <ProjectReference Include="..\BetaCinema.Domain\BetaCinema.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Features\Payments\Command\" />
+  </ItemGroup>
+
 </Project>

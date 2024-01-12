@@ -1,0 +1,36 @@
+﻿.detail-container {
+    max-width: 1150px;
+    margin: auto;
+    padding-bottom: 100px;
+}
+
+.movie-title-wrapper {
+    font-size: 22px;
+}
+
+.movie-title {
+    color: #337ab7;
+}
+
+.title {
+    font-size: 34px;
+    line-height: 1.5;
+    font-weight: 500;
+}
+
+.description {
+    font-family: 'Source Sans Pro', sans-serif;
+    font-size: 18px;
+}
+
+.info {
+    font-family: 'Source Sans Pro', sans-serif;
+    font-size: 18px;
+}
+
+.info-title {
+    display: inline-block;
+    width: 25%;
+    font-weight: 600;
+    text-transform: uppercase;
+}

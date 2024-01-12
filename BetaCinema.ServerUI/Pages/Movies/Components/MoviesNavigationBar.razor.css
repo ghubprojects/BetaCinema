@@ -1,0 +1,10 @@
+﻿.tab-content {
+    font-size: 30px;
+}
+
+.list-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 1150px;
+    margin: auto;
+}

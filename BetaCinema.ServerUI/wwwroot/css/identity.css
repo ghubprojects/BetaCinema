@@ -1,0 +1,135 @@
+﻿
+.page {
+    height: 100vh;
+    position: relative;
+    display: flex;
+    flex-direction: column
+}
+
+header {
+    position: sticky;
+    z-index: 100
+}
+
+main {
+    flex: 1;
+    background-color: #f5f5f5;
+}
+
+/* Authorize Menu Styles */
+
+.authorize-menu {
+    height: 25px;
+    display: flex;
+    justify-content: flex-end;
+    padding: 4px 160px;
+    color: #dde;
+    background-color: black;
+}
+
+.authorized-wrapper, .not-authorized-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-right: 32px;
+}
+
+.auth-link {
+    color: #fff;
+    text-decoration: none;
+    font-family: "Open Sans", sans-serif;
+    font-size: 13px;
+    line-height: 17px;
+    font-weight: 300;
+}
+
+.register-link {
+    padding-left: 12px;
+    border-left: 1px solid #fff
+}
+
+/* Navigation Bar Styles */
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 160px;
+    box-shadow: 0 1px 3px #ddd;
+    z-index: 100
+}
+
+.nav-items {
+    display: flex;
+}
+
+.nav-item-title {
+    padding: 24px 12px;
+    font-family: Oswald, sans-serif;
+    font-size: 18px;
+    color: #333;
+    text-transform: uppercase;
+    text-decoration: none
+}
+
+    .nav-item-title:hover {
+        color: #337ab7;
+    }
+
+/* General Auth Styles */
+
+.auth-button {
+    min-width: 240px;
+    padding: 10px 24px;
+    border-radius: 4px;
+    font-size: 14px;
+    text-transform: uppercase;
+    color: #fff;
+    background-image: linear-gradient(to right, #fc3606 0%, #fda085 51%, #fc7704 100%);
+    background-size: 200% auto;
+}
+
+    .auth-button.external {
+        background-image: linear-gradient(to right, #0a64a7 0%, #258dcf 51%, #3db1f3 100%)
+    }
+
+/* Login Page Styles */
+
+.login-container {
+}
+
+.login-wrapper {
+    width: 530px;
+    margin: 20px auto;
+}
+
+.title {
+    padding: 10px;
+    background-color: #03599d;
+    color: #fff;
+    font-family: Oswald, sans-serif;
+    font-size: 14px;
+    line-height: 20px;
+    text-transform: uppercase;
+    text-align: center
+}
+
+.form-wrapper {
+    padding: 24px 16px;
+    background-color: #fff;
+    font-family: 'Source Sans Pro', sans-serif;
+}
+
+.form-label {
+    margin-bottom: 6px;
+}
+
+.form-input-wrapper {
+    width: 100%;
+    margin-bottom: 8px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center
+}

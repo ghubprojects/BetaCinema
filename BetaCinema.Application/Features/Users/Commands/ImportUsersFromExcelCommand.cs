@@ -11,7 +11,7 @@ namespace BetaCinema.Application.Features.Users.Commands
 {
     public class ImportUsersFromExcelCommand : IRequest<ServiceResult>
     {
-        public UploadRequest UploadRequest { get; set; }
+        public ImportRequest ImportRequest { get; set; }
     }
 
     /// <summary>
@@ -28,7 +28,7 @@ namespace BetaCinema.Application.Features.Users.Commands
 
         public async Task<ServiceResult> Handle(ImportUsersFromExcelCommand request, CancellationToken cancellationToken)
         {
-            var stream = new MemoryStream(request.UploadRequest.Data);
+            var stream = new MemoryStream(request.ImportRequest.Data);
             var result = (await ImportFromExcelHelper<User>.ImportAsync(stream, mappers: new Dictionary<string, Func<DataRow, User, object>>
             {
                 { "UserName", (row,item) => item.UserName = row["UserName"].ToString() },

@@ -1,12 +1,23 @@
-﻿<AuthorizeView>
-    <Authorized>
-        <a href="#">Hello, @context.User.Identity.Name!</a>
-        <form method="post" action="/logout">
-            <button type="submit" class="nav-link btn btn-link">Log out</button>
-        </form>
-    </Authorized>
-    <NotAuthorized>
-        <NavLink href="register">Register</NavLink>
-        <NavLink href="login">Log in</NavLink>
-    </NotAuthorized>
-</AuthorizeView>
+﻿<div class="authorize-menu">
+    <AuthorizeView>
+        <Authorized>
+            <div class="authorized-wrapper">
+                <p>Xin chào: @context.User.Identity.Name</p>
+                <form method="post" action="/logout">
+                    <button type="submit"><i class="fas fa-arrow-right-from-bracket"></i></button>
+                </form>
+            </div>
+        </Authorized>
+        <NotAuthorized>
+            <div class="not-authorized-wrapper">
+                <MudLink Href="login" Underline="Underline.None">
+                    <p>Đăng nhập</p>
+                </MudLink>
+
+                <MudLink Href="register" Underline="Underline.None">
+                    <p class="register-link">Đăng ký</p>
+                </MudLink>
+            </div>
+        </NotAuthorized>
+    </AuthorizeView>
+</div>

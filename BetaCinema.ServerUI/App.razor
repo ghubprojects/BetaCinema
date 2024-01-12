@@ -12,3 +12,17 @@
         </NotFound>
     </Router>
 </CascadingAuthenticationState>
+
+<MudThemeProvider Theme="customTheme" />
+<MudSnackbarProvider />
+<MudDialogProvider FullWidth="true" MaxWidth="MaxWidth.ExtraSmall" />
+
+@code {
+    MudTheme customTheme = new MudTheme()
+    {
+        Palette = new PaletteLight()
+        {
+                Primary = "#03599d"
+        }
+    };
+}

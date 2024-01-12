@@ -10,6 +10,7 @@ namespace BetaCinema.ServerUI.Middlewares
     {
         #region Fields
 
+
         private readonly RequestDelegate _next;
         private readonly ILogger _logger;
 

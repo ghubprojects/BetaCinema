@@ -1,0 +1,9 @@
+﻿.container {
+    max-width: 1150px;
+    margin: auto;
+}
+
+.title {
+    font-size: 28px;
+    text-transform: uppercase
+}

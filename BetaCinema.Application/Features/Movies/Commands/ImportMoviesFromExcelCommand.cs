@@ -10,7 +10,7 @@ namespace BetaCinema.Application.Features.Movies.Commands
 {
     public class ImportMoviesFromExcelCommand : IRequest<ServiceResult>
     {
-        public UploadRequest UploadRequest { get; set; }
+        public ImportRequest ImportRequest { get; set; }
     }
 
     /// <summary>
@@ -27,7 +27,7 @@ namespace BetaCinema.Application.Features.Movies.Commands
 
         public async Task<ServiceResult> Handle(ImportMoviesFromExcelCommand request, CancellationToken cancellationToken)
         {
-            var stream = new MemoryStream(request.UploadRequest.Data);
+            var stream = new MemoryStream(request.ImportRequest.Data);
             var result = (await ImportFromExcelHelper<Movie>.ImportAsync(stream, mappers: new Dictionary<string, Func<DataRow, Movie, object>>
             {
                 { "MovieName", (row,item) => item.MovieName = row["MovieName"].ToString() },

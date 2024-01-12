@@ -2,6 +2,7 @@
 using BetaCinema.Domain.Exceptions;
 using BetaCinema.Infrastructure;
 using BetaCinema.ServerUI.Middlewares;
+using MudBlazor;
 using MudBlazor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,7 +11,15 @@ var builder = WebApplication.CreateBuilder(args);
     builder.Services.AddRazorPages();
     builder.Services.AddServerSideBlazor();
 
-    builder.Services.AddMudServices();
+    builder.Services.AddMudServices(config =>
+    {
+        config.SnackbarConfiguration.PositionClass = Defaults.Classes.Position.BottomRight;
+        config.SnackbarConfiguration.ShowCloseIcon = true;
+        config.SnackbarConfiguration.VisibleStateDuration = 3000;
+        config.SnackbarConfiguration.HideTransitionDuration = 300;
+        config.SnackbarConfiguration.ShowTransitionDuration = 300;
+        config.SnackbarConfiguration.SnackbarVariant = Variant.Filled;
+    });
 
     builder.Services.AddInfrastructure(builder.Configuration).AddApplication();
 

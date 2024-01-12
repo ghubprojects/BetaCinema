@@ -1,0 +1,78 @@
+﻿@page "/admin/users"
+@layout AdminLayout
+@inherits TableBase
+
+<AuthorizeView Roles="Admin">
+    <NotAuthorized>
+        <RedirectToLogin />
+    </NotAuthorized>
+    <Authorized>
+        <MudPaper Elevation="0">
+            <MudPaper Elevation="0" Class="d-flex gap-4 justify-space-between align-items-center admin-table-title">
+                <h3 class="mb-0">@string.Format(SharedResources.TableTitle, "người dùng")</h3>
+                <div class="form-group d-flex gap-2">
+                    <MudButton Variant="@Variant.Filled" Color="@Color.Primary" OnClick="@NavigateToCreateForm">
+                        @SharedResources.Create
+                        <MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.Add" />
+                    </MudButton>
+                    <MudButton Variant="@Variant.Filled" Color="@Color.Primary" OnClick="@DownloadExcelFile">
+                        @SharedResources.ExportExcel
+                        <MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.CloudDownload" Class="ml-2" />
+                    </MudButton>
+
+                    <MudFileUpload T="IBrowserFile" Accept=".xlsx" FilesChanged="UploadFiles"
+                                   Context="uploadContext" Class="mt-0">
+                        <ButtonTemplate>
+                            <MudButton HtmlTag="label" Variant="Variant.Filled" Color="Color.Primary" for="@uploadContext.Id">
+                                @SharedResources.ImportExcel
+                                <MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.CloudUpload" Class="ml-2" />
+                            </MudButton>
+                        </ButtonTemplate>
+                    </MudFileUpload>
+                </div>
+            </MudPaper>
+        </MudPaper>
+
+        <br>
+
+        @if (users == null)
+        {
+            <text>@SharedResources.Loading</text>
+        }
+        else if (users.Count == 0)
+        {
+            <text>@SharedResources.NoRecord</text>
+        }
+        else
+        {
+            <MudDataGrid Items="@users" Elevation="0" Filterable="false" SortMode="@SortMode.None"
+                         Groupable="false" FixedHeader="true" Class="admin-table">
+                <Columns>
+                    <PropertyColumn Property="x => x.UserName" StickyLeft="true" />
+                    <PropertyColumn Property="x => x.FullName" />
+                    <PropertyColumn Property="x => x.Email" />
+                    <PropertyColumn Property="x => x.Password" />
+                    <PropertyColumn Property="x => x.Role" />
+                    <TemplateColumn StickyRight="true" Title="@SharedResources.OptionsColumnTitle">
+                        <CellTemplate Context="TableContext">
+                            <MudStack Row>
+                             <MudButton Size="@Size.Small"
+                                        Variant="@Variant.Filled"
+                                        Color="@Color.Primary"
+                                        OnClick="@(()=>Navigation.NavigateTo($"admin/users/edit/{TableContext.Item.Id}"))">
+                                 @SharedResources.Edit
+                             </MudButton>
+                             <MudButton Size="@Size.Small"
+                                        Variant="@Variant.Filled"
+                                        Color="@Color.Error"
+                                        OnClick="@(() => Delete(TableContext.Item.Id))">
+                                 @SharedResources.Delete
+                             </MudButton>
+                         </MudStack>
+                     </CellTemplate>
+                 </TemplateColumn>
+             </Columns>
+         </MudDataGrid>
+        }
+    </Authorized>
+</AuthorizeView>

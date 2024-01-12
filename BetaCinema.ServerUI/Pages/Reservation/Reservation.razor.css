@@ -1,0 +1,106 @@
+﻿.reservation-container {
+    max-width: 1150px;
+    margin: auto;
+    padding-bottom: 40px;
+}
+
+.reservation-wrapper {
+    display: flex
+}
+
+.page-title-wrapper {
+    font-size: 22px;
+}
+
+.link-title {
+    color: #337ab7;
+}
+
+.title {
+    font-size: 23px;
+    line-height: 1.5;
+    font-weight: 500;
+}
+
+.description {
+    font-family: 'Source Sans Pro', sans-serif;
+    font-size: 18px;
+}
+
+.info-wrapper {
+    padding: 12px 0;
+    font-size: 14px;
+}
+
+.info-title {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+
+    width: 50%;
+    font-family: 'Source Sans Pro', sans-serif;
+}
+
+.info-content {
+    font-family: 'Source Sans Pro', sans-serif;
+    font-weight: 500;
+    width: 50%;
+}
+
+.seat {
+    width: 42px;
+    height: 42px;
+    font-family: serif;
+    font-size: 12px;
+    font-weight: 600;
+    text-align: center;
+    line-height: 36px;
+    background-image: url("/assets/images/seat-unselected.png");
+    background-color: transparent !important;
+    background-repeat: no-repeat;
+    background-size: 36px 36px;
+    background-position: center;
+    color: #494c62;
+}
+
+    .seat.selected {
+        color: #fff;
+        background-image: url("/assets/images/seat-selected.png");
+    }
+
+    .seat.sold {
+        color: #fff;
+        background-image: url("/assets/images/seat-sold.png");
+    }
+
+.submit-button {
+    font-size: 16px;
+    line-height: 1.5;
+    text-transform: uppercase !important;
+}
+
+.info-divider {
+    margin: 6px 0;
+    border-top: 2px dashed #ccc;
+}
+
+.seat-status {
+    font-family: Oswald, sans-serif;
+    font-size: 18px;
+}
+
+.total-price-title {
+    font-family: Oswald, sans-serif;
+    font-size: 18px;
+}
+
+.total-price {
+    font-family: Oswald, sans-serif;
+    font-size: 18px;
+    color: #03599d;
+}
+
+.price-divider {
+    height: 100%;
+    border-left: 2px solid #d8d8d8;
+}

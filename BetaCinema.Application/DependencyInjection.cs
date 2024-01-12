@@ -10,6 +10,7 @@ namespace BetaCinema.Application
             // Cấu hình AutoMapper để ánh xạ các đối tượng.
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
+            // DI mediator to implement CQRS
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 
             return services;

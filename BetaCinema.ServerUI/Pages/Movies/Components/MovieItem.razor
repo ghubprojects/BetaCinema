@@ -1,0 +1,27 @@
+﻿@inherits MovieItemBase
+
+<MudCard Elevation="0" Style="@($"background-color:{Colors.Grey.Lighten4}")">
+    <MudImage Src="/assets/images/testposter.jpg" Fluid="true" Style="border-radius: 20px" />
+    <MudCardContent Class="p-0 mb-8">
+        <MudLink Href="movie-detail" Class="d-block mt-2 mb-4">
+            <p class="movie-title">abc</p>
+        </MudLink>
+
+        <MudText>
+            <span class="info"><b class="info-title">Thể loại: </b>abc</span>
+        </MudText>
+
+        <MudText>
+            <span class="info"><b class="info-title">Thời lượng: </b>100 phút</span>
+        </MudText>
+
+        <MudText>
+            <span class="info"><b class="info-title">Ngày khởi chiếu: </b>01/01/2024</span>
+        </MudText>
+    </MudCardContent>
+    <MudCardActions Class="p-0">
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" FullWidth>
+            <p class="booking-button">Mua vé</p>
+        </MudButton>
+    </MudCardActions>
+</MudCard>

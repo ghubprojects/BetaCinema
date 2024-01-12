@@ -1,0 +1,11 @@
+﻿@page "/admin"
+@layout AdminLayout
+
+<AuthorizeView Roles="Admin">
+    <NotAuthorized>
+        <RedirectToLogin />
+    </NotAuthorized>
+    <Authorized>
+        <h3>Chào mừng đến với trang quản lý dữ liệu dành cho quản trị viên !</h3>
+    </Authorized>
+</AuthorizeView>

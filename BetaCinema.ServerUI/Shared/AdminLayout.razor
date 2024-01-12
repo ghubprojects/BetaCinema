@@ -1,0 +1,23 @@
+﻿@inherits LayoutComponentBase
+
+<PageTitle>Beta Cinema</PageTitle>
+
+<div class="page">
+    <header style="z-index:50">
+        <AuthorizeMenu />
+        <NavigationBar />
+    </header>
+
+    <section class="main-section">
+        <div class="sidebar" style="height:calc(100vh - 100px)">
+            <AdminMenu />
+        </div>
+        <main class="main">
+            @Body
+        </main>
+    </section>
+
+    <footer style="z-index:50">
+        <TheFooter />
+    </footer>
+</div>

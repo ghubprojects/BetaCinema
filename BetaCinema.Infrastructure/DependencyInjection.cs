@@ -1,4 +1,6 @@
-﻿using BetaCinema.Application.Interfaces.Repositories;
+﻿using BetaCinema.Application.Configurations;
+using BetaCinema.Application.Interfaces.Repositories;
+using BetaCinema.Application.Interfaces.Services;
 using BetaCinema.Domain.Models;
 using BetaCinema.Infrastructure.Repositories;
 using BetaCinema.Infrastructure.Services;
@@ -42,9 +44,19 @@ namespace BetaCinema.Infrastructure
                 // Thiết lập ClientID và ClientSecret để truy cập API google
                 googleOptions.ClientId = googleConfig["ClientId"];
                 googleOptions.ClientSecret = googleConfig["ClientSecret"];
+
                 // Cấu hình Url callback lại từ Google (không thiết lập thì mặc định là /signin-google)
                 googleOptions.CallbackPath = "/login-google";
             });
+
+            // Add VNPAY service
+            services.AddScoped<IVnPayService, VnPayService>();
+
+            // Add SMTP mail service
+            services.AddTransient<IMailService, SMTPMailService>();
+
+            // Config mail sender
+            services.Configure<MailConfiguration>(configuration.GetSection("MailConfiguration"));
 
             services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
             services.AddScoped<IUnitOfWork, UnitOfWork>();

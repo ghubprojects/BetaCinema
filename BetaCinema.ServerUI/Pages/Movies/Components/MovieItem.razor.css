@@ -1,0 +1,19 @@
+﻿.movie-title {
+    font-size: 18px;
+    line-height: 1.5;
+}
+
+.info {
+    font-family: 'Source Sans Pro', sans-serif;
+    font-size: 15px;
+}
+
+.info-title {
+    font-weight: 600;
+}
+
+.booking-button {
+    font-size: 18px;
+    line-height: 1.4;
+    text-transform: uppercase !important;
+}

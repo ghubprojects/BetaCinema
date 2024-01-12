@@ -1,0 +1,56 @@
+﻿@inherits NavigationBarBase
+
+<div class="navbar">
+    <MudLink Href="home">
+        <MudImage Src="/assets/images/logo.jpg" Height="55" Alt="Beta Cinema Logo" />
+    </MudLink>
+
+    <MudMenu Variant="Variant.Filled" FullWidth="true" ActivationEvent="@MouseEvent.LeftClick"
+             AnchorOrigin="Origin.BottomLeft" TransformOrigin="Origin.TopLeft" ListClass="location-list" Class="ml-1">
+        <ActivatorContent>
+            <MudChip Color="Color.Primary" Class="location-menu">
+                @locationMenu.SelectedCinema.CinemaName
+                <MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.KeyboardArrowDown" Class="ml-1" />
+            </MudChip>
+        </ActivatorContent>
+        <ChildContent>
+            @foreach (var location in locationMenu.Locations)
+            {
+                <MudMenu Variant="Variant.Filled" FullWidth="true" ActivationEvent="@MouseEvent.MouseOver"
+                         AnchorOrigin="Origin.TopRight" TransformOrigin="Origin.TopLeft" ListClass="cinema-list"
+                         Style="width:100%">
+                    <ActivatorContent>
+                        <MudMenuItem Color="Color.Primary" Class="location-item">
+                            @location.LocationName
+                            <MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.KeyboardArrowRight" Class="ml-1" />
+                        </MudMenuItem>
+                    </ActivatorContent>
+                    <ChildContent>
+                        @foreach (var cinema in location.Cinemas)
+                        {
+                            <MudMenuItem Class="cinema-item" OnClick="@(e=>SelectCinema(cinema))">
+                                @cinema.CinemaName
+                            </MudMenuItem>
+                        }
+                    </ChildContent>
+                </MudMenu>
+            }
+        </ChildContent>
+    </MudMenu>
+
+    <div class="nav-items">
+        @foreach (var navItem in navItemList)
+        {
+            <MudLink Href="@navItem.Href" Underline="Underline.None">
+                <p class="nav-item-title">@navItem.Title</p>
+            </MudLink>
+        }
+        <AuthorizeView Roles="Admin">
+            <Authorized>
+                <MudLink Href="admin" Underline="Underline.None">
+                    <p class="nav-item-title">Admin</p>
+                </MudLink>
+            </Authorized>
+        </AuthorizeView>
+    </div>
+</div>

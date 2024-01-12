@@ -1,0 +1,29 @@
+﻿.authorize-menu {
+    height: 25px;
+    display: flex;
+    justify-content: flex-end;
+    padding: 4px 160px;
+    color: #dde;
+    background-color: black;
+}
+
+.authorized-wrapper, .not-authorized-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-right: 32px;
+}
+
+p {
+    margin: 0;
+    color: white;
+    font-family: "Open Sans", sans-serif;
+    font-size: 13px;
+    line-height:17px;
+    font-weight: 300;
+}
+
+.register-link {
+    padding-left: 12px;
+    border-left: 1px solid #fff
+}

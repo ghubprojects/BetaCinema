@@ -3,7 +3,12 @@
         <MudText>@ContentText</MudText>
     </DialogContent>
     <DialogActions>
-        <MudButton Color="@Color" Variant="Variant.Filled" OnClick="Submit">@ButtonText</MudButton>
+        <div class="p-2">
+            <MudButton Color="@Color" Variant="Variant.Filled" OnClick="Submit">
+                <MudText>@ButtonText</MudText>
+            </MudButton>
+        </div>
+
     </DialogActions>
 </MudDialog>
 

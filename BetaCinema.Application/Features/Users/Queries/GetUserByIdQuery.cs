@@ -1,15 +1,16 @@
 ﻿using BetaCinema.Application.Interfaces.Repositories;
 using BetaCinema.Domain.Models;
+using BetaCinema.Domain.Wrappers;
 using MediatR;
 
 namespace BetaCinema.Application.Features.Users.Commands
 {
-    public class GetUserByIdQuery : IRequest<User>
+    public class GetUserByIdQuery : IRequest<ServiceResult>
     {
         public string Id { get; set; } = null!;
     }
 
-    public class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery, User>
+    public class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery, ServiceResult>
     {
         private readonly IUnitOfWork _unitOfWork;
 
@@ -18,10 +19,17 @@ namespace BetaCinema.Application.Features.Users.Commands
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<User> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
+        public async Task<ServiceResult> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
         {
-            return await _unitOfWork.Repository<User>().GetByIdAsync(request.Id);
-            ;
+            try
+            {
+                var userData = await _unitOfWork.Repository<User>().GetByIdAsync(request.Id);
+                return new ServiceResult(true, "", userData);
+            }
+            catch (Exception ex)
+            {
+                return new ServiceResult(false, ex.Message);
+            }
         }
     }
 }

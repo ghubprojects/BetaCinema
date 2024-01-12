@@ -1,0 +1,23 @@
+﻿.navbar {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 160px;
+    box-shadow: 0 1px 3px #ddd;
+    z-index:100
+}
+
+.nav-items {
+    display: flex;
+}
+
+.nav-item-title {
+    padding: 24px 12px;
+    font-family: Oswald, sans-serif;
+    font-size: 18px;
+    color: #333;
+    text-transform: uppercase
+}
+
+    .nav-item-title:hover {
+        color: #337ab7;
+    }

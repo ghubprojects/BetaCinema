@@ -1,0 +1,62 @@
+﻿@using BetaCinema.Domain.Enums;
+@page "/admin/users/create"
+@layout AdminLayout
+@inherits CreateBase
+
+<AuthorizeView Roles="Admin">
+    <NotAuthorized>
+        <RedirectToLogin />
+    </NotAuthorized>
+    <Authorized>
+        <h3 class="mb-8">@string.Format(SharedResources.CreateTitle, "người dùng") </h3>
+
+        <EditForm Model="@UserData" OnValidSubmit="@CreateUser" Context="formContext">
+            <DataAnnotationsValidator />
+            <MudGrid xs="12">
+                <MudContainer MaxWidth="MaxWidth.Medium">
+                    <MudCard Class="p-4">
+                        <MudCardContent Class="p-0 mb-4 d-flex flex-column gap-2">
+                            <MudTextField @bind-Value="@UserData.UserName"
+                                          Label="UserName"
+                                          Variant="Variant.Outlined"
+                                          Margin="Margin.Dense">
+                            </MudTextField>
+                            <MudTextField @bind-Value="@UserData.FullName"
+                                          Label="FullName"
+                                          Variant="Variant.Outlined"
+                                          Margin="Margin.Dense">
+                            </MudTextField>
+                            <MudTextField @bind-Value="@UserData.Email"
+                                          Label="Email"
+                                          Variant="Variant.Outlined"
+                                          Margin="Margin.Dense">
+                            </MudTextField>
+                            <MudTextField @bind-Value="@UserData.Password"
+                                          Label="Password"
+                                          Variant="Variant.Outlined"
+                                          Margin="Margin.Dense">
+                            </MudTextField>
+                            <MudSelect @bind-Value="@UserData.Role"
+                                       T="string"
+                                       Label="Role"
+                                       AnchorOrigin="Origin.BottomCenter"
+                                       Variant="Variant.Outlined"
+                                       Margin="Margin.Dense">
+                                <MudSelectItem Value="UserRole.Admin.ToString()" />
+                                <MudSelectItem Value="UserRole.Customer.ToString()" />
+                            </MudSelect>
+                        </MudCardContent>
+                        <MudCardActions Class="p-0">
+                            <MudButton ButtonType="ButtonType.Submit"
+                                       Variant="Variant.Filled"
+                                       Color="Color.Primary"
+                                       Class="ml-auto">
+                                @SharedResources.Create
+                            </MudButton>
+                        </MudCardActions>
+                    </MudCard>
+                </MudContainer>
+            </MudGrid>
+        </EditForm>
+    </Authorized>
+</AuthorizeView>

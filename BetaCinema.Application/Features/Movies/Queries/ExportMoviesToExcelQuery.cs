@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using BetaCinema.Application.Helpers;
 using BetaCinema.Application.Interfaces.Repositories;
-using BetaCinema.Domain.ExportEntities;
+using BetaCinema.Domain.DTO;
 using BetaCinema.Domain.Models;
 using MediatR;
 using Microsoft.AspNetCore.Hosting;

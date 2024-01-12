@@ -1,0 +1,107 @@
+﻿@page "/reservation"
+@inherits ReservationBase
+
+<div class="reservation-container">
+    <div class="reservation-wrapper d-flex gap-6">
+        <MudCard Elevation="0" Class="d-flex gap-8" Style="@($"background-color:{Colors.Grey.Lighten4};width:68%")">
+            <MudCardContent Class="p-0 flex-1 d-flex flex-column gap-4">
+                <MudText Class="my-5">
+                    <p class="page-title-wrapper">
+                        <span class="link-title">Trang chủ</span> > <span class="link-title">Đặt vé</span> > <span class="link-title">Arkie và Ngày Mặt Trời Mất Tích</span>
+                    </p>
+                </MudText>
+
+                <div class="d-flex">
+                    <MudImage Src="/assets/images/screen.png" Fluid="true" />
+                </div>
+
+                <MudContainer>
+                    @foreach (var rowSeat in roomSeats)
+                    {
+                        <div class="d-flex justify-content-center">
+                            @foreach (var seat in rowSeat.Seats)
+                            {
+                                <div class="@GetSeatClasses(seat)" @onclick="@(e => ToggleSelectSeat(seat))">
+                                    @($"{seat.RowNum}{seat.SeatNum}")
+                                </div>
+                            }
+                        </div>
+                    }
+                </MudContainer>
+
+                <MudPaper Elevation="0" Class="d-flex justify-content-between px-3 py-4 rounded-0">
+                    @foreach (var seatStatus in seatStatusList)
+                    {
+                        <div class="d-flex gap-6 px-4 align-items-center">
+                            <MudImage Src="@($"/assets/images/{seatStatus.ImageFileName}")" Width="40" />
+                            <p class="seat-status">@seatStatus.Status</p>
+                        </div>
+                    }
+
+                    <span class="price-divider"></span>
+
+                    <MudStack Spacing="3" Class="px-4" Style="width:25%">
+                        <p class="total-price-title">Tổng tiền</p>
+                        <p class="total-price">@totalPrice</p>
+                    </MudStack>
+                </MudPaper>
+
+            </MudCardContent>
+        </MudCard>
+
+        <MudCard Elevation="0" Class="d-flex flex-column mt-10" Style="width:32%;height:fit-content">
+            <MudCardContent Class="p-0 d-flex">
+                <MudImage Src="/assets/images/testposter.jpg" Fluid="true" Class="px-3 ml-n3" Style="width:50%" />
+                <p class="title px-3" style="color:#03599d">Arkie và Ngày Mặt Trời Mất Tích</p>
+            </MudCardContent>
+
+            <MudCardContent Class="px-8 py-3 d-flex flex-column gap-4">
+                <div class="detail-infos">
+                    @foreach (var info in movieInfos)
+                    {
+                        <div class="info-wrapper">
+                            <div class="info-title">
+                                <i class="@info.IconClass" style="font-size:14px"></i>
+                                @($"{info.Title}:")
+                            </div>
+                            <span class="info-content">@info.Content</span>
+                        </div>
+                    }
+                </div>
+            </MudCardContent>
+
+            <hr class="info-divider">
+
+            <MudCardContent Class="px-8 py-3 d-flex flex-column gap-4">
+                <div class="detail-infos">
+                    @foreach (var info in showtimeInfos)
+                    {
+                        <div class="info-wrapper">
+                            <div class="info-title">
+                                <i class="@info.IconClass" style="font-size:14px"></i>
+                                @($"{info.Title}")
+                            </div>
+                            <span class="info-content">@info.Content</span>
+                        </div>
+                    }
+
+                    <div class="info-wrapper">
+                        <div class="info-title">
+                            <i class="fas fa-cubes" style="font-size:14px"></i>
+                            Ghế ngồi
+                        </div>
+                        <span class="info-content">
+                            @(string.Join(", ", selectedSeat.Select(s => $"{s.RowNum}{s.SeatNum}")))
+                        </span>
+                    </div>
+                </div>
+            </MudCardContent>
+
+            <MudCardActions Class="pb-8 d-flex justify-content-center">
+                <MudButton Size="Size.Large" Variant="Variant.Filled" Color="Color.Primary">
+                    <p class="submit-button">@SharedResources.Continue</p>
+                </MudButton>
+            </MudCardActions>
+        </MudCard>
+    </div>
+</div>

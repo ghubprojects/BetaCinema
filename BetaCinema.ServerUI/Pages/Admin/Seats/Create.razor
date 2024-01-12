@@ -1,0 +1,43 @@
+﻿@page "/admin/seats/create"
+@layout AdminLayout
+@inherits CreateBase
+
+<AuthorizeView Roles="Admin">
+    <NotAuthorized>
+        <RedirectToLogin />
+    </NotAuthorized>
+    <Authorized>
+        <h3 class="mb-8">@string.Format(SharedResources.CreateTitle, "ghế")</h3>
+
+        <EditForm Model="@SeatData" OnValidSubmit="@CreateSeat" Context="formContext">
+            <DataAnnotationsValidator />
+            <MudGrid xs="12">
+                <MudContainer MaxWidth="MaxWidth.Medium">
+                    <MudCard Class="p-4">
+                        <MudCardContent Class="p-0 mb-4 d-flex flex-column gap-2">
+                            <MudTextField @bind-Value="@SeatData.RowNum"
+                                          Label="RowNum"
+                                          Variant="Variant.Outlined"
+                                          Margin="Margin.Dense"
+                                                Required>
+                            </MudTextField>
+                            <MudTextField @bind-Value="@SeatData.SeatNum"
+                                          Label="SeatNum"
+                                          Variant="Variant.Outlined"
+                                          Margin="Margin.Dense">
+                            </MudTextField>
+                        </MudCardContent>
+                        <MudCardActions Class="p-0">
+                            <MudButton ButtonType="ButtonType.Submit"
+                                       Variant="Variant.Filled"
+                                       Color="Color.Primary"
+                                       Class="ml-auto">
+                                @SharedResources.Create
+                            </MudButton>
+                        </MudCardActions>
+                    </MudCard>
+                </MudContainer>
+            </MudGrid>
+        </EditForm>
+    </Authorized>
+</AuthorizeView>

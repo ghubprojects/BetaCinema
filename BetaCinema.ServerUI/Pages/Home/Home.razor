@@ -1,0 +1,19 @@
+﻿@page "/home"
+@using BetaCinema.ServerUI.Pages.Movies.Components
+@inherits HomeBase
+
+<MudCarousel ShowArrows EnableSwipeGesture AutoCycle ShowBullets="false" TData="object"
+              Class="mud-width-full mb-9" Style="height:542px">
+     @foreach (var slideName in slideNames)
+    {
+        <MudCarouselItem Class="mud-width-full" Transition="Transition.Slide" Color="@Color.Primary">
+            <div class="d-flex justify-content-center" style="height:542px">
+                <MudImage Src="@($"/assets/images/slides/{slideName}")" />
+            </div>
+        </MudCarouselItem>
+    }
+</MudCarousel>
+
+<div class="pt-3" style="padding-bottom: 200px">
+    <MoviesNavigationBar />
+</div>

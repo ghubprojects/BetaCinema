@@ -1,0 +1,44 @@
+﻿@using BetaCinema.Domain.Enums;
+@page "/admin/cinemas/create"
+@layout AdminLayout
+@inherits CreateBase
+
+<AuthorizeView Roles="Admin">
+    <NotAuthorized>
+        <RedirectToLogin />
+    </NotAuthorized>
+    <Authorized>
+        <h3 class="mb-8">@string.Format(SharedResources.CreateTitle, "phim")</h3>
+
+        <EditForm Model="@CinemaData" OnValidSubmit="@CreateCinema" Context="formContext">
+            <DataAnnotationsValidator />
+            <MudGrid xs="12">
+                <MudContainer MaxWidth="MaxWidth.Medium">
+                    <MudCard Class="p-4">
+                        <MudCardContent Class="p-0 mb-4 d-flex flex-column gap-2">
+                            <MudTextField @bind-Value="@CinemaData.CinemaName"
+                                          Label="CinemaName"
+                                          Variant="Variant.Outlined"
+                                          Margin="Margin.Dense"
+                                                Required>
+                            </MudTextField>
+                            <MudTextField @bind-Value="@CinemaData.CinemaLocation"
+                                          Label="CinemaLocation"
+                                          Variant="Variant.Outlined"
+                                          Margin="Margin.Dense">
+                            </MudTextField>
+                        </MudCardContent>
+                        <MudCardActions Class="p-0">
+                            <MudButton ButtonType="ButtonType.Submit"
+                                       Variant="Variant.Filled"
+                                       Color="Color.Primary"
+                                       Class="ml-auto">
+                                @SharedResources.Create
+                            </MudButton>
+                        </MudCardActions>
+                    </MudCard>
+                </MudContainer>
+            </MudGrid>
+        </EditForm>
+    </Authorized>
+</AuthorizeView>

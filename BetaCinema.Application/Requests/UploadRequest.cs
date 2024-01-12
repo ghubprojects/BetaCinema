@@ -1,15 +1,11 @@
-﻿using BetaCinema.Domain.Enums;
+﻿using Microsoft.AspNetCore.Components.Forms;
 
 namespace BetaCinema.Application.Requests
 {
     public class UploadRequest
     {
-        public string FileName { get; set; }
+        public IList<IBrowserFile> UploadedFiles { get; set; }
 
-        public string Extension { get; set; }
-
-        public UploadType UploadType { get; set; }
-
-        public byte[] Data { get; set; }
+        public long MaxFileSize { get; set; } = 1024 * 1024 * 3; // represents 3MB
     }
 }

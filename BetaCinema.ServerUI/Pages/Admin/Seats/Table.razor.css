@@ -1,0 +1,3 @@
+﻿.admin-table .mud-drop-container {
+    height: calc(100px - 40px) !important;
+}

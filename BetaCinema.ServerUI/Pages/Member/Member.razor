@@ -1,0 +1,70 @@
+﻿@page "/member"
+@inherits MemberBase
+
+<AuthorizeView Roles="Admin, Customer">
+    <NotAuthorized>
+        <RedirectToLogin />
+    </NotAuthorized>
+    <Authorized>
+        <div class="member-container">
+            <div class="member-wrapper">
+                <div class="title">Thông tin tài khoản</div>
+                <div class="form-wrapper">
+                    <EditForm Model="@UserData" OnValidSubmit="@SaveChanges" Context="formContext">
+                        <DataAnnotationsValidator />
+
+                        <MudCard Elevation="0" Class="d-flex px-6 py-5 gap-3">
+                            <MudCardContent Class="d-flex flex-column align-items-center gap-3">
+                                <MudImage ObjectFit="ObjectFit.Cover" Src="@($"/assets/images/avatars/{UserData.Avatar}")"
+                                          Width="240" Height="240" />
+
+                                <MudFileUpload T="IBrowserFile" Accept=".png, .jpg" FilesChanged="UploadAvatar"
+                                               Context="uploadContext" Class="mt-0">
+                                    <ButtonTemplate>
+                                        <MudButton HtmlTag="label" Variant="Variant.Filled" Color="Color.Primary"
+                                                   for="@uploadContext.Id">
+                                            @SharedResources.Upload
+                                            <MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.Image" Class="ml-2" />
+                                        </MudButton>
+                                    </ButtonTemplate>
+                                </MudFileUpload>
+                            </MudCardContent>
+
+                            <MudCardContent Class="flex-1 d-flex flex-column gap-3">
+                                <MudTextField @bind-Value="@UserData.UserName"
+                                              Label="UserName"
+                                              Variant="Variant.Outlined"
+                                              Margin="Margin.Dense">
+                                </MudTextField>
+                                <MudTextField @bind-Value="@UserData.FullName"
+                                              Label="FullName"
+                                              Variant="Variant.Outlined"
+                                              Margin="Margin.Dense">
+                                </MudTextField>
+                                <MudTextField @bind-Value="@UserData.Email"
+                                              Label="Email"
+                                              Variant="Variant.Outlined"
+                                              Margin="Margin.Dense">
+                                </MudTextField>
+                                <MudTextField @bind-Value="@UserData.Password"
+                                              Label="Password"
+                                              Variant="Variant.Outlined"
+                                              Margin="Margin.Dense" ReadOnly>
+                                </MudTextField>
+
+                                <MudCardActions Class="p-0">
+                                    <MudButton ButtonType="ButtonType.Submit"
+                                               Variant="Variant.Filled"
+                                               Color="Color.Primary"
+                                               Class="ml-auto">
+                                        @SharedResources.Update
+                                    </MudButton>
+                                </MudCardActions>
+                            </MudCardContent>
+                        </MudCard>
+                    </EditForm>
+                </div>
+            </div>
+        </div>
+    </Authorized>
+</AuthorizeView>

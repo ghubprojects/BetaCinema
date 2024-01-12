@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using BetaCinema.Application.Helpers;
+using BetaCinema.Domain.DTO;
 using BetaCinema.Domain.Exceptions;
-using BetaCinema.Domain.ExportEntities;
 using BetaCinema.Domain.Models;
 
 namespace BetaCinema.Application.Mappings
