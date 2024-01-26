@@ -1,0 +1,33 @@
+﻿@inherits MoviesNavbarBase
+
+<MudTabs Rounded="true" Border @bind-ActivePanelIndex="activeTabIndex"
+          Class="align-items-center" Style="@($"background-color:{Colors.Grey.Lighten4}")">
+     <MudTabPanel Style="@($"background-color:{Colors.Grey.Lighten4}")" OnClick="GetComingMovies">
+         <ChildContent>
+             <div class="list-wrapper">
+                 @foreach (var movies in comingMovies)
+                {
+                    <div class="w-25 px-8 py-6"><MovieItem MovieData="movies" /></div>
+                }
+            </div>
+        </ChildContent>
+        <TabContent>
+            <span class="tab-content">Phim sắp chiếu</span>
+        </TabContent>
+    </MudTabPanel>
+
+    <MudTabPanel Style="@($"background-color:{Colors.Grey.Lighten4}")" OnClick="GetShowingMovies">
+        <ChildContent>
+            <div class="list-wrapper">
+                @foreach (var movies in showingMovies)
+                {
+                    <div class="w-25 px-8 py-6"><MovieItem MovieData="movies" /></div>
+                }
+            </div>
+        </ChildContent>
+
+        <TabContent>
+            <span class="tab-content">Phim đang chiếu</span>
+        </TabContent>
+    </MudTabPanel>
+</MudTabs>

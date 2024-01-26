@@ -1,7 +1,8 @@
 ﻿using BetaCinema.Application.Helpers;
-using BetaCinema.Application.Interfaces.Repositories;
+using BetaCinema.Application.Interfaces;
 using BetaCinema.Application.Requests;
 using BetaCinema.Domain.Models;
+using BetaCinema.Domain.Resources;
 using BetaCinema.Domain.Wrappers;
 using MediatR;
 using System.Data;
@@ -18,26 +19,45 @@ namespace BetaCinema.Application.Features.Movies.Commands
     /// </summary>
     internal sealed class ImportMoviesFromExcelCommandHandler : IRequestHandler<ImportMoviesFromExcelCommand, ServiceResult>
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IAppDbContext _context;
 
-        public ImportMoviesFromExcelCommandHandler(IUnitOfWork unitOfWork)
+        public ImportMoviesFromExcelCommandHandler(IAppDbContext context)
         {
-            _unitOfWork = unitOfWork;
+            _context = context;
         }
 
         public async Task<ServiceResult> Handle(ImportMoviesFromExcelCommand request, CancellationToken cancellationToken)
         {
-            var stream = new MemoryStream(request.ImportRequest.Data);
-            var result = (await ImportFromExcelHelper<Movie>.ImportAsync(stream, mappers: new Dictionary<string, Func<DataRow, Movie, object>>
+            var mappers = new Dictionary<string, Func<DataRow, Movie, object>>
             {
-                { "MovieName", (row,item) => item.MovieName = row["MovieName"].ToString() },
-                { "Poster", (row, item) => item.Poster = row["Poster"]?.ToString() },
-                { "Duration", (row, item) => item.Duration = Convert.ToInt32(row["Duration"]) },
-                { "ReleaseDate", (row, item) => item.ReleaseDate = DateTime.Parse(row["ReleaseDate"].ToString()) },
-                { "Director", (row, item) => item.Director = row["Director"]?.ToString() },
-                { "Actor", (row, item) => item.Actor = row["Actor"]?.ToString() },
-                { "Description", (row, item) => item.Description = row["Description"]?.ToString() },
-            }, "Sheet1"));
+                {
+                    MovieResources.MovieName,
+                    (row, item) => item.MovieName = row[MovieResources.MovieName].ToString()
+                },
+                {
+                    MovieResources.Duration,
+                    (row, item) => item.Duration = Convert.ToInt32(row[MovieResources.Duration])
+                },
+                {
+                    MovieResources.ReleaseDate,
+                    (row, item) => item.ReleaseDate = DateTime.Parse(row[MovieResources.ReleaseDate].ToString())
+                },
+                {
+                    MovieResources.Director,
+                    (row, item) => item.Director = row[MovieResources.Director]?.ToString()
+                },
+                {
+                    MovieResources.Actor,
+                    (row, item) => item.Actor = row[MovieResources.Actor]?.ToString()
+                },
+                {
+                    MovieResources.Description,
+                    (row, item) => item.Description = row[MovieResources.Description]?.ToString()
+                },
+            };
+
+            var stream = new MemoryStream(request.ImportRequest.Data);
+            var result = (await ImportFromExcelHelper<Movie>.ImportAsync(stream, mappers, "Sheet1"));
 
             var movies = result.Select(data => new Movie
             {
@@ -50,10 +70,12 @@ namespace BetaCinema.Application.Features.Movies.Commands
                 Actor = data.Actor,
                 Description = data.Description,
                 DeleteFlag = false,
+                CreatedDate = DateTime.Now,
+                ModifiedDate = DateTime.Now
             }).ToList();
 
-            await _unitOfWork.Repository<Movie>().AddMultipleAsync(movies);
-
+            _context.Movies.AddRange(movies);
+            await _context.SaveChangesAsync(cancellationToken);
             return new ServiceResult(true);
         }
     }

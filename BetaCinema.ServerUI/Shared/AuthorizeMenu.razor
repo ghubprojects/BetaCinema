@@ -1,10 +1,15 @@
-﻿<div class="authorize-menu">
+﻿@using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
+@inject ProtectedLocalStorage BrowserStorage
+
+<div class="authorize-menu">
     <AuthorizeView>
         <Authorized>
             <div class="authorized-wrapper">
                 <p>Xin chào: @context.User.Identity.Name</p>
                 <form method="post" action="/logout">
-                    <button type="submit"><i class="fas fa-arrow-right-from-bracket"></i></button>
+                    <button type="submit" onclick="@(async () => await BrowserStorage.DeleteAsync("userId"))">
+                        <i class="fas fa-arrow-right-from-bracket"></i>
+                    </button>
                 </form>
             </div>
         </Authorized>

@@ -1,0 +1,169 @@
+﻿.checkout-container {
+    max-width: 1150px;
+    margin: auto;
+    padding-bottom: 40px;
+}
+
+.checkout-wrapper {
+    display: flex
+}
+
+.page-title-wrapper {
+    font-family: Oswald, sans-serif;
+    font-size: 22px;
+}
+
+.link-title {
+    color: #337ab7;
+}
+
+.title-wrapper {
+    display: flex;
+    gap: 12px;
+    align-items: center
+}
+
+.title {
+    font-size: 20px;
+    font-weight: 400;
+    text-transform: uppercase;
+}
+
+/* User Info */
+.user-info {
+    display: flex;
+    margin-top: 24px;
+}
+
+    .user-info .user-info-item {
+        width: 40%
+    }
+
+        .user-info .user-info-item .user-info-item-label {
+            font-weight: 500;
+        }
+
+        .user-info .user-info-item .user-info-item-value {
+        }
+
+/* Total Price */
+.total-price {
+    display: flex
+}
+
+    .total-price * {
+        color: #000;
+        font-family: 'Source Sans Pro', sans-serif;
+    }
+
+    .total-price .seat-type {
+        width: 50%;
+        font-size: 18px;
+        font-weight: 500;
+        text-transform: uppercase;
+    }
+
+    .total-price .seat-quantity {
+        width: 30%;
+        text-align: right;
+    }
+
+    .total-price .seat-money {
+        width: 20%;
+        text-align: right;
+    }
+
+/* Divider */
+
+.divider {
+    margin: 12px 0 36px;
+    border-top: 1px solid #333;
+}
+
+/* Payment Method */
+.option-title {
+    margin-top: 24px;
+    font-family: 'Source Sans Pro', sans-serif;
+    font-size: 18px;
+    font-weight: 500;
+}
+
+/* Note section */
+.note-before-next {
+    padding-left: 28px;
+    font-family: 'Source Sans Pro', sans-serif;
+    font-size: 14px;
+    font-style: italic
+}
+
+.note-refund {
+    padding-left: 28px;
+    font-family: 'Source Sans Pro', sans-serif;
+    font-size: 14px;
+    font-style: italic
+}
+
+.movie-title {
+    font-family: Oswald, sans-serif;
+    font-size: 23px;
+    line-height: 1.5;
+    font-weight: 500;
+}
+
+.method-title {
+    display: inline-block;
+    font-size: 13px;
+    margin-left: 12px
+}
+
+.description {
+    font-family: 'Source Sans Pro', sans-serif;
+    font-size: 18px;
+}
+
+.info-wrapper {
+    padding: 12px 0;
+    font-size: 14px;
+}
+
+.info-title {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    width: 50%;
+    font-family: 'Source Sans Pro', sans-serif;
+}
+
+.info-content {
+    font-family: 'Source Sans Pro', sans-serif;
+    font-weight: 500;
+    width: 50%;
+}
+
+.submit-button {
+    font-family: Oswald, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    text-transform: uppercase !important;
+}
+
+.info-divider {
+    margin: 6px 0;
+    border-top: 2px dashed #ccc;
+}
+
+.total-price-title {
+    font-family: Oswald, sans-serif;
+    font-size: 18px;
+}
+
+.total-price {
+    font-family: Oswald, sans-serif;
+    font-size: 18px;
+    color: #03599d;
+}
+
+.price-divider {
+    height: 100%;
+    border-left: 2px solid #d8d8d8;
+}

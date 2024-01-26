@@ -2,6 +2,7 @@
 using BetaCinema.Application.Requests;
 using BetaCinema.Domain.Enums;
 using BetaCinema.Domain.Models;
+using BetaCinema.Domain.Resources;
 using BetaCinema.Domain.Wrappers;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
@@ -31,11 +32,26 @@ namespace BetaCinema.Application.Features.Users.Commands
             var stream = new MemoryStream(request.ImportRequest.Data);
             var result = (await ImportFromExcelHelper<User>.ImportAsync(stream, mappers: new Dictionary<string, Func<DataRow, User, object>>
             {
-                { "UserName", (row,item) => item.UserName = row["UserName"].ToString() },
-                { "FullName", (row,item) => item.FullName = row["FullName"].ToString() },
-                { "Email", (row,item) => item.Email = row["Email"].ToString() },
-                { "Password", (row,item) => item.Password = row["Password"].ToString() },
-                { "Role", (row,item) => item.Role = row["Role"].ToString() },
+                {
+                    UserResources.UserName, (row,item) =>
+                    item.UserName = row[UserResources.UserName].ToString()
+                },
+                {
+                    UserResources.FullName, (row,item) =>
+                    item.FullName = row[UserResources.FullName].ToString()
+                },
+                {
+                    UserResources.Email, (row,item) =>
+                    item.Email = row[UserResources.Email].ToString()
+                },
+                {
+                    UserResources.Password, (row,item) =>
+                    item.Password = row[UserResources.Password].ToString()
+                },
+                {
+                    UserResources.Role, (row,item) =>
+                    item.Role = row[UserResources.Role].ToString()
+                },
             }, "Sheet1"));
 
             var users = result.Select(data => new User

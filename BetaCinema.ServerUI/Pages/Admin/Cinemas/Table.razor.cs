@@ -28,6 +28,26 @@ namespace BetaCinema.ServerUI.Pages.Admin.Cinemas
 
         protected List<Cinema>? cinemas;
 
+        protected string _searchString;
+
+        // quick filter - filter globally across multiple columns with the same input
+        protected Func<Cinema, bool> _quickFilter => x =>
+        {
+            if (string.IsNullOrWhiteSpace(_searchString))
+                return true;
+
+            if (x.CinemaName.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+                return true;
+
+            if (x.CinemaLocation.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+                return true;
+
+            if ($"{x.CinemaName} {x.CinemaLocation}".Contains(_searchString))
+                return true;
+
+            return false;
+        };
+
         protected override async Task OnInitializedAsync()
         {
             cinemas = await Mediator.Send(new GetAllCinemasQuery());
@@ -43,7 +63,7 @@ namespace BetaCinema.ServerUI.Pages.Admin.Cinemas
             var cinema = cinemas.First(x => x.Id == cinemaId);
             if (await js.InvokeAsync<bool>("confirm", $"Do you want to delete Cinema <{cinema.CinemaName}>?"))
             {
-                await Mediator.Send(new DeleteUserCommand() { Id = cinemaId });
+                await Mediator.Send(new DeleteCinemaCommand() { Id = cinemaId });
                 SnackBar.Add("Delete successfully", Severity.Success);
                 await OnInitializedAsync();
             }

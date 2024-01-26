@@ -1,4 +1,5 @@
-﻿using BetaCinema.Application.Features.Movies.Commands;
+﻿using BetaCinema.Application.Features.Categories.Commands;
+using BetaCinema.Application.Features.Movies.Commands;
 using BetaCinema.Domain.Models;
 using BetaCinema.ServerUI.Components.Dialog;
 using BetaCinema.ServerUI.Resources;
@@ -21,23 +22,26 @@ namespace BetaCinema.ServerUI.Pages.Admin.Movies
 
         [Inject] private IMediator Mediator { get; set; }
 
-        [Parameter]
-        public Movie MovieData { get; set; }
+        public Movie MovieData { get; set; } = new();
 
-        protected async override Task OnParametersSetAsync()
+        protected List<Category> CategoryList { get; set; } = new();
+
+        protected string categoriesValue = "";
+        protected IEnumerable<string> categoryOptions { get; set; } = new HashSet<string>() { };
+
+        protected override async Task OnParametersSetAsync()
         {
-            await Task.Run(() =>
-            {
-                MovieData = new Movie()
-                {
-                    DeleteFlag = false
-                };
-            });
+            MovieData = new Movie() { DeleteFlag = false };
+            CategoryList = await Mediator.Send(new GetAllCategoriesQuery());
         }
 
         protected async Task CreateMovie()
         {
-            var result = await Mediator.Send(new CreateMovieCommand() { Data = MovieData });
+            var result = await Mediator.Send(new CreateMovieCommand()
+            {
+                MovieInfo = MovieData,
+                Categories = categoryOptions.ToList()
+            });
 
             if (result.IsSuccess)
             {

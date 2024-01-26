@@ -43,7 +43,7 @@ namespace BetaCinema.ServerUI.Pages.Admin.Seats
             var seat = seats.First(x => x.Id == seatId);
             if (await js.InvokeAsync<bool>("confirm", $"Do you want to delete Seat <{seat.RowNum}{seat.SeatNum}>?"))
             {
-                await Mediator.Send(new DeleteUserCommand() { Id = seatId });
+                await Mediator.Send(new DeleteSeatCommand() { Id = seatId });
                 SnackBar.Add("Delete successfully", Severity.Success);
                 await OnInitializedAsync();
             }

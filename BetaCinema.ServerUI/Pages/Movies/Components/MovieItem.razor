@@ -1,10 +1,10 @@
 ﻿@inherits MovieItemBase
 
 <MudCard Elevation="0" Style="@($"background-color:{Colors.Grey.Lighten4}")">
-    <MudImage Src="/assets/images/testposter.jpg" Fluid="true" Style="border-radius: 20px" />
-    <MudCardContent Class="p-0 mb-8">
-        <MudLink Href="movie-detail" Class="d-block mt-2 mb-4">
-            <p class="movie-title">abc</p>
+    <MudImage Src="@($"/assets/images/posters/{MovieData.Poster}")" Fluid="true" Style="border-radius: 20px" />
+    <MudCardContent Class="p-0 mb-6">
+        <MudLink Href="@uri" Class="d-block mt-2 mb-2">
+            <span class="movie-title">@MovieData.MovieName</span>
         </MudLink>
 
         <MudText>
@@ -12,16 +12,26 @@
         </MudText>
 
         <MudText>
-            <span class="info"><b class="info-title">Thời lượng: </b>100 phút</span>
+            <span class="info"><b class="info-title">Thời lượng: </b>@($"{MovieData.Duration} phút")</span>
         </MudText>
 
-        <MudText>
-            <span class="info"><b class="info-title">Ngày khởi chiếu: </b>01/01/2024</span>
-        </MudText>
+        @if (MovieData.ReleaseDate.Value.Date > DateTime.Now.Date)
+        {
+            <MudText>
+                <span class="info">
+                    <b class="info-title">Ngày khởi chiếu: </b>
+                    <span class="info-time">@MovieData.ReleaseDate.Value.ToString("dd/MM/yyyy")</span>
+                </span>
+            </MudText>
+        }
     </MudCardContent>
-    <MudCardActions Class="p-0">
+
+    @if (MovieData.ReleaseDate.Value.Date <= DateTime.Now.Date)
+    {
+        <MudCardActions Class="p-0">
         <MudButton Variant="Variant.Filled" Color="Color.Primary" FullWidth>
-            <p class="booking-button">Mua vé</p>
+            <span class="booking-button">Mua vé</span>
         </MudButton>
     </MudCardActions>
+    }
 </MudCard>

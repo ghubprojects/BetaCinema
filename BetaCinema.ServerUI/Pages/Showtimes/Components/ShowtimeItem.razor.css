@@ -1,19 +1,25 @@
 ﻿.movie-title {
-    font-size: 18px;
+    font-family: Oswald, sans-serif;
+    font-size: 28px;
     line-height: 1.5;
+    text-wrap: wrap;
 }
+
+    .movie-title:hover {
+        color: #E02222;
+        text-decoration: underline;
+    }
+
+    .movie-title.first-movie {
+        font-size: 32px;
+    }
 
 .info {
     font-family: 'Source Sans Pro', sans-serif;
-    font-size: 15px;
+    font-size: 18px;
+    color: #555;
 }
 
 .info-title {
     font-weight: 600;
-}
-
-.booking-button {
-    font-size: 18px;
-    line-height: 1.4;
-    text-transform: uppercase !important;
 }

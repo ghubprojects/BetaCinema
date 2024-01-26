@@ -1,0 +1,26 @@
+﻿@inherits MovieShowtimesNavigationBarBase
+
+<div class="showtime-navbar-container">
+    <MudTabs Rounded="true" Border Class="align-items-start">
+         @foreach (var kvp in currentWeekDays)
+        {
+            <MudTabPanel Style="@($"background-color:{Colors.Grey.Lighten4}")" OnClick="() => GetShowtimes(kvp.Key)">
+                <ChildContent>
+                    <div class="list-wrapper">
+                        @foreach (var showtime in showtimeList)
+                        {
+                            <MovieShowtimeItem ShowtimeData="showtime" IsFullWidth="true"/>
+                        }
+                    </div>
+                </ChildContent>
+
+                <TabContent>
+                    <span class="tab-content">
+                        <span class="tab-content-day">@kvp.Key.Substring(0,2)</span>@kvp.Key.Substring(2)
+                    </span>
+                </TabContent>
+            </MudTabPanel>
+        }
+    </MudTabs>
+</div>
+

@@ -1,4 +1,4 @@
-﻿using BetaCinema.Application.Interfaces.Repositories;
+﻿using BetaCinema.Application.Interfaces;
 using BetaCinema.Domain.Models;
 using MediatR;
 
@@ -11,16 +11,16 @@ namespace BetaCinema.Application.Features.Cinemas.Commands
 
     public class GetCinemaByIdQueryHandler : IRequestHandler<GetCinemaByIdQuery, Cinema>
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IAppDbContext _context;
 
-        public GetCinemaByIdQueryHandler(IUnitOfWork unitOfWork)
+        public GetCinemaByIdQueryHandler(IAppDbContext context)
         {
-            _unitOfWork = unitOfWork;
+            _context = context;
         }
 
         public async Task<Cinema> Handle(GetCinemaByIdQuery request, CancellationToken cancellationToken)
         {
-            return await _unitOfWork.Repository<Cinema>().GetByIdAsync(request.Id);
+            return await _context.Cinemas.FindAsync(request.Id);
         }
     }
 }

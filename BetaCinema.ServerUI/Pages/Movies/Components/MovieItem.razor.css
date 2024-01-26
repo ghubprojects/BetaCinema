@@ -1,6 +1,10 @@
 ﻿.movie-title {
+    font-family: Oswald, sans-serif;
     font-size: 18px;
     line-height: 1.5;
+    text-wrap: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 
 .info {
@@ -12,7 +16,13 @@
     font-weight: 600;
 }
 
+.info-time {
+    font-family: Oswald, sans-serif;
+    color: #03599d;
+}
+
 .booking-button {
+    font-family: Oswald, sans-serif;
     font-size: 18px;
     line-height: 1.4;
     text-transform: uppercase !important;

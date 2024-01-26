@@ -118,21 +118,24 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Duplicated" xml:space="preserve">
-    <value>{0} is existed</value>
+    <value>{0} đã tồn tại</value>
   </data>
   <data name="GreaterThan0" xml:space="preserve">
-    <value>{0} must be greater than 0</value>
+    <value>{0} phải lớn hơn 0</value>
   </data>
   <data name="GreaterThanNow" xml:space="preserve">
-    <value>{0} must be greater than now</value>
+    <value>{0} phải lớn hơn hiện tại</value>
   </data>
   <data name="Invalid" xml:space="preserve">
-    <value>{0} is invalid</value>
+    <value>{0} không hợp lệ</value>
+  </data>
+  <data name="NotExisted" xml:space="preserve">
+    <value>{0} không tồn tại</value>
   </data>
   <data name="Overflow" xml:space="preserve">
-    <value>{0} is overflow</value>
+    <value>{0} quá dài</value>
   </data>
   <data name="Required" xml:space="preserve">
-    <value>{0} is required</value>
+    <value>{0} không được để trống</value>
   </data>
 </root>

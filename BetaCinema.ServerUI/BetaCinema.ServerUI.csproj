@@ -1,53 +1,76 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		
+		<PreserveCompilationContext>true</PreserveCompilationContext>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.23" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.11">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.23" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.23" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.23">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.16" />
-    <PackageReference Include="MudBlazor" Version="6.11.2" />
-  </ItemGroup>
+	<ItemGroup>
+	  <None Include="wwwroot\assets\images\avatars\4kpqz34d.jpg" />
+	  <None Include="wwwroot\assets\images\avatars\dcfcslgg.jpg" />
+	  <None Include="wwwroot\assets\images\avatars\hknbmqu1.jpg" />
+	  <None Include="wwwroot\assets\images\avatars\nric5hj2.png" />
+	  <None Include="wwwroot\assets\images\avatars\rhsst1bn.jpg" />
+	  <None Include="wwwroot\assets\images\avatars\sc0jic3d.png" />
+	  <None Include="wwwroot\assets\images\avatars\wuojqv40.jpg" />
+	  <None Include="wwwroot\assets\images\desktop.ini" />
+	  <None Include="wwwroot\assets\images\logo.jpg" />
+	  <None Include="wwwroot\assets\images\notified.png" />
+	  <None Include="wwwroot\assets\images\payment-email-title.jpg" />
+	  <None Include="wwwroot\assets\images\screen.png" />
+	  <None Include="wwwroot\assets\images\seat-selected.png" />
+	  <None Include="wwwroot\assets\images\seat-sold.png" />
+	  <None Include="wwwroot\assets\images\seat-unselected.png" />
+	  <None Include="wwwroot\assets\images\slide1.png" />
+	  <None Include="wwwroot\assets\images\slide2.png" />
+	  <None Include="wwwroot\assets\images\slide3.jpg" />
+	  <None Include="wwwroot\assets\images\slides\1702x621-152608-110124-95.png" />
+	  <None Include="wwwroot\assets\images\slides\24tbalh5.png" />
+	  <None Include="wwwroot\assets\images\slides\g3qxax3m.png" />
+	  <None Include="wwwroot\assets\images\slides\thong-bao-khai-truong-tqk-1702-x-621-copy-111553-090124-69.png" />
+	  <None Include="wwwroot\assets\images\testposter.jpg" />
+	  <None Include="wwwroot\assets\images\ticket-price.png" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\BetaCinema.Application\BetaCinema.Application.csproj" />
-    <ProjectReference Include="..\BetaCinema.Infrastructure\BetaCinema.Infrastructure.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Fluid.ViewEngine" Version="2.5.0" />
+		<PackageReference Include="Fluxor.Blazor.Web" Version="5.9.1" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.23" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.11">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.23" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.23" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.23">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.16" />
+		<PackageReference Include="MudBlazor" Version="6.11.2" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Template\" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\BetaCinema.Application\BetaCinema.Application.csproj" />
+		<ProjectReference Include="..\BetaCinema.Infrastructure\BetaCinema.Infrastructure.csproj" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <None Include="wwwroot\assets\images\slide1.png" />
-  </ItemGroup>
+	<ItemGroup>
+		<Compile Update="Resources\SharedResources.Designer.cs">
+			<DesignTime>True</DesignTime>
+			<AutoGen>True</AutoGen>
+			<DependentUpon>SharedResources.resx</DependentUpon>
+		</Compile>
+	</ItemGroup>
 
-  <ItemGroup>
-    <Compile Update="Resources\SharedResources.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>SharedResources.resx</DependentUpon>
-    </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Update="Resources\SharedResources.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>SharedResources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>
+	<ItemGroup>
+		<EmbeddedResource Update="Resources\SharedResources.resx">
+			<Generator>PublicResXFileCodeGenerator</Generator>
+			<LastGenOutput>SharedResources.Designer.cs</LastGenOutput>
+		</EmbeddedResource>
+	</ItemGroup>
 
 </Project>

@@ -1,5 +1,6 @@
 ﻿@page "/admin/cinemas"
 @layout AdminLayout
+@using BetaCinema.Domain.Models;
 @inherits TableBase
 
 <AuthorizeView Roles="Admin">
@@ -9,13 +10,13 @@
     <Authorized>
         <MudPaper Elevation="0">
             <MudPaper Elevation="0" Class="d-flex gap-4 justify-space-between align-items-center admin-table-title">
-                <h3 class="mb-0">@string.Format(SharedResources.TableTitle, "rạp phim")</h3>
+                <h4 class="mb-0">@string.Format(SharedResources.TableTitle, "rạp phim")</h4>
                 <div class="form-group d-flex gap-2">
-                    <MudButton Variant="@Variant.Filled" Color="@Color.Primary" OnClick="@NavigateToCreateForm">
+                    <MudButton Size="Size.Small" Variant="@Variant.Filled" Color="@Color.Primary" OnClick="@NavigateToCreateForm">
                         @SharedResources.Create
                         <MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.Add" />
                     </MudButton>
-                    <MudButton Variant="@Variant.Filled" Color="@Color.Primary" OnClick="@DownloadExcelFile">
+                    <MudButton Size="Size.Small" Variant="@Variant.Filled" Color="@Color.Primary" OnClick="@DownloadExcelFile">
                         @SharedResources.ExportExcel
                         <MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.CloudDownload" Class="ml-2" />
                     </MudButton>
@@ -23,7 +24,8 @@
                     <MudFileUpload T="IBrowserFile" Accept=".xlsx" FilesChanged="UploadFiles"
                                    Context="uploadContext" Class="mt-0">
                         <ButtonTemplate>
-                            <MudButton HtmlTag="label" Variant="Variant.Filled" Color="Color.Primary" for="@uploadContext.Id">
+                            <MudButton Size="Size.Small" HtmlTag="label" Variant="Variant.Filled" Color="Color.Primary"
+                                       for="@uploadContext.Id">
                                 @SharedResources.ImportExcel
                                 <MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.CloudUpload" Class="ml-2" />
                             </MudButton>
@@ -45,27 +47,43 @@
         }
         else
         {
-            <MudDataGrid Items="@cinemas" Elevation="0" Filterable="false" SortMode="@SortMode.None"
-                         Groupable="false" FixedHeader="true" Class="admin-table">
-                <Columns>
-                    <PropertyColumn Property="x => x.CinemaName" />
-                    <PropertyColumn Property="x => x.CinemaLocation" />
-                    <TemplateColumn Title="@SharedResources.OptionsColumnTitle">
-                        <CellTemplate Context="tableContext">
-                            <MudStack Row>
-                             <MudButton Size="@Size.Small" Variant="@Variant.Filled" Color="@Color.Primary"
-                                        OnClick="@(()=>Navigation.NavigateTo($"admin/cinemas/edit/{tableContext.Item.Id}"))">
-                                 @SharedResources.Edit
-                             </MudButton>
-                             <MudButton Size="@Size.Small" Variant="@Variant.Filled" Color="@Color.Error"
-                                        OnClick="@(() => Delete(tableContext.Item.Id))">
-                                 @SharedResources.Delete
-                             </MudButton>
+            <MudTable Items="@cinemas" Elevation="0" Dense Hover FixedHeader Filter="@_quickFilter"
+                       Class="admin-table" Context="tableContext">
+                 <ToolBarContent>
+                     <MudSpacer />
+                     <MudTextField @bind-Value="_searchString" Variant="Variant.Outlined" Margin="Margin.Dense"
+                                   Placeholder="@SharedResources.Search" Adornment="Adornment.Start"
+                                   AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0">
+                     </MudTextField>
+                 </ToolBarContent>
+
+                 <HeaderContent>
+                     <MudTh>@CinemaResources.CinemaName</MudTh>
+                     <MudTh>@CinemaResources.CinemaLocation</MudTh>
+                     <MudTh>@SharedResources.OptionsColumnTitle</MudTh>
+                 </HeaderContent>
+
+                 <RowTemplate>
+                     <MudTd>@tableContext.CinemaName</MudTd>
+                     <MudTd>@tableContext.CinemaLocation</MudTd>
+                     <MudTd>
+                         <MudStack Row Spacing="2">
+                             <MudIconButton Size="@Size.Small" Variant="@Variant.Text" Color="@Color.Primary"
+                                            Icon="@Icons.Material.Filled.Edit" Class="rounded-circle"
+                                            OnClick="@(()=>Navigation.NavigateTo($"admin/cinemas/edit/{tableContext.Id}"))">
+                             </MudIconButton>
+                             <MudIconButton Size="@Size.Small" Variant="@Variant.Text" Color="@Color.Error"
+                                            Icon="@Icons.Material.Filled.Delete" Class="rounded-circle"
+                                            OnClick="@(() => Delete(tableContext.Id))">
+                             </MudIconButton>
                          </MudStack>
-                     </CellTemplate>
-                 </TemplateColumn>
-             </Columns>
-         </MudDataGrid>
+                     </MudTd>
+                 </RowTemplate>
+
+                 <PagerContent>
+                     <MudTablePager />
+                 </PagerContent>
+             </MudTable>
         }
     </Authorized>
 </AuthorizeView>

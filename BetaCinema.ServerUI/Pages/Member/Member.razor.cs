@@ -34,15 +34,15 @@ namespace BetaCinema.ServerUI.Pages.Member
             return id;
         }
 
-        protected override async Task OnInitializedAsync()
+        protected override void OnInitialized()
         {
-            UserId = await RetrieveUserId();
             UserData = new User();
         }
 
         protected override async Task OnParametersSetAsync()
         {
-            var result = await Mediator.Send(new GetUserByIdQuery() { Id = UserId });
+
+            var result = await Mediator.Send(new GetUserByIdQuery() { Id = await RetrieveUserId() });
 
             if (result.IsSuccess)
             {

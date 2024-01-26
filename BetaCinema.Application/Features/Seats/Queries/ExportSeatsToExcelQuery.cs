@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using BetaCinema.Application.Helpers;
-using BetaCinema.Application.Interfaces.Repositories;
+using BetaCinema.Application.Interfaces;
 using BetaCinema.Domain.DTO;
 using BetaCinema.Domain.Models;
 using MediatR;
@@ -23,26 +23,24 @@ namespace BetaCinema.Application.Features.Seats.Queries
     /// </summary>
     internal sealed class ExportSeatsToExcelQueryHandler : IRequestHandler<ExportSeatsToExcelQuery, byte[]>
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IAppDbContext _context;
         private readonly IWebHostEnvironment _env;
         private readonly IMapper _mapper;
 
-        public ExportSeatsToExcelQueryHandler(IUnitOfWork unitOfWork, IWebHostEnvironment env, IMapper mapper)
+        public ExportSeatsToExcelQueryHandler(IAppDbContext context, IWebHostEnvironment env, IMapper mapper)
         {
             _env = env;
             _mapper = mapper;
-            _unitOfWork = unitOfWork;
+            _context = context;
         }
 
         public async Task<byte[]> Handle(ExportSeatsToExcelQuery request, CancellationToken cancellationToken)
         {
             // Lấy dữ liệu từ database
-            var dataList = await _unitOfWork.Repository<Seat>().GetAllByAdminAsync();
-
-            var dataExportList = _mapper.Map<List<SeatExport>>(dataList);
+            var dataExportList = _mapper.Map<List<SeatExport>>(_context.Seats);
 
             // Define đường dẫn tới file excel mẫu
-            var templateFileInfo = new FileInfo(Path.Combine(_env.ContentRootPath, "Template", $"{typeof(Seat).Name}Export.xlsx"));
+            var templateFileInfo = new FileInfo(Path.Combine(_env.ContentRootPath, "Template", "ExportTemplates", $"{typeof(Seat).Name}Export.xlsx"));
 
             // Gọi đến helper để lấy dữ liệu cho file excel
             var excelData = ExportToExcelHelper<SeatExport>.GenerateExcelFile(dataExportList, templateFileInfo);

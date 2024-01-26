@@ -5,6 +5,7 @@
 }
 
 .movie-title-wrapper {
+    font-family: Oswald, sans-serif;
     font-size: 22px;
 }
 
@@ -13,6 +14,7 @@
 }
 
 .title {
+    font-family: Oswald, sans-serif;
     font-size: 34px;
     line-height: 1.5;
     font-weight: 500;

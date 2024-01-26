@@ -16,7 +16,7 @@
                         <MudCard Elevation="0" Class="d-flex px-6 py-5 gap-3">
                             <MudCardContent Class="d-flex flex-column align-items-center gap-3">
                                 <MudImage ObjectFit="ObjectFit.Cover" Src="@($"/assets/images/avatars/{UserData.Avatar}")"
-                                          Width="240" Height="240" />
+                                          Width="240" Height="240" Class="rounded" />
 
                                 <MudFileUpload T="IBrowserFile" Accept=".png, .jpg" FilesChanged="UploadAvatar"
                                                Context="uploadContext" Class="mt-0">
@@ -32,22 +32,22 @@
 
                             <MudCardContent Class="flex-1 d-flex flex-column gap-3">
                                 <MudTextField @bind-Value="@UserData.UserName"
-                                              Label="UserName"
+                                              Label="@UserResources.UserName"
                                               Variant="Variant.Outlined"
                                               Margin="Margin.Dense">
                                 </MudTextField>
                                 <MudTextField @bind-Value="@UserData.FullName"
-                                              Label="FullName"
+                                              Label="@UserResources.FullName"
                                               Variant="Variant.Outlined"
                                               Margin="Margin.Dense">
                                 </MudTextField>
                                 <MudTextField @bind-Value="@UserData.Email"
-                                              Label="Email"
+                                              Label="@UserResources.Email"
                                               Variant="Variant.Outlined"
                                               Margin="Margin.Dense">
                                 </MudTextField>
                                 <MudTextField @bind-Value="@UserData.Password"
-                                              Label="Password"
+                                              Label="@UserResources.Password"
                                               Variant="Variant.Outlined"
                                               Margin="Margin.Dense" ReadOnly>
                                 </MudTextField>

@@ -1,8 +1,9 @@
 ﻿using BetaCinema.Application.Features.Cinemas.Validators;
-using BetaCinema.Application.Interfaces.Repositories;
+using BetaCinema.Application.Interfaces;
 using BetaCinema.Domain.Models;
 using BetaCinema.Domain.Wrappers;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace BetaCinema.Application.Features.Cinemas.Commands
 {
@@ -13,11 +14,11 @@ namespace BetaCinema.Application.Features.Cinemas.Commands
 
     public class UpdateCinemaCommandHandler : IRequestHandler<UpdateCinemaCommand, ServiceResult>
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IAppDbContext _context;
 
-        public UpdateCinemaCommandHandler(IUnitOfWork unitOfWork)
+        public UpdateCinemaCommandHandler(IAppDbContext context)
         {
-            _unitOfWork = unitOfWork;
+            _context = context;
         }
 
         public async Task<ServiceResult> Handle(UpdateCinemaCommand request, CancellationToken cancellationToken)
@@ -31,7 +32,9 @@ namespace BetaCinema.Application.Features.Cinemas.Commands
             }
             else
             {
-                await _unitOfWork.Repository<Cinema>().UpdateAsync(request.Data);
+                request.Data.ModifiedDate = DateTime.Now;
+                _context.Entry(request.Data).State = EntityState.Modified;
+                await _context.SaveChangesAsync(cancellationToken);
                 return new ServiceResult(true);
             }
         }

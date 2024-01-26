@@ -1,29 +1,38 @@
-﻿using BetaCinema.Application.Interfaces.Repositories;
-using BetaCinema.Domain.Models;
+﻿using BetaCinema.Application.Interfaces;
+using BetaCinema.Domain.Resources;
+using BetaCinema.Domain.Wrappers;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace BetaCinema.Application.Features.Movies.Commands
 {
-    public class DeleteMovieCommand : IRequest
+    public class DeleteMovieCommand : IRequest<ServiceResult>
     {
         public string Id { get; set; } = null!;
     }
 
-    public class DeleteMovieCommandHandler : IRequestHandler<DeleteMovieCommand>
+    public class DeleteMovieCommandHandler : IRequestHandler<DeleteMovieCommand, ServiceResult>
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IAppDbContext _context;
 
-        public DeleteMovieCommandHandler(IUnitOfWork unitOfWork)
+        public DeleteMovieCommandHandler(IAppDbContext context)
         {
-            _unitOfWork = unitOfWork;
+            _context = context;
         }
 
-        public async Task Handle(DeleteMovieCommand request, CancellationToken cancellationToken)
+        public async Task<ServiceResult> Handle(DeleteMovieCommand request, CancellationToken cancellationToken)
         {
-            var movie = await _unitOfWork.Repository<Movie>().GetByIdAsync(request.Id);
+            var movie = await _context.Movies.FindAsync(request.Id);
             if (movie != null)
             {
-                await _unitOfWork.Repository<Movie>().DeleteAsync(movie);
+                movie.DeleteFlag = true;
+                _context.Entry(movie).State = EntityState.Modified;
+                await _context.SaveChangesAsync(cancellationToken);
+                return new ServiceResult(true);
+            }
+            else
+            {
+                return new ServiceResult(false, string.Format(MessageResouces.NotExisted), "Phim");
             }
         }
     }

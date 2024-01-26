@@ -1,9 +1,10 @@
-﻿using BetaCinema.Domain.Requests;
+﻿using FluentEmail.Core.Models;
 
 namespace BetaCinema.Application.Interfaces.Services
 {
     public interface IMailService
     {
-        Task SendAsync(MailRequest request);
+        Task<SendResponse> SendAsync(string to, string subject, string body);
+        Task<SendResponse> SendAsync(string to, string subject, string template, object model);
     }
 }

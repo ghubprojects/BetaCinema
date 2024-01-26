@@ -9,8 +9,10 @@ namespace BetaCinema.ServerUI.Shared
             new SidebarItem("Slides", "admin/slides", "fas fa-image"),
             new SidebarItem("Người dùng", "admin/users", "fas fa-user"),
             new SidebarItem("Phim", "admin/movies", "fas fa-film"),
-            new SidebarItem("Rạp phim", "admin/cinemas", "fas fa-location-dot"),
+            new SidebarItem("Suất chiếu", "admin/showtimes", "fas fa-clock"),
             new SidebarItem("Hóa đơn", "admin/payments", "fas fa-money-bill"),
+            new SidebarItem("Rạp phim", "admin/cinemas", "fas fa-location-dot"),
+            new SidebarItem("Thể loại", "admin/categories", "fas fa-list"),
             new SidebarItem("Ghế", "admin/seats", "fas fa-couch"),
         };
     }

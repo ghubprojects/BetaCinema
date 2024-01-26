@@ -1,0 +1,33 @@
+﻿.showtime-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center
+}
+
+    .showtime-item .showtime {
+        width: 80px;
+        padding: 6px 16px;
+        background-color: #E5E5E5;
+        font-family: 'Source Sans Pro', sans-serif;
+        font-size: 16px;
+        font-weight: 500;
+        text-align: center;
+        cursor: pointer;
+    }
+
+        .showtime-item .showtime.fullwidth {
+            width: 120px;
+            font-family: Oswald, sans-serif;
+            font-weight: 400;
+            font-size: 14px;
+        }
+
+        .showtime-item .showtime:hover {
+            color: #E02222
+        }
+
+    .showtime-item .seats-unsold {
+        padding-top: 6px;
+        font-family: Oswald, sans-serif;
+        font-size: 10px;
+    }

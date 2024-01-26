@@ -9,17 +9,9 @@
     <Authorized>
         <MudPaper Elevation="0">
             <MudPaper Elevation="0" Class="d-flex gap-4 justify-space-between align-items-center admin-table-title">
-                <h3 class="mb-0">@string.Format(SharedResources.TableTitle, "hóa đơn")</h3>
+                <h4 class="mb-0">@string.Format(SharedResources.TableTitle, "hóa đơn")</h4>
                 <div class="form-group d-flex gap-2">
-                    <MudButton Variant="@Variant.Filled"
-                               Color="@Color.Primary"
-                               OnClick="@NavigateToCheckoutForm">
-                        Checkout
-                        <MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.Add" />
-                    </MudButton>
-                    <MudButton Variant="@Variant.Filled"
-                               Color="@Color.Primary"
-                               OnClick="@DownloadExcelFile">
+                    <MudButton Size="Size.Small" Variant="@Variant.Filled" Color="@Color.Primary" OnClick="@DownloadExcelFile">
                         @SharedResources.ExportExcel
                         <MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.CloudDownload" Class="ml-2" />
                     </MudButton>
@@ -39,24 +31,34 @@
         }
         else
         {
-            <MudDataGrid Items="@payments" Elevation="0" Filterable="false" SortMode="@SortMode.None"
-                         Groupable="false" FixedHeader="true" Class="admin-table">
-                <Columns>
-                    <PropertyColumn Property="x => x.Id" StickyLeft="true" />
-                    <PropertyColumn Property="x => x.ReservationId" />
-                    <PropertyColumn Property="x => x.TotalPrice" />
-                    <TemplateColumn StickyRight="true" Title="@SharedResources.OptionsColumnTitle">
-                        <CellTemplate Context="tableContext">
-                            <MudStack Row>
-                             <MudButton Size="@Size.Small" Variant="@Variant.Filled" Color="@Color.Error"
-                                        OnClick="@(() => Delete(tableContext.Item.Id))">
-                                 @SharedResources.Delete
-                             </MudButton>
-                         </MudStack>
-                     </CellTemplate>
-                 </TemplateColumn>
-             </Columns>
-         </MudDataGrid>
+            <MudTable Items="@payments" Elevation="0" Dense Hover FixedHeader Filter="@_quickFilter"
+                       Class="admin-table" Context="tableContext">
+                 <ToolBarContent>
+                     <MudSpacer />
+                     <MudTextField @bind-Value="_searchString" Variant="Variant.Outlined" Margin="Margin.Dense"
+                                   Placeholder="@SharedResources.Search" Adornment="Adornment.Start"
+                                   AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0">
+                     </MudTextField>
+                 </ToolBarContent>
+
+                 <HeaderContent>
+                     <MudTh>Id</MudTh>
+                     <MudTh>Reservation Id</MudTh>
+                     <MudTh>@PaymentResources.TotalPrice</MudTh>
+                     <MudTh>@PaymentResources.PaymentTime</MudTh>
+                 </HeaderContent>
+
+                 <RowTemplate>
+                     <MudTd>@tableContext.Id</MudTd>
+                     <MudTd>@tableContext.ReservationId</MudTd>
+                     <MudTd>@string.Format("{0} đ", tableContext.TotalPrice.ToString("#,##0"))</MudTd>
+                     <MudTd>@tableContext.CreatedDate.ToString("dd/MM/yyyy HH:mm:ss")</MudTd>
+                 </RowTemplate>
+
+                 <PagerContent>
+                     <MudTablePager />
+                 </PagerContent>
+         </MudTable>
         }
     </Authorized>
 </AuthorizeView>

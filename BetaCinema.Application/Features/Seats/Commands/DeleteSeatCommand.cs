@@ -1,6 +1,6 @@
-﻿using BetaCinema.Application.Interfaces.Repositories;
-using BetaCinema.Domain.Models;
+﻿using BetaCinema.Application.Interfaces;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace BetaCinema.Application.Features.Seats.Commands
 {
@@ -11,19 +11,21 @@ namespace BetaCinema.Application.Features.Seats.Commands
 
     public class DeleteSeatCommandHandler : IRequestHandler<DeleteSeatCommand>
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IAppDbContext _context;
 
-        public DeleteSeatCommandHandler(IUnitOfWork unitOfWork)
+        public DeleteSeatCommandHandler(IAppDbContext context)
         {
-            _unitOfWork = unitOfWork;
+            _context = context;
         }
 
         public async Task Handle(DeleteSeatCommand request, CancellationToken cancellationToken)
         {
-            var cinema = await _unitOfWork.Repository<Seat>().GetByIdAsync(request.Id);
-            if (cinema != null)
+            var seat = await _context.Seats.FindAsync(request.Id);
+            if (seat != null)
             {
-                await _unitOfWork.Repository<Seat>().DeleteAsync(cinema);
+                seat.DeleteFlag = true;
+                _context.Entry(seat).State = EntityState.Modified;
+                await _context.SaveChangesAsync(cancellationToken);
             }
         }
     }

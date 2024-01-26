@@ -1,4 +1,4 @@
-﻿using BetaCinema.Application.Interfaces.Repositories;
+﻿using BetaCinema.Application.Interfaces;
 using BetaCinema.Domain.Models;
 using MediatR;
 
@@ -11,16 +11,16 @@ namespace BetaCinema.Application.Features.Seats.Commands
 
     public class GetSeatByIdQueryHandler : IRequestHandler<GetSeatByIdQuery, Seat>
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IAppDbContext _context;
 
-        public GetSeatByIdQueryHandler(IUnitOfWork unitOfWork)
+        public GetSeatByIdQueryHandler(IAppDbContext context)
         {
-            _unitOfWork = unitOfWork;
+            _context = context;
         }
 
         public async Task<Seat> Handle(GetSeatByIdQuery request, CancellationToken cancellationToken)
         {
-            return await _unitOfWork.Repository<Seat>().GetByIdAsync(request.Id);
+            return await _context.Seats.FindAsync(request.Id);
         }
     }
 }

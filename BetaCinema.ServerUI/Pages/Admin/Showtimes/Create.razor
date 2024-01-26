@@ -1,0 +1,45 @@
+﻿@using BetaCinema.Domain.Enums;
+@page "/admin/showtimes/create"
+@layout AdminLayout
+@inherits CreateBase
+
+<AuthorizeView Roles="Admin">
+    <NotAuthorized>
+        <RedirectToLogin />
+    </NotAuthorized>
+    <Authorized>
+        <h3 class="mb-8">@string.Format(SharedResources.CreateTitle, "giờ chiếu")</h3>
+
+        <EditForm Model="@ShowtimeData" OnValidSubmit="@CreateShowtime" Context="formContext">
+            <DataAnnotationsValidator />
+
+            <MudCard Elevation="0" Class="d-flex px-6 py-5 gap-3">
+                <MudCardContent Class="flex-1 d-flex flex-column gap-3">
+                    <MudTextField @bind-Value="@ShowtimeData.MovieId"
+                                  Variant="Variant.Outlined" Margin="Margin.Dense"
+                                  Label="@MovieResources.MovieName" Required>
+                    </MudTextField>
+
+                    <MudTextField @bind-Value="@ShowtimeData.CinemaId"
+                                  Variant="Variant.Outlined" Margin="Margin.Dense"
+                                  Label="@CinemaResources.CinemaName" Class="flex-1">
+                    </MudTextField>
+
+                    <MudDatePicker @bind-Date="@ShowtimeData.StartTime"
+                                   Variant="Variant.Outlined" Margin="Margin.Dense"
+                                   MinDate="DateTime.Now" DisableToolbar="true"
+                                   Label="@ShowtimeResources.StartTime" Class="flex-1" />
+
+                    <MudCardActions Class="p-0">
+                        <MudButton ButtonType="ButtonType.Submit"
+                                   Variant="Variant.Filled"
+                                   Color="Color.Primary"
+                                   Class="ml-auto">
+                            @SharedResources.Create
+                        </MudButton>
+                    </MudCardActions>
+                </MudCardContent>
+            </MudCard>
+        </EditForm>
+    </Authorized>
+</AuthorizeView>

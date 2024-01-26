@@ -26,8 +26,7 @@ namespace BetaCinema.ServerUI.Pages.Admin.Users
 
         [Inject] private IMediator Mediator { get; set; }
 
-        [Parameter]
-        public User UserData { get; set; }
+        public User UserData { get; set; } = new();
 
         protected async override Task OnParametersSetAsync()
         {

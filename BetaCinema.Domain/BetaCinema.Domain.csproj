@@ -11,17 +11,89 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Resources\PaymentResources.Designer.cs">
+      <DependentUpon>PaymentResources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Resources\ReservationResources.Designer.cs">
+      <DependentUpon>ReservationResources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Resources\UserResources.Designer.cs">
+      <DependentUpon>UserResources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Resources\SeatResources.Designer.cs">
+      <DependentUpon>SeatResources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Resources\CategoryResources.Designer.cs">
+      <DependentUpon>CategoryResources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
     <Compile Update="Resources\MessageResouces.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>MessageResouces.resx</DependentUpon>
     </Compile>
+    <Compile Update="Resources\CinemaResources.Designer.cs">
+      <DependentUpon>CinemaResources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Resources\ShowtimeResources.Designer.cs">
+      <DependentUpon>ShowtimeResources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Resources\MovieResources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>MovieResources.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Update="Resources\PaymentResources.resx">
+      <LastGenOutput>PaymentResources.Designer.cs</LastGenOutput>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ReservationResources.resx">
+      <LastGenOutput>ReservationResources.Designer.cs</LastGenOutput>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\UserResources.resx">
+      <LastGenOutput>UserResources.Designer.cs</LastGenOutput>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\SeatResources.resx">
+      <LastGenOutput>SeatResources.Designer.cs</LastGenOutput>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\CategoryResources.resx">
+      <LastGenOutput>CategoryResources.Designer.cs</LastGenOutput>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="Resources\MessageResouces.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>MessageResouces.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\CinemaResources.resx">
+      <LastGenOutput>CinemaResources.Designer.cs</LastGenOutput>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ShowtimeResources.resx">
+      <LastGenOutput>ShowtimeResources.Designer.cs</LastGenOutput>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\MovieResources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>MovieResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
 

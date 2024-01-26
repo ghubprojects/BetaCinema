@@ -1,7 +1,8 @@
 ﻿using BetaCinema.Application.Helpers;
-using BetaCinema.Application.Interfaces.Repositories;
+using BetaCinema.Application.Interfaces;
 using BetaCinema.Application.Requests;
 using BetaCinema.Domain.Models;
+using BetaCinema.Domain.Resources;
 using BetaCinema.Domain.Wrappers;
 using MediatR;
 using System.Data;
@@ -18,11 +19,11 @@ namespace BetaCinema.Application.Features.Cinemas.Commands
     /// </summary>
     internal sealed class ImportCinemasFromExcelCommandHandler : IRequestHandler<ImportCinemasFromExcelCommand, ServiceResult>
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IAppDbContext _context;
 
-        public ImportCinemasFromExcelCommandHandler(IUnitOfWork unitOfWork)
+        public ImportCinemasFromExcelCommandHandler(IAppDbContext context)
         {
-            _unitOfWork = unitOfWork;
+            _context = context;
         }
 
         public async Task<ServiceResult> Handle(ImportCinemasFromExcelCommand request, CancellationToken cancellationToken)
@@ -30,8 +31,8 @@ namespace BetaCinema.Application.Features.Cinemas.Commands
             var stream = new MemoryStream(request.ImportRequest.Data);
             var result = (await ImportFromExcelHelper<Cinema>.ImportAsync(stream, mappers: new Dictionary<string, Func<DataRow, Cinema, object>>
             {
-                { "CinemaName", (row,item) => item.CinemaName = row["CinemaName"].ToString() },
-                { "Poster", (row, item) => item.CinemaLocation = row["CinemaLocation"]?.ToString() },
+                { CinemaResources.CinemaName, (row,item) => item.CinemaName = row[CinemaResources.CinemaName].ToString() },
+                { CinemaResources.CinemaLocation, (row, item) => item.CinemaLocation = row[CinemaResources.CinemaLocation]?.ToString() },
             }, "Sheet1"));
 
             var cinemas = result.Select(data => new Cinema
@@ -40,10 +41,12 @@ namespace BetaCinema.Application.Features.Cinemas.Commands
                 CinemaName = data.CinemaName,
                 CinemaLocation = data.CinemaLocation,
                 DeleteFlag = false,
+                CreatedDate = DateTime.Now,
+                ModifiedDate = DateTime.Now,
             }).ToList();
 
-            await _unitOfWork.Repository<Cinema>().AddMultipleAsync(cinemas);
-
+            _context.Cinemas.AddRange(cinemas);
+            await _context.SaveChangesAsync(cancellationToken);
             return new ServiceResult(true);
         }
     }

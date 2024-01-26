@@ -1,8 +1,9 @@
-﻿using BetaCinema.Application.Interfaces.Repositories;
+﻿using BetaCinema.Application.Interfaces;
 using BetaCinema.Application.Requests;
 using BetaCinema.Domain.Models;
 using BetaCinema.Domain.Wrappers;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
 namespace BetaCinema.Application.Features.Users.Commands
@@ -20,12 +21,12 @@ namespace BetaCinema.Application.Features.Users.Commands
         {
             private readonly IConfiguration _configuration;
 
-            private readonly IUnitOfWork _unitOfWork;
+            private readonly IAppDbContext _context;
 
-            public UploadAvatarUserCommandHandler(IConfiguration configuration, IUnitOfWork unitOfWork)
+            public UploadAvatarUserCommandHandler(IConfiguration configuration, IAppDbContext context)
             {
                 _configuration = configuration;
-                _unitOfWork = unitOfWork;
+                _context = context;
             }
 
             public async Task<ServiceResult> Handle(UploadAvatarUserCommand request, CancellationToken cancellationToken)
@@ -49,8 +50,8 @@ namespace BetaCinema.Application.Features.Users.Commands
 
                     // update to database
                     request.UserData.Avatar = newFileName;
-                    await _unitOfWork.Repository<User>().UpdateAsync(request.UserData);
-
+                    _context.Entry(request.UserData).State = EntityState.Modified;
+                    await _context.SaveChangesAsync(cancellationToken);
                     return new ServiceResult(true);
                 }
                 catch (Exception ex)

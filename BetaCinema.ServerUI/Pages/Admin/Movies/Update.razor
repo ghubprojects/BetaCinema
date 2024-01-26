@@ -1,4 +1,5 @@
 ﻿@using BetaCinema.Domain.Enums;
+@using BetaCinema.Domain.Models;
 @page "/admin/movies/edit/{MovieId}"
 @layout AdminLayout
 @inherits UpdateBase
@@ -12,57 +13,76 @@
 
         <EditForm Model="@MovieData" OnValidSubmit="@SaveChanges" Context="formContext">
             <DataAnnotationsValidator />
-            <MudGrid xs="12">
-                <MudContainer MaxWidth="MaxWidth.Medium">
-                    <MudCard Class="p-4">
-                        <MudCardContent Class="p-0 mb-4 d-flex flex-column gap-2">
-                            <MudTextField @bind-Value="@MovieData.MovieName"
-                                          Label="MovieName"
-                                          Variant="Variant.Outlined"
-                                          Margin="Margin.Dense">
-                            </MudTextField>
-                            <MudTextField @bind-Value="@MovieData.Poster"
-                                          Label="Poster"
-                                          Variant="Variant.Outlined"
-                                          Margin="Margin.Dense">
-                            </MudTextField>
-                            <MudTextField @bind-Value="@MovieData.Duration"
-                                          Label="Duration"
-                                          Variant="Variant.Outlined"
-                                          Margin="Margin.Dense">
-                            </MudTextField>
-                            <MudDatePicker @bind-Value="@MovieData.ReleaseDate"
-                                           Label="ReleaseDate"
-                                           DisableToolbar="true"
-                                           Variant="Variant.Outlined"
-                                           Margin="Margin.Dense" />
-                            <MudTextField @bind-Value="@MovieData.Director"
-                                          Label="Director"
-                                          Variant="Variant.Outlined"
-                                          Margin="Margin.Dense">
-                            </MudTextField>
-                            <MudTextField @bind-Value="@MovieData.Actor"
-                                          Label="Actor"
-                                          Variant="Variant.Outlined"
-                                          Margin="Margin.Dense">
-                            </MudTextField>
-                            <MudTextField @bind-Value="@MovieData.Description"
-                                          Label="Description"
-                                          Variant="Variant.Outlined"
-                                          Margin="Margin.Dense">
-                            </MudTextField>
-                        </MudCardContent>
-                        <MudCardActions Class="p-0">
-                            <MudButton ButtonType="ButtonType.Submit"
-                                       Variant="Variant.Filled"
-                                       Color="Color.Primary"
-                                       Class="ml-auto">
-                                @SharedResources.Save
+
+            <MudCard Elevation="0" Class="d-flex px-6 py-5 gap-3">
+                <MudCardContent Class="d-flex flex-column align-items-center gap-3">
+                    <MudImage ObjectFit="ObjectFit.Cover" Src="@($"/assets/images/posters/{MovieData.Poster}")"
+                              Width="228" Height="360" Class="rounded" />
+
+                    <MudFileUpload T="IBrowserFile" Accept=".png, .jpg" FilesChanged="UploadPoster"
+                                   Context="uploadContext" Class="mt-0">
+                        <ButtonTemplate>
+                            <MudButton HtmlTag="label" Variant="Variant.Filled" Color="Color.Primary"
+                                       for="@uploadContext.Id">
+                                @SharedResources.Upload
+                                <MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.Image" Class="ml-2" />
                             </MudButton>
-                        </MudCardActions>
-                    </MudCard>
-                </MudContainer>
-            </MudGrid>
-        </EditForm>
-    </Authorized>
-</AuthorizeView>
+                        </ButtonTemplate>
+                    </MudFileUpload>
+                </MudCardContent>
+
+                <MudCardContent Class="flex-1 d-flex flex-column gap-3 justify-start">
+                    <MudTextField @bind-Value="@MovieData.MovieName"
+                                  Variant="Variant.Outlined" Margin="Margin.Dense"
+                                  Label="@MovieResources.MovieName" Required Class="justify-end">
+                     </MudTextField>
+
+                     <MudSelect T="string" @bind-Value="categoriesValue" @bind-SelectedValues="categoryOptions"
+                                Variant="Variant.Outlined" Margin="Margin.Dense"
+                                Label="@MovieResources.Category" MultiSelection="true"
+                                AnchorOrigin="Origin.BottomCenter">
+                         @foreach (var category in CategoryList)
+                        {
+                            <MudSelectItem T="string" Value="@category.CategoryName">@category.CategoryName</MudSelectItem>
+                        }
+                    </MudSelect>
+
+                    <MudStack Row>
+                        <MudTextField @bind-Value="@MovieData.Duration"
+                                      Variant="Variant.Outlined" Margin="Margin.Dense"
+                                      Label="@(string.Format("{0} (phút)",MovieResources.Duration))" Class="flex-1">
+                        </MudTextField>
+                        <MudDatePicker @bind-Date="@MovieData.ReleaseDate"
+                                       Variant="Variant.Outlined" Margin="Margin.Dense"
+                                       MinDate="DateTime.Now" DisableToolbar="true"
+                                       Label="@MovieResources.ReleaseDate" Class="flex-1" />
+                    </MudStack>
+
+                    <MudStack Row>
+                        <MudTextField @bind-Value="@MovieData.Director"
+                                      Variant="Variant.Outlined" Margin="Margin.Dense"
+                                      Label="@MovieResources.Director" Class="flex-1">
+                        </MudTextField>
+                        <MudTextField @bind-Value="@MovieData.Actor"
+                                      Variant="Variant.Outlined" Margin="Margin.Dense"
+                                      Label="@MovieResources.Actor" Class="flex-1">
+                        </MudTextField>
+                    </MudStack>
+
+                    <MudTextField @bind-Value="@MovieData.Description"
+                                  Variant="Variant.Outlined" Margin="Margin.Dense"
+                                  Label="@MovieResources.Description" AutoGrow Lines="4" MaxLines="10">
+                     </MudTextField>
+                     <MudCardActions Class="p-0">
+                         <MudButton ButtonType="ButtonType.Submit"
+                                    Variant="Variant.Filled"
+                                    Color="Color.Primary"
+                                    Class="ml-auto">
+                             @SharedResources.Update
+                         </MudButton>
+                     </MudCardActions>
+                 </MudCardContent>
+             </MudCard>
+         </EditForm>
+     </Authorized>
+ </AuthorizeView>

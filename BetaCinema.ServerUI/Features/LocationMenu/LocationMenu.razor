@@ -1,0 +1,35 @@
+﻿@inherits LocationMenuBase
+
+<MudMenu Variant="Variant.Filled" FullWidth="true" ActivationEvent="@MouseEvent.LeftClick"
+         AnchorOrigin="Origin.BottomLeft" TransformOrigin="Origin.TopLeft" ListClass="location-list" Class="ml-1"
+@ref="locationMenuRef">
+    <ActivatorContent>
+        <MudChip Color="Color.Primary" Class="location-menu">
+            @locationMenu.SelectedCinema.CinemaName
+            <MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.KeyboardArrowDown" Class="ml-1" />
+        </MudChip>
+    </ActivatorContent>
+    <ChildContent>
+        @foreach (var location in locationMenu.Locations)
+        {
+            <MudMenu Variant="Variant.Filled" FullWidth="true" ActivationEvent="@MouseEvent.MouseOver"
+                     AnchorOrigin="Origin.TopRight" TransformOrigin="Origin.TopLeft" ListClass="cinema-list"
+                     Style="width:100%">
+                <ActivatorContent>
+                    <MudMenuItem Color="Color.Primary" Class="location-item">
+                        @location.LocationName
+                        <MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.KeyboardArrowRight" Class="ml-1" />
+                    </MudMenuItem>
+                </ActivatorContent>
+                <ChildContent>
+                    @foreach (var cinema in location.Cinemas)
+                    {
+                        <MudMenuItem Class="cinema-item" OnClick="@(e=>SelectCinema(cinema))">
+                            @cinema.CinemaName
+                        </MudMenuItem>
+                    }
+                </ChildContent>
+            </MudMenu>
+        }
+    </ChildContent>
+</MudMenu>

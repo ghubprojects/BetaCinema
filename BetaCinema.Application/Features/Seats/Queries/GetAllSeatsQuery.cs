@@ -1,4 +1,4 @@
-﻿using BetaCinema.Application.Interfaces.Repositories;
+﻿using BetaCinema.Application.Interfaces;
 using BetaCinema.Domain.Models;
 using MediatR;
 
@@ -8,16 +8,20 @@ namespace BetaCinema.Application.Features.Seats.Commands
 
     public class GetAllSeatsQueryHandler : IRequestHandler<GetAllSeatsQuery, List<Seat>>
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IAppDbContext _context;
 
-        public GetAllSeatsQueryHandler(IUnitOfWork unitOfWork)
+        public GetAllSeatsQueryHandler(IAppDbContext context)
         {
-            _unitOfWork = unitOfWork;
+            _context = context;
         }
 
         public async Task<List<Seat>> Handle(GetAllSeatsQuery request, CancellationToken cancellationToken)
         {
-            return await _unitOfWork.Repository<Seat>().GetAllAsync();
+            return _context.Seats
+                .Where(s => !s.DeleteFlag)
+                .OrderBy(s => s.RowNum)
+                .ThenBy(s => s.SeatNum)
+                .ToList();
         }
     }
 }

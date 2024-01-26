@@ -1,5 +1,4 @@
-﻿using BetaCinema.Application.Interfaces.Repositories;
-using BetaCinema.Domain.Models;
+﻿using BetaCinema.Application.Interfaces;
 using BetaCinema.Domain.Wrappers;
 using MediatR;
 
@@ -12,18 +11,18 @@ namespace BetaCinema.Application.Features.Users.Commands
 
     public class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery, ServiceResult>
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IAppDbContext _context;
 
-        public GetUserByIdQueryHandler(IUnitOfWork unitOfWork)
+        public GetUserByIdQueryHandler(IAppDbContext context)
         {
-            _unitOfWork = unitOfWork;
+            _context = context;
         }
 
         public async Task<ServiceResult> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
         {
             try
             {
-                var userData = await _unitOfWork.Repository<User>().GetByIdAsync(request.Id);
+                var userData = await _context.Users.FindAsync(request.Id);
                 return new ServiceResult(true, "", userData);
             }
             catch (Exception ex)

@@ -1,12 +1,15 @@
-﻿namespace BetaCinema.Domain.Models;
+﻿using System;
+using System.Collections.Generic;
+
+namespace BetaCinema.Domain.Models;
 
 public partial class MovieCategory
 {
     public string Id { get; set; } = null!;
 
-    public string MovieId { get; set; }
+    public string MovieId { get; set; } = null!;
 
-    public string CategoryId { get; set; }
+    public string CategoryId { get; set; } = null!;
 
     public bool DeleteFlag { get; set; }
 

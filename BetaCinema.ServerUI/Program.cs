@@ -1,7 +1,9 @@
 ﻿using BetaCinema.Application;
 using BetaCinema.Domain.Exceptions;
 using BetaCinema.Infrastructure;
+using BetaCinema.Infrastructure.Persistence;
 using BetaCinema.ServerUI.Middlewares;
+using Fluxor;
 using MudBlazor;
 using MudBlazor.Services;
 
@@ -19,6 +21,13 @@ var builder = WebApplication.CreateBuilder(args);
         config.SnackbarConfiguration.HideTransitionDuration = 300;
         config.SnackbarConfiguration.ShowTransitionDuration = 300;
         config.SnackbarConfiguration.SnackbarVariant = Variant.Filled;
+    });
+
+    // Register Fluxor
+    builder.Services.AddFluxor(options =>
+    {
+        options.ScanAssemblies(typeof(Program).Assembly);
+        //options.UseReduxDevTools();
     });
 
     builder.Services.AddInfrastructure(builder.Configuration).AddApplication();

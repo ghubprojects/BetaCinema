@@ -1,0 +1,12 @@
+﻿.tab-content {
+    font-family: Oswald, sans-serif;
+    font-size: 30px;
+    font-weight: 400;
+}
+
+.list-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 1150px;
+    margin: auto;
+}

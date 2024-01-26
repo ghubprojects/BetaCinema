@@ -27,7 +27,6 @@ namespace BetaCinema.Infrastructure.Services
             var tick = DateTime.Now.Ticks.ToString();
 
             var urlCallBack = _configuration["PaymentCallBack:ReturnUrl"];
-            var description = "Dat ve xem phim Beta Cinema. So tien";
 
             var pay = new VnPayLibrary();
             pay.AddRequestData("vnp_Version", vnpayConfig["Version"]);
@@ -38,8 +37,8 @@ namespace BetaCinema.Infrastructure.Services
             pay.AddRequestData("vnp_CurrCode", vnpayConfig["CurrCode"]);
             pay.AddRequestData("vnp_IpAddr", pay.GetIpAddress(context));
             pay.AddRequestData("vnp_Locale", vnpayConfig["Locale"]);
-            pay.AddRequestData("vnp_OrderInfo", $"{description} {model.TotalPrice}");
-            pay.AddRequestData("vnp_OrderType", "Movie Ticket");
+            pay.AddRequestData("vnp_OrderInfo", "BC-{0}");
+            pay.AddRequestData("vnp_OrderType", "MovieTicket");
             pay.AddRequestData("vnp_ReturnUrl", urlCallBack);
             pay.AddRequestData("vnp_TxnRef", tick);
 

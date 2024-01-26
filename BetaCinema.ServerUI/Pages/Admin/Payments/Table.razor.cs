@@ -24,14 +24,26 @@ namespace BetaCinema.ServerUI.Pages.Admin.Payments
 
         protected List<Payment>? payments;
 
+        protected string _searchString;
+
+        // quick filter - filter globally across multiple columns with the same input
+        protected Func<Payment, bool> _quickFilter => x =>
+        {
+            if (string.IsNullOrWhiteSpace(_searchString))
+                return true;
+
+            if (x.TotalPrice.ToString().Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+                return true;
+
+            if (x.CreatedDate.ToString("dd/MM/yyyy HH:mm:ss").Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+                return true;
+
+            return false;
+        };
+
         protected override async Task OnInitializedAsync()
         {
             payments = await Mediator.Send(new GetAllPaymentsQuery());
-        }
-
-        protected void NavigateToCheckoutForm()
-        {
-            Navigation.NavigateTo("payments/checkout");
         }
 
         protected async Task Delete(string paymentId)

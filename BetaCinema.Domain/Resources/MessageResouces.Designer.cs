@@ -61,7 +61,7 @@ namespace BetaCinema.Domain.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} is existed.
+        ///   Looks up a localized string similar to {0} đã tồn tại.
         /// </summary>
         public static string Duplicated {
             get {
@@ -70,7 +70,7 @@ namespace BetaCinema.Domain.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} must be greater than 0.
+        ///   Looks up a localized string similar to {0} phải lớn hơn 0.
         /// </summary>
         public static string GreaterThan0 {
             get {
@@ -79,7 +79,7 @@ namespace BetaCinema.Domain.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} must be greater than now.
+        ///   Looks up a localized string similar to {0} phải lớn hơn hiện tại.
         /// </summary>
         public static string GreaterThanNow {
             get {
@@ -88,7 +88,7 @@ namespace BetaCinema.Domain.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} is invalid.
+        ///   Looks up a localized string similar to {0} không hợp lệ.
         /// </summary>
         public static string Invalid {
             get {
@@ -97,7 +97,16 @@ namespace BetaCinema.Domain.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} is overflow.
+        ///   Looks up a localized string similar to {0} không tồn tại.
+        /// </summary>
+        public static string NotExisted {
+            get {
+                return ResourceManager.GetString("NotExisted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} quá dài.
         /// </summary>
         public static string Overflow {
             get {
@@ -106,7 +115,7 @@ namespace BetaCinema.Domain.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} is required.
+        ///   Looks up a localized string similar to {0} không được để trống.
         /// </summary>
         public static string Required {
             get {

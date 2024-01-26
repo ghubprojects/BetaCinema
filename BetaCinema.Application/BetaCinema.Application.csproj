@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -11,6 +11,10 @@
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
     <PackageReference Include="EPPlus" Version="7.0.5" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
+    <PackageReference Include="jcamp.FluentEmail.Core" Version="3.7.0" />
+    <PackageReference Include="jcamp.FluentEmail.MailKit" Version="3.7.0" />
+    <PackageReference Include="jcamp.FluentEmail.Razor" Version="3.7.0" />
+    <PackageReference Include="jcamp.FluentEmail.Smtp" Version="3.7.0" />
     <PackageReference Include="MediatR" Version="12.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.2.7" />
     <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.2.0" />
@@ -18,10 +22,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BetaCinema.Domain\BetaCinema.Domain.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Features\Payments\Command\" />
   </ItemGroup>
 
 </Project>

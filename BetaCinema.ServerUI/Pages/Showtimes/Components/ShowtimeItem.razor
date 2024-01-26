@@ -1,27 +1,31 @@
-﻿@inherits ShowtimeItemBase
+﻿@using BetaCinema.ServerUI.Features.MovieShowtimes
+@inherits ShowtimeItemBase
 
-<MudCard Elevation="0" Style="@($"background-color:{Colors.Grey.Lighten4}")">
-    <MudImage Src="/assets/images/testposter.jpg" Fluid="true" Style="border-radius: 20px" />
+<MudCard Elevation="0" Class="d-flex gap-3 my-9 pr-6" Style="@($"background-color:{Colors.Grey.Lighten4};{wrapperStyles}")">
+    <MudImage Src="@($"/assets/images/posters/{MovieData.Poster}")" Style="@posterStyles" />
+
     <MudCardContent Class="p-0 mb-8">
-        <MudLink Href="movie-detail" Class="d-block mt-2 mb-4">
-            <p class="movie-title">Movie</p>
+        <MudLink Href="@uri" Class="d-block my-1" Underline="Underline.None">
+            <span class="@movieTitleClasses">@MovieData.MovieName</span>
         </MudLink>
 
-        <MudText>
-            <span class="info"><b class="info-title">Thể loại: </b>Category</span>
-        </MudText>
+        <div class="d-flex gap-3">
+            <MudText>
+                <i class="fas fa-tags" style="font-size:16px;color:#03599d"></i>
+                <span class="info">Category</span>
+            </MudText>
 
-        <MudText>
-            <span class="info"><b class="info-title">Thời lượng: </b>100 phút</span>
-        </MudText>
+            <MudText>
+                <i class="far fa-clock" style="font-size:14px;color:#03599d"></i>
+                <span class="info">@($"{MovieData.Duration} phút")</span>
+            </MudText>
+        </div>
 
-        <MudText>
-            <span class="info"><b class="info-title">Ngày khởi chiếu: </b>01/01/2024</span>
-        </MudText>
+        <div class="d-flex flex-wrap gap-3 mt-6">
+            @foreach (var showtime in showtimeList)
+            {
+                <MovieShowtimeItem ShowtimeData="showtime" />
+            }
+        </div>
     </MudCardContent>
-    <MudCardActions Class="p-0">
-        <MudButton Variant="Variant.Filled" Color="Color.Primary" FullWidth>
-            <p class="booking-button">Mua vé</p>
-        </MudButton>
-    </MudCardActions>
 </MudCard>

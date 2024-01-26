@@ -1,6 +1,6 @@
-﻿using BetaCinema.Application.Interfaces.Repositories;
-using BetaCinema.Domain.Models;
+﻿using BetaCinema.Application.Interfaces;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace BetaCinema.Application.Features.Users.Commands
 {
@@ -11,19 +11,21 @@ namespace BetaCinema.Application.Features.Users.Commands
 
     public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand>
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IAppDbContext _context;
 
-        public DeleteUserCommandHandler(IUnitOfWork unitOfWork)
+        public DeleteUserCommandHandler(IAppDbContext context)
         {
-            _unitOfWork = unitOfWork;
+            _context = context;
         }
 
         public async Task Handle(DeleteUserCommand request, CancellationToken cancellationToken)
         {
-            var product = await _unitOfWork.Repository<User>().GetByIdAsync(request.Id);
-            if (product != null)
+            var item = await _context.Users.FindAsync(request.Id);
+            if (item != null)
             {
-                await _unitOfWork.Repository<User>().DeleteAsync(product);
+                item.DeleteFlag = true;
+                _context.Entry(item).State = EntityState.Modified;
+                await _context.SaveChangesAsync(cancellationToken);
             }
         }
     }

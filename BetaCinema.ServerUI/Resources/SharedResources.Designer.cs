@@ -61,6 +61,15 @@ namespace BetaCinema.ServerUI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Đồng ý.
+        /// </summary>
+        public static string Agree {
+            get {
+                return ResourceManager.GetString("Agree", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Đóng.
         /// </summary>
         public static string Close {
@@ -142,6 +151,24 @@ namespace BetaCinema.ServerUI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Quay lại.
+        /// </summary>
+        public static string GoBack {
+            get {
+                return ResourceManager.GetString("GoBack", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Về Trang chủ.
+        /// </summary>
+        public static string GoHome {
+            get {
+                return ResourceManager.GetString("GoHome", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Nhập từ Excel.
         /// </summary>
         public static string ImportExcel {
@@ -183,6 +210,15 @@ namespace BetaCinema.ServerUI.Resources {
         public static string Save {
             get {
                 return ResourceManager.GetString("Save", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tìm kiếm.
+        /// </summary>
+        public static string Search {
+            get {
+                return ResourceManager.GetString("Search", resourceCulture);
             }
         }
         

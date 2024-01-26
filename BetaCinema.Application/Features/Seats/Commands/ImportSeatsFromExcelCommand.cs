@@ -1,7 +1,8 @@
 ﻿using BetaCinema.Application.Helpers;
-using BetaCinema.Application.Interfaces.Repositories;
+using BetaCinema.Application.Interfaces;
 using BetaCinema.Application.Requests;
 using BetaCinema.Domain.Models;
+using BetaCinema.Domain.Resources;
 using BetaCinema.Domain.Wrappers;
 using MediatR;
 using System.Data;
@@ -18,11 +19,11 @@ namespace BetaCinema.Application.Features.Seats.Commands
     /// </summary>
     internal sealed class ImportSeatsFromExcelCommandHandler : IRequestHandler<ImportSeatsFromExcelCommand, ServiceResult>
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IAppDbContext _context;
 
-        public ImportSeatsFromExcelCommandHandler(IUnitOfWork unitOfWork)
+        public ImportSeatsFromExcelCommandHandler(IAppDbContext context)
         {
-            _unitOfWork = unitOfWork;
+            _context = context;
         }
 
         public async Task<ServiceResult> Handle(ImportSeatsFromExcelCommand request, CancellationToken cancellationToken)
@@ -30,20 +31,22 @@ namespace BetaCinema.Application.Features.Seats.Commands
             var stream = new MemoryStream(request.ImportRequest.Data);
             var result = (await ImportFromExcelHelper<Seat>.ImportAsync(stream, mappers: new Dictionary<string, Func<DataRow, Seat, object>>
             {
-                { "RowNum", (row,item) => item.RowNum = row["RowNum"].ToString() },
-                { "SeatNum", (row, item) => item.SeatNum = int.Parse(row["SeatNum"]?.ToString()) },
+                { SeatResources.RowNum, (row,item) => item.RowNum = row[SeatResources.RowNum].ToString() },
+                { SeatResources.SeatNum, (row, item) => item.SeatNum = int.Parse(row[SeatResources.SeatNum]?.ToString()) },
             }, "Sheet1"));
 
-            var cinemas = result.Select(data => new Seat
+            var seats = result.Select(data => new Seat
             {
                 Id = Guid.NewGuid().ToString(),
                 RowNum = data.RowNum,
                 SeatNum = data.SeatNum,
                 DeleteFlag = false,
+                CreatedDate = DateTime.Now,
+                ModifiedDate = DateTime.Now,
             }).ToList();
 
-            await _unitOfWork.Repository<Seat>().AddMultipleAsync(cinemas);
-
+            _context.Seats.AddRange(seats);
+            await _context.SaveChangesAsync(cancellationToken);
             return new ServiceResult(true);
         }
     }

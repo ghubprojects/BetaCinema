@@ -1,0 +1,10 @@
+﻿@inherits MovieShowtimeItemBase
+
+<MudCard Elevation="0" Style="@($"background-color:{Colors.Grey.Lighten4}")">
+    <div class="showtime-item">
+        <div class="@ShowtimeClass" onclick="@ShowConfirmShowtimeDialog">
+            @ShowtimeData.StartTime.Value.ToString("HH:mm")
+        </div>
+        <span class="seats-unsold">? ghế trống</span>
+    </div>
+</MudCard>

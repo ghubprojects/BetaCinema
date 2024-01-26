@@ -21,12 +21,17 @@ namespace BetaCinema.Application.Helpers
             };
 
             var dt = new DataTable();
+
+            var titleInSheet = true;
+            var headerRow = titleInSheet ? 3 : 1;
+
             var titlesInFirstRow = true;
-            foreach (var firstRowCell in ws.Cells[1, 1, 1, ws.Dimension.End.Column])
+            var startRow = titlesInFirstRow ? 4 : 3;
+
+            foreach (var firstRowCell in ws.Cells[headerRow, 1, headerRow, ws.Dimension.End.Column])
             {
                 dt.Columns.Add(titlesInFirstRow ? firstRowCell.Text : $"Column {firstRowCell.Start.Column}");
             }
-            var startRow = titlesInFirstRow ? 2 : 1;
 
             var headers = mappers.Keys.Select(x => x).ToList();
             var errors = new List<string>();

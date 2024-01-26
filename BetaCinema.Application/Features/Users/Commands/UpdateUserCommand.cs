@@ -1,6 +1,7 @@
-﻿using BetaCinema.Application.Interfaces.Repositories;
+﻿using BetaCinema.Application.Interfaces;
 using BetaCinema.Domain.Models;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace BetaCinema.Application.Features.Users.Commands
 {
@@ -11,18 +12,20 @@ namespace BetaCinema.Application.Features.Users.Commands
 
     public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand>
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IAppDbContext _context;
 
-        public UpdateUserCommandHandler(IUnitOfWork unitOfWork)
+        public UpdateUserCommandHandler(IAppDbContext context)
         {
-            _unitOfWork = unitOfWork;
+            _context = context;
         }
 
         public async Task Handle(UpdateUserCommand request, CancellationToken cancellationToken)
         {
             request.Data.NormalizedEmail = request.Data.Email.ToUpper();
             request.Data.NormalizedUserName = request.Data.UserName.ToUpper();
-            await _unitOfWork.Repository<User>().UpdateAsync(request.Data);
+
+            _context.Entry(request.Data).State = EntityState.Modified;
+            await _context.SaveChangesAsync(cancellationToken);
         }
     }
 }

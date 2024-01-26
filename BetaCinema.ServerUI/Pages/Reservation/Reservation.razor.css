@@ -9,6 +9,7 @@
 }
 
 .page-title-wrapper {
+    font-family: Oswald, sans-serif;
     font-size: 22px;
 }
 
@@ -17,6 +18,7 @@
 }
 
 .title {
+    font-family: Oswald, sans-serif;
     font-size: 23px;
     line-height: 1.5;
     font-weight: 500;
@@ -61,6 +63,7 @@
     background-size: 36px 36px;
     background-position: center;
     color: #494c62;
+    user-select: none;
 }
 
     .seat.selected {
@@ -71,10 +74,12 @@
     .seat.sold {
         color: #fff;
         background-image: url("/assets/images/seat-sold.png");
+        cursor: not-allowed;
     }
 
 .submit-button {
-    font-size: 16px;
+    font-family: Oswald, sans-serif;
+    font-size: 14px;
     line-height: 1.5;
     text-transform: uppercase !important;
 }
@@ -98,6 +103,7 @@
     font-family: Oswald, sans-serif;
     font-size: 18px;
     color: #03599d;
+    text-align: right;
 }
 
 .price-divider {

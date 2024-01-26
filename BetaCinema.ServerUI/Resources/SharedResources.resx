@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Agree" xml:space="preserve">
+    <value>Đồng ý</value>
+  </data>
   <data name="Close" xml:space="preserve">
     <value>Đóng</value>
   </data>
@@ -144,6 +147,12 @@
   <data name="ExportExcel" xml:space="preserve">
     <value>Xuất ra Excel</value>
   </data>
+  <data name="GoBack" xml:space="preserve">
+    <value>Quay lại</value>
+  </data>
+  <data name="GoHome" xml:space="preserve">
+    <value>Về Trang chủ</value>
+  </data>
   <data name="ImportExcel" xml:space="preserve">
     <value>Nhập từ Excel</value>
   </data>
@@ -158,6 +167,9 @@
   </data>
   <data name="Save" xml:space="preserve">
     <value>Lưu</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Tìm kiếm</value>
   </data>
   <data name="TableTitle" xml:space="preserve">
     <value>Danh sách {0}</value>

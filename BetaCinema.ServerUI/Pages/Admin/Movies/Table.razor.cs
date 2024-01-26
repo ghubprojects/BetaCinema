@@ -1,6 +1,5 @@
 ﻿using BetaCinema.Application.Features.Movies.Commands;
 using BetaCinema.Application.Features.Movies.Queries;
-using BetaCinema.Application.Features.Users.Commands;
 using BetaCinema.Application.Requests;
 using BetaCinema.Domain.Enums;
 using BetaCinema.Domain.Models;
@@ -28,6 +27,26 @@ namespace BetaCinema.ServerUI.Pages.Admin.Movies
 
         protected List<Movie>? movies;
 
+        protected string _searchString;
+
+        // quick filter - filter globally across multiple columns with the same input
+        protected Func<Movie, bool> _quickFilter => x =>
+        {
+            if (string.IsNullOrWhiteSpace(_searchString))
+                return true;
+
+            if (x.MovieName.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+                return true;
+
+            if (string.Join(", ", x.MovieCategories.Select(mc => mc.Category.CategoryName)).Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+                return true;
+
+            if (x.ReleaseDate.Value.ToString("dd/MM/yyyy").Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+                return true;
+
+            return false;
+        };
+
         protected override async Task OnInitializedAsync()
         {
             movies = await Mediator.Send(new GetAllMoviesQuery());
@@ -43,9 +62,23 @@ namespace BetaCinema.ServerUI.Pages.Admin.Movies
             var movie = movies.First(x => x.Id == movieId);
             if (await js.InvokeAsync<bool>("confirm", $"Do you want to delete Movie <{movie.MovieName}>?"))
             {
-                await Mediator.Send(new DeleteUserCommand() { Id = movieId });
-                SnackBar.Add("Delete successfully", Severity.Success);
-                await OnInitializedAsync();
+                var result = await Mediator.Send(new DeleteMovieCommand() { Id = movieId });
+
+                if (result.IsSuccess)
+                {
+                    SnackBar.Add("Delete successfully", Severity.Success);
+                    await OnInitializedAsync();
+                }
+                else
+                {
+                    DialogService.Show<ErrorMessageDialog>(SharedResources.Error,
+                        new DialogParameters<ErrorMessageDialog>
+                        {
+                            { x => x.ContentText, result.Message },
+                            { x => x.ButtonText, SharedResources.Close },
+                            { x => x.Color, Color.Error }
+                        }, new DialogOptions() { MaxWidth = MaxWidth.ExtraSmall });
+                }
             }
         }
 
@@ -81,7 +114,7 @@ namespace BetaCinema.ServerUI.Pages.Admin.Movies
                     Extension = extension
                 };
 
-                var result = await Mediator.Send(new ImportUsersFromExcelCommand()
+                var result = await Mediator.Send(new ImportMoviesFromExcelCommand()
                 { ImportRequest = importRequest });
 
                 if (result.IsSuccess)

@@ -1,0 +1,93 @@
+﻿@page "/admin/showtimes"
+@using BetaCinema.Domain.Models;
+@layout AdminLayout
+@inherits TableBase
+
+<AuthorizeView Roles="Admin">
+    <NotAuthorized>
+        <RedirectToLogin />
+    </NotAuthorized>
+    <Authorized>
+        <MudPaper Elevation="0">
+            <MudPaper Elevation="0" Class="d-flex gap-4 justify-space-between align-items-center admin-table-title">
+                <h4 class="mb-0">@string.Format(SharedResources.TableTitle, "giờ chiếu")</h4>
+
+                <div class="form-group d-flex gap-2">
+                    <MudButton Size="Size.Small" Variant="@Variant.Filled" Color="@Color.Primary" OnClick="@NavigateToCreateForm">
+                        @SharedResources.Create
+                        <MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.Add" Class="ml-1" />
+                    </MudButton>
+                    <MudButton Size="Size.Small" Variant="@Variant.Filled" Color="@Color.Primary" OnClick="@DownloadExcelFile">
+                        @SharedResources.ExportExcel
+                        <MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.CloudDownload" Class="ml-2" />
+                    </MudButton>
+
+                    <MudFileUpload T="IBrowserFile" Accept=".xlsx" FilesChanged="UploadFiles"
+                                   Context="uploadContext" Class="mt-0">
+                        <ButtonTemplate>
+                            <MudButton Size="Size.Small" HtmlTag="label" Variant="Variant.Filled" Color="Color.Primary" for="@uploadContext.Id">
+                                @SharedResources.ImportExcel
+                                <MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.CloudUpload" Class="ml-2" />
+                            </MudButton>
+                        </ButtonTemplate>
+                    </MudFileUpload>
+                </div>
+            </MudPaper>
+        </MudPaper>
+
+        <br>
+
+        @if (showtimes == null)
+        {
+            <text>@SharedResources.Loading</text>
+        }
+        else if (showtimes.Count == 0)
+        {
+            <text>@SharedResources.NoRecord</text>
+        }
+        else
+        {
+            <MudTable Items="@showtimes" Elevation="0" Dense Hover FixedHeader Filter="@_quickFilter"
+                       Class="admin-table" Context="tableContext">
+                 <ToolBarContent>
+                     <MudSpacer />
+                     <MudTextField @bind-Value="_searchString" Variant="Variant.Outlined" Margin="Margin.Dense"
+                                   Placeholder="@SharedResources.Search" Adornment="Adornment.Start"
+                                   AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0">
+                     </MudTextField>
+                 </ToolBarContent>
+
+                 <HeaderContent>
+                     <MudTh>@MovieResources.MovieName</MudTh>
+                     <MudTh>@CinemaResources.CinemaName</MudTh>
+                     <MudTh>@ShowtimeResources.StartTime</MudTh>
+                     <MudTh>@ShowtimeResources.TicketPrice</MudTh>
+                     <MudTh>@SharedResources.OptionsColumnTitle</MudTh>
+                 </HeaderContent>
+
+                 <RowTemplate>
+                     <MudTd>@tableContext.Movie.MovieName</MudTd>
+                     <MudTd>@tableContext.Cinema.CinemaName</MudTd>
+                     <MudTd>@tableContext.StartTime.Value.ToString("dd/MM/yyyy HH:mm:ss")</MudTd>
+                     <MudTd>@string.Format("{0} đ", tableContext.TicketPrice.ToString("#,##0"))</MudTd>
+                     <MudTd>
+                         <MudStack Row Spacing="2">
+                             <MudIconButton Size="@Size.Small" Variant="@Variant.Text" Color="@Color.Primary"
+                                            Icon="@Icons.Material.Filled.Edit" Class="rounded-circle"
+                                            OnClick="@(()=>Navigation.NavigateTo($"admin/showtimes/edit/{tableContext.Id}"))">
+                             </MudIconButton>
+                             <MudIconButton Size="@Size.Small" Variant="@Variant.Text" Color="@Color.Error"
+                                            Icon="@Icons.Material.Filled.Delete" Class="rounded-circle"
+                                            OnClick="@(() => Delete(tableContext.Id))">
+                             </MudIconButton>
+                         </MudStack>
+                     </MudTd>
+                 </RowTemplate>
+
+                 <PagerContent>
+                     <MudTablePager />
+                 </PagerContent>
+             </MudTable>
+        }
+    </Authorized>
+</AuthorizeView>

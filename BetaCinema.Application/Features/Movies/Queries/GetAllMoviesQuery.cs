@@ -1,6 +1,7 @@
-﻿using BetaCinema.Application.Interfaces.Repositories;
+﻿using BetaCinema.Application.Interfaces;
 using BetaCinema.Domain.Models;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace BetaCinema.Application.Features.Movies.Commands
 {
@@ -8,16 +9,22 @@ namespace BetaCinema.Application.Features.Movies.Commands
 
     public class GetAllMoviesQueryHandler : IRequestHandler<GetAllMoviesQuery, List<Movie>>
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IAppDbContext _context;
 
-        public GetAllMoviesQueryHandler(IUnitOfWork unitOfWork)
+        public GetAllMoviesQueryHandler(IAppDbContext context)
         {
-            _unitOfWork = unitOfWork;
+            _context = context;
         }
 
         public async Task<List<Movie>> Handle(GetAllMoviesQuery request, CancellationToken cancellationToken)
         {
-            return await _unitOfWork.Repository<Movie>().GetAllAsync();
+            return _context.Movies
+                .Include(m => m.MovieCategories)
+                    .ThenInclude(mc => mc.Category)
+                .Where(m => !m.DeleteFlag)
+                .OrderByDescending(m => m.ModifiedDate)
+                .ThenByDescending(m => m.ReleaseDate)
+                .ToList();
         }
     }
 }

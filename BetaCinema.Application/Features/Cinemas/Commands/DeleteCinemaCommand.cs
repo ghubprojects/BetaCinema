@@ -1,6 +1,6 @@
-﻿using BetaCinema.Application.Interfaces.Repositories;
-using BetaCinema.Domain.Models;
+﻿using BetaCinema.Application.Interfaces;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace BetaCinema.Application.Features.Cinemas.Commands
 {
@@ -11,19 +11,21 @@ namespace BetaCinema.Application.Features.Cinemas.Commands
 
     public class DeleteCinemaCommandHandler : IRequestHandler<DeleteCinemaCommand>
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IAppDbContext _context;
 
-        public DeleteCinemaCommandHandler(IUnitOfWork unitOfWork)
+        public DeleteCinemaCommandHandler(IAppDbContext context)
         {
-            _unitOfWork = unitOfWork;
+            _context = context;
         }
 
         public async Task Handle(DeleteCinemaCommand request, CancellationToken cancellationToken)
         {
-            var cinema = await _unitOfWork.Repository<Cinema>().GetByIdAsync(request.Id);
+            var cinema = await _context.Cinemas.FindAsync(request.Id);
             if (cinema != null)
             {
-                await _unitOfWork.Repository<Cinema>().DeleteAsync(cinema);
+                cinema.DeleteFlag = true;
+                _context.Entry(cinema).State = EntityState.Modified;
+                await _context.SaveChangesAsync(cancellationToken);
             }
         }
     }

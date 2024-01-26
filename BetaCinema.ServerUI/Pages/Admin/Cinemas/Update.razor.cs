@@ -17,11 +17,9 @@ namespace BetaCinema.ServerUI.Pages.Admin.Cinemas
 
         [Inject] private IMediator Mediator { get; set; }
 
-        [Parameter]
-        public string CinemaId { get; set; }
+        [Parameter] public string CinemaId { get; set; }
 
-        [Parameter]
-        public Cinema CinemaData { get; set; }
+        public Cinema CinemaData { get; set; } = new();
 
         protected async override Task OnParametersSetAsync()
         {

@@ -9,12 +9,12 @@
     <Authorized>
         <MudPaper Elevation="0">
             <MudPaper Elevation="0" Class="d-flex gap-4 justify-space-between align-items-center admin-table-title admin-table-title">
-                <h3 class="mb-0">@string.Format(SharedResources.TableTitle, "slides")</h3>
+                <h4 class="mb-0">@string.Format(SharedResources.TableTitle, "slides")</h4>
                 <div class="form-group d-flex gap-2">
                     <MudFileUpload T="IReadOnlyList<IBrowserFile>" Accept=".png, .jpg" FilesChanged="UploadFiles"
                                    Context="uploadContext" Class="mt-0">
                         <ButtonTemplate>
-                            <MudButton HtmlTag="label" Variant="Variant.Filled" Color="Color.Primary" for="@uploadContext.Id">
+                            <MudButton Size="Size.Small" HtmlTag="label" Variant="Variant.Filled" Color="Color.Primary" for="@uploadContext.Id">
                                 @SharedResources.Upload
                                 <MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.Image" Class="ml-2" />
                             </MudButton>
@@ -36,26 +36,27 @@
         }
         else
         {
-            <MudDataGrid Items="@slideNames" Elevation="0" Filterable="false" SortMode="@SortMode.None"
-                         Groupable="false" FixedHeader="true" Class="admin-table">
-                <Columns >
-                    <TemplateColumn Title="Slide">
-                        <CellTemplate Context="tableContext">
-                            <MudImage Src="@($"/assets/images/slides/{tableContext.Item}")" Width="400" />
-                        </CellTemplate>
-                    </TemplateColumn>
-                    <TemplateColumn Title="@SharedResources.OptionsColumnTitle">
-                        <CellTemplate Context="tableContext">
-                            <MudStack Row>
-                             <MudButton Size="@Size.Small" Variant="@Variant.Filled" Color="@Color.Error"
-                                        OnClick="@(() => Delete(tableContext.Item))">
-                                 @SharedResources.Delete
-                             </MudButton>
+            <MudTable Items="@slideNames" Elevation="0" Dense Hover FixedHeader
+                       Class="admin-table" Context="tableContext">
+                 <HeaderContent>
+                     <MudTh>Slide</MudTh>
+                     <MudTh>@SharedResources.OptionsColumnTitle</MudTh>
+                 </HeaderContent>
+
+                 <RowTemplate>
+                     <MudTd>
+                         <MudImage Src="@($"/assets/images/slides/{tableContext}")" Width="400" />
+                     </MudTd>
+                     <MudTd>
+                         <MudStack Row Spacing="2">
+                             <MudIconButton Size="@Size.Small" Variant="@Variant.Text" Color="@Color.Error"
+                                            Icon="@Icons.Material.Filled.Delete" Class="rounded-circle"
+                                            OnClick="@(() => Delete(tableContext))">
+                             </MudIconButton>
                          </MudStack>
-                     </CellTemplate>
-                 </TemplateColumn>
-             </Columns>
-         </MudDataGrid>
+                     </MudTd>
+                 </RowTemplate>
+         </MudTable>
         }
     </Authorized>
 </AuthorizeView>

@@ -1,11 +1,12 @@
-﻿using BetaCinema.Application.Configurations;
-using BetaCinema.Application.Interfaces.Repositories;
+﻿using BetaCinema.Application.Interfaces;
 using BetaCinema.Application.Interfaces.Services;
 using BetaCinema.Domain.Models;
-using BetaCinema.Infrastructure.Repositories;
+using BetaCinema.Infrastructure.Persistence;
 using BetaCinema.Infrastructure.Services;
+using FluentEmail.MailKitSmtp;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -16,7 +17,9 @@ namespace BetaCinema.Infrastructure
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
             // Add DB Context
-            services.AddDbContext<AppDbContext>();
+            services.AddDbContextFactory<AppDbContext>(options => options.UseNpgsql("Server=localhost;Port=5432;Database=beta_cinema;Uid=postgres;Pwd=MyAl1705!!!;"));
+
+            services.AddTransient<IAppDbContext>(provider => provider.GetRequiredService<IDbContextFactory<AppDbContext>>().CreateDbContext());
 
             // Add Identity
             services.AddIdentity<User, IdentityRole>(options =>
@@ -52,14 +55,25 @@ namespace BetaCinema.Infrastructure
             // Add VNPAY service
             services.AddScoped<IVnPayService, VnPayService>();
 
-            // Add SMTP mail service
-            services.AddTransient<IMailService, SMTPMailService>();
+            // Add mail service
+            services.AddMailService(configuration);
 
-            // Config mail sender
-            services.Configure<MailConfiguration>(configuration.GetSection("MailConfiguration"));
+            return services;
+        }
 
-            services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
+        private static IServiceCollection AddMailService(this IServiceCollection services, IConfiguration configuration)
+        {
+            var smtpClientOptions = new SmtpClientOptions();
+            configuration.GetSection(nameof(SmtpClientOptions)).Bind(smtpClientOptions);
+            services.Configure<SmtpClientOptions>(configuration.GetSection(nameof(SmtpClientOptions)));
+
+            services.AddSingleton(smtpClientOptions);
+            services.AddScoped<IMailService, MailService>();
+
+            // configure your sender and template choices with dependency injection.
+            services.AddFluentEmail(smtpClientOptions.User)
+                .AddRazorRenderer()
+                .AddMailKitSender(smtpClientOptions);
 
             return services;
         }

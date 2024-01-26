@@ -1,8 +1,9 @@
 ﻿@page "/ticket-price"
+@inherits TicketPriceBase
 
 <div class="container" style="padding-bottom: 200px">
     <MudText Class="my-8">
-        <p class="title">Giá vé rạp Beta Hà Nội</p>
+        <p class="title">@($"Giá vé rạp {CinemaState.Value.Cinema.CinemaName}")</p>
     </MudText>
 
     <MudImage Elevation="0" Src="/assets/images/ticket-price.png" Fluid="true" Style="width:100%" />

@@ -1,0 +1,78 @@
+﻿@page "/admin/categories"
+@using BetaCinema.Domain.Models;
+@layout AdminLayout
+@inherits TableBase
+
+<AuthorizeView Roles="Admin">
+    <NotAuthorized>
+        <RedirectToLogin />
+    </NotAuthorized>
+    <Authorized>
+        <MudPaper Elevation="0">
+            <MudPaper Elevation="0" Class="d-flex gap-4 justify-space-between align-items-center admin-table-title">
+                <h4 class="mb-0">@string.Format(SharedResources.TableTitle, "thể loại")</h4>
+                <div class="form-group d-flex gap-2">
+                    <MudButton Size="Size.Small" Variant="@Variant.Filled" Color="@Color.Primary" OnClick="@NavigateToCreateForm">
+                        @SharedResources.Create
+                        <MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.Add" />
+                    </MudButton>
+                    <MudButton Size="Size.Small" Variant="@Variant.Filled" Color="@Color.Primary" OnClick="@DownloadExcelFile">
+                        @SharedResources.ExportExcel
+                        <MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.CloudDownload" Class="ml-2" />
+                    </MudButton>
+
+                    <MudFileUpload T="IBrowserFile" Accept=".xlsx" FilesChanged="UploadFiles"
+                                   Context="uploadContext" Class="mt-0">
+                        <ButtonTemplate>
+                            <MudButton Size="Size.Small" HtmlTag="label" Variant="Variant.Filled" Color="Color.Primary"
+                                       for="@uploadContext.Id">
+                                @SharedResources.ImportExcel
+                                <MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.CloudUpload" Class="ml-2" />
+                            </MudButton>
+                        </ButtonTemplate>
+                    </MudFileUpload>
+                </div>
+            </MudPaper>
+        </MudPaper>
+
+        <br>
+
+        @if (categories == null)
+        {
+            <text>@SharedResources.Loading</text>
+        }
+        else if (categories.Count == 0)
+        {
+            <text>@SharedResources.NoRecord</text>
+        }
+        else
+        {
+            <MudTable Items="@categories" Elevation="0" Dense Hover FixedHeader
+                       Class="admin-table" Context="tableContext">
+                 <HeaderContent>
+                     <MudTh>@CategoryResources.CategoryName</MudTh>
+                     <MudTh>@SharedResources.OptionsColumnTitle</MudTh>
+                 </HeaderContent>
+
+                 <RowTemplate>
+                     <MudTd>@tableContext.CategoryName</MudTd>
+                     <MudTd>
+                         <MudStack Row Spacing="2">
+                             <MudIconButton Size="@Size.Small" Variant="@Variant.Text" Color="@Color.Primary"
+                                            Icon="@Icons.Material.Filled.Edit" Class="rounded-circle"
+                                            OnClick="@(()=>Navigation.NavigateTo($"admin/categories/edit/{tableContext.Id}"))">
+                             </MudIconButton>
+                             <MudIconButton Size="@Size.Small" Variant="@Variant.Text" Color="@Color.Error"
+                                            Icon="@Icons.Material.Filled.Delete" Class="rounded-circle"
+                                            OnClick="@(() => Delete(tableContext.Id))">
+                             </MudIconButton>
+                         </MudStack>
+                     </MudTd>
+                 </RowTemplate>
+                 <PagerContent>
+                     <MudTablePager />
+                 </PagerContent>
+             </MudTable>
+        }
+    </Authorized>
+</AuthorizeView>

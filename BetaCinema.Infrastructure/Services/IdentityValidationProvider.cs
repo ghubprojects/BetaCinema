@@ -23,7 +23,7 @@ namespace BetaCinema.Infrastructure.Services
             _options = optionsAccessor.Value;
         }
 
-        protected override TimeSpan RevalidationInterval => TimeSpan.FromSeconds(1);
+        protected override TimeSpan RevalidationInterval => TimeSpan.FromSeconds(1000);
 
         protected override async Task<bool> ValidateAuthenticationStateAsync(
             AuthenticationState authenticationState, CancellationToken cancellationToken)

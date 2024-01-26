@@ -1,0 +1,32 @@
+﻿@inherits ConfirmShowtimeDialogBase
+
+<MudDialog Class="confirm-showtime-dialog">
+    <DialogContent>
+        <div class="d-flex flex-column">
+            <p class="movie-title">@ShowtimeData.Movie.MovieName</p>
+            <MudSimpleTable Elevation="0" Hover Class="showtime-info-table">
+                 <thead>
+                     <tr>
+                         <th>@CinemaResources.CinemaName</th>
+                         <th>@ShowtimeResources.ShowDate</th>
+                         <th>@ShowtimeResources.StartTime</th>
+                     </tr>
+                 </thead>
+                 <tbody>
+                     <tr>
+                         <td>@ShowtimeData.Cinema.CinemaName</td>
+                         <td>@ShowtimeData.StartTime.Value.ToString("dd/MM/yyyy")</td>
+                         <td>@ShowtimeData.StartTime.Value.ToString("HH:mm")</td>
+                     </tr>
+                 </tbody>
+             </MudSimpleTable>
+         </div>
+     </DialogContent>
+     <DialogActions>
+         <div class="d-flex justify-content-center" style="width:100%">
+             <MudButton Size="Size.Large" Variant="Variant.Filled" Color="Color.Primary" OnClick="NavigateToReservation">
+                 <p class="submit-button">@ButtonText</p>
+             </MudButton>
+         </div>
+     </DialogActions>
+ </MudDialog>

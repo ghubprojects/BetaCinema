@@ -4,9 +4,9 @@ public partial class Showtime
 {
     public string Id { get; set; } = null!;
 
-    public string MovieId { get; set; }
+    public string MovieId { get; set; } = null!;
 
-    public string CinemaId { get; set; }
+    public string CinemaId { get; set; } = null!;
 
     public DateTime? StartTime { get; set; }
 

@@ -17,11 +17,9 @@ namespace BetaCinema.ServerUI.Pages.Admin.Seats
 
         [Inject] private IMediator Mediator { get; set; }
 
-        [Parameter]
-        public string SeatId { get; set; }
+        [Parameter] public string SeatId { get; set; }
 
-        [Parameter]
-        public Seat SeatData { get; set; }
+        public Seat SeatData { get; set; } = new();
 
         protected async override Task OnParametersSetAsync()
         {

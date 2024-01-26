@@ -1,0 +1,77 @@
+﻿@page "/checkout-result"
+@inherits PaymentResultBase
+
+<AuthorizeView Roles="Customer, Admin">
+    <NotAuthorized>
+        <RedirectToLogin />
+    </NotAuthorized>
+    <Authorized>
+        <div class="member-container">
+            <div class="member-wrapper">
+                @if (paymentResponse.Success)
+                {
+                    <div class="title">
+                        <div class="rounded-pill position-relative d-flex align-items-center justify-content-center"
+                             style="background:#fff;width:14px;height:14px;">
+                            <i class="fa-solid fa-circle-check position-absolute" style="color: #35aa47;font-size:20px"></i>
+                        </div>
+                        <span>Giao dịch thành công</span>
+
+                    </div>
+                    <div class="form-wrapper">
+                        <MudCard Elevation="0" Class="d-flex px-6 py-6 flex-column">
+                            <MudCardContent Class="d-flex gap-8">
+                                <MudImage ObjectFit="ObjectFit.Cover" Src="@($"/assets/images/logo.jpg")"
+                                          Width="280" Class="rounded" />
+
+                                <div class="d-flex flex-column gap-2" style="width:758px">
+                                    <p class="content-title">Qúy khách đã Đặt vé trực tuyến thành công !</p>
+                                    <MudText>Trong vòng 10 phút kể từ khi thanh toán thành công, Beta Cinemas sẽ gửi Quý khách thông tin vé qua email của Quý khách. Vui lòng kiểm tra thông tin xác nhận vé và mang theo khi đến nhận vé tại Quầy vé của Beta Cinemas.</MudText>
+                                    <MudText>Xin cảm ơn và chúc Quý khách hàng có những giây phút xem phim tuyệt vời tại BETA CINEMAS!</MudText>
+                                </div>
+                            </MudCardContent>
+
+                            <MudCardActions>
+                                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled"
+                                           Color="Color.Primary" Class="ml-auto" OnClick="@NavigateToHome">
+                                    @SharedResources.GoHome
+                                </MudButton>
+                            </MudCardActions>
+                        </MudCard>
+                    </div>
+                }
+                else
+                {
+                    <div class="title">
+                        <div class="rounded-pill position-relative d-flex align-items-center justify-content-center"
+                             style="background:#fff;width:14px;height:14px;">
+                            <i class="fa-solid fa-circle-xmark position-absolute" style="color: #db3a1b;font-size:20px"></i>
+                        </div>
+                        <span>Giao dịch thất bại</span>
+                    </div>
+
+                    <div class="form-wrapper">
+                        <MudCard Elevation="0" Class="d-flex px-6 py-6 flex-column">
+                            <MudCardContent Class="d-flex gap-8">
+                                <MudImage ObjectFit="ObjectFit.Cover" Src="@($"/assets/images/logo.jpg")"
+                                          Width="280" Class="rounded" />
+
+                                <div class="d-flex flex-column gap-2" style="width:758px">
+                                    <p class="content-title">Vui lòng kiểm tra lại !</p>
+                                    <MudText>Có lỗi xảy ra trong quá trình giao dịch. Giao dịch không tồn tại hoặc đã được xử lý.</MudText>
+                                </div>
+                            </MudCardContent>
+
+                            <MudCardActions>
+                                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled"
+                                           Color="Color.Primary" Class="ml-auto" OnClick="@NavigateToHome">
+                                    @SharedResources.GoHome
+                                </MudButton>
+                            </MudCardActions>
+                        </MudCard>
+                    </div>
+                }
+            </div>
+        </div>
+    </Authorized>
+</AuthorizeView>

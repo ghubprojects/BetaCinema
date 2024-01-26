@@ -1,12 +1,15 @@
-﻿namespace BetaCinema.Domain.Models;
+﻿using System;
+using System.Collections.Generic;
+
+namespace BetaCinema.Domain.Models;
 
 public partial class Reservation
 {
     public string Id { get; set; } = null!;
 
-    public string ShowtimeId { get; set; }
+    public string ShowtimeId { get; set; } = null!;
 
-    public string UserId { get; set; }
+    public string UserId { get; set; } = null!;
 
     public bool DeleteFlag { get; set; }
 

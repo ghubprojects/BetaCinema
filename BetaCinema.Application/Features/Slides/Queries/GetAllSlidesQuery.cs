@@ -16,7 +16,9 @@ namespace BetaCinema.Application.Features.Slides.Queries
 
         public async Task<List<string>> Handle(GetAllSlidesQuery request, CancellationToken cancellationToken)
         {
-            var slideFiles = Directory.GetFiles(Path.Combine(_configuration.GetValue<string>("FileStorage:Images"), "slides")).ToList();
+            var slideFiles = Directory.GetFiles(Path.Combine(_configuration.GetValue<string>("FileStorage:Images"), "slides"))
+                .OrderBy(filePath => Math.Abs((File.GetCreationTime(filePath) - DateTime.Now).Ticks))
+                .ToList();
 
             var slideNames = new List<string>();
 

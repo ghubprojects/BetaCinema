@@ -1,0 +1,15 @@
+﻿.movie-title {
+    margin: 20px 0;
+    font-family: Oswald, sans-serif;
+    font-size: 32px;
+    line-height: 1.5;
+    text-align: center;
+    color: #03599d;
+}
+
+.submit-button {
+    font-family: Oswald, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    text-transform: uppercase !important;
+}

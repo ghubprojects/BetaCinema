@@ -1,4 +1,4 @@
-﻿using BetaCinema.Application.Interfaces.Repositories;
+﻿using BetaCinema.Application.Interfaces;
 using BetaCinema.Domain.Models;
 using MediatR;
 
@@ -8,16 +8,18 @@ namespace BetaCinema.Application.Features.Users.Commands
 
     public class GetAllUsersQueryHandler : IRequestHandler<GetAllUsersQuery, List<User>>
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IAppDbContext _context;
 
-        public GetAllUsersQueryHandler(IUnitOfWork unitOfWork)
+        public GetAllUsersQueryHandler(IAppDbContext context)
         {
-            _unitOfWork = unitOfWork;
+            _context = context;
         }
 
         public async Task<List<User>> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
         {
-            return await _unitOfWork.Repository<User>().GetAllAsync();
+            return _context.Users
+                .Where(u => !u.DeleteFlag)
+                .ToList();
         }
     }
 }

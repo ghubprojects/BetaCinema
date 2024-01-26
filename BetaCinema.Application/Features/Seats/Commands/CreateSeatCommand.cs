@@ -1,5 +1,5 @@
 ﻿using BetaCinema.Application.Features.Seats.Validators;
-using BetaCinema.Application.Interfaces.Repositories;
+using BetaCinema.Application.Interfaces;
 using BetaCinema.Domain.Models;
 using BetaCinema.Domain.Wrappers;
 using MediatR;
@@ -13,11 +13,11 @@ namespace BetaCinema.Application.Features.Seats.Commands
 
     public class CreateSeatCommandHandler : IRequestHandler<CreateSeatCommand, ServiceResult>
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IAppDbContext _context;
 
-        public CreateSeatCommandHandler(IUnitOfWork unitOfWork)
+        public CreateSeatCommandHandler(IAppDbContext context)
         {
-            _unitOfWork = unitOfWork;
+            _context = context;
         }
 
         public async Task<ServiceResult> Handle(CreateSeatCommand request, CancellationToken cancellationToken)
@@ -32,7 +32,12 @@ namespace BetaCinema.Application.Features.Seats.Commands
             else
             {
                 request.Data.Id = Guid.NewGuid().ToString();
-                await _unitOfWork.Repository<Seat>().AddAsync(request.Data);
+                request.Data.DeleteFlag = false;
+                request.Data.CreatedDate = DateTime.Now;
+                request.Data.ModifiedDate = DateTime.Now;
+
+                _context.Seats.Add(request.Data);
+                await _context.SaveChangesAsync(cancellationToken);
                 return new ServiceResult(true);
             }
         }

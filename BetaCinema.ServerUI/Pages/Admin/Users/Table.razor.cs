@@ -27,6 +27,32 @@ namespace BetaCinema.ServerUI.Pages.Admin.Users
 
         protected List<User>? users;
 
+        protected string _searchString;
+
+        // quick filter - filter globally across multiple columns with the same input
+        protected Func<User, bool> _quickFilter => x =>
+        {
+            if (string.IsNullOrWhiteSpace(_searchString))
+                return true;
+
+            if (x.UserName.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+                return true;
+
+            if (x.FullName.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+                return true;
+
+            if (x.Email.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+                return true;
+
+            if (x.Role.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+                return true;
+
+            if ($"{x.UserName} {x.FullName} {x.Email} {x.Role}".Contains(_searchString))
+                return true;
+
+            return false;
+        };
+
         protected override async Task OnInitializedAsync()
         {
             users = await Mediator.Send(new GetAllUsersQuery());
