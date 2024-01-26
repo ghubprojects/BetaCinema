@@ -12,6 +12,8 @@ namespace BetaCinema.ServerUI.Features.MovieShowtimes
 
         [Parameter] public Showtime ShowtimeData { get; set; } = new();
 
+        [Parameter] public int UnsoldSeats { get; set; }
+
         [Parameter] public bool IsFullWidth { get; set; }
 
         protected string ShowtimeClass { get => IsFullWidth ? "showtime fullwidth" : "showtime"; }

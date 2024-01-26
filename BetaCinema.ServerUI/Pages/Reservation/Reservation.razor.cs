@@ -3,6 +3,8 @@ using BetaCinema.Application.Features.Showtimes.Commands;
 using BetaCinema.Application.Features.Users.Commands;
 using BetaCinema.Domain.Models;
 using BetaCinema.Domain.Resources;
+using BetaCinema.ServerUI.Components.Dialog;
+using BetaCinema.ServerUI.Resources;
 using BetaCinema.ServerUI.Store.ReservationUseCase;
 using Fluxor;
 using MediatR;
@@ -148,30 +150,48 @@ namespace BetaCinema.ServerUI.Pages.Reservation
 
         protected async Task HandleReserveSeat()
         {
-            // get user data
-            var storedUserId = await BrowserStorage.GetAsync<string>("userId");
-            var userDataResult = await Mediator.Send(
-                new GetUserByIdQuery() { Id = storedUserId.Value });
-
-            if (userDataResult.IsSuccess)
+            if (selectedSeats == null)
             {
-                var userData = (User)userDataResult.Data;
-                Dispatcher.Dispatch(new ReserveSeatAction()
-                {
-                    Showtime = ShowtimeData,
-                    SelectedSeat = selectedSeats,
-                    UserEmail = userData.Email,
-                    UserFullName = userData.FullName,
-                });
+                return;
+            }
 
-                await BrowserStorage.SetAsync("showtimeId", ShowtimeData.Id);
-                await BrowserStorage.SetAsync("selectedSeats", string.Join(", ", selectedSeats.Select(x => $"{x.RowNum}{x.SeatNum}")));
-
-                Navigation.NavigateTo("checkout");
+            if (!selectedSeats.Any())
+            {
+                DialogService.Show<ErrorMessageDialog>(SharedResources.Error,
+                    new DialogParameters<ErrorMessageDialog>
+                    {
+                        { x => x.ContentText, "Vui lòng chọn ít nhất 1 ghế để tiếp tục." },
+                        { x => x.ButtonText, SharedResources.Close },
+                        { x => x.Color, Color.Error }
+                    }, new DialogOptions() { MaxWidth = MaxWidth.ExtraSmall });
             }
             else
             {
-                Navigation.NavigateTo("login", true);
+                // get user data
+                var storedUserId = await BrowserStorage.GetAsync<string>("userId");
+                var userDataResult = await Mediator.Send(
+                    new GetUserByIdQuery() { Id = storedUserId.Value });
+
+                if (userDataResult.IsSuccess)
+                {
+                    var userData = (User)userDataResult.Data;
+                    Dispatcher.Dispatch(new ReserveSeatAction()
+                    {
+                        Showtime = ShowtimeData,
+                        SelectedSeat = selectedSeats,
+                        UserEmail = userData.Email,
+                        UserFullName = userData.FullName,
+                    });
+
+                    await BrowserStorage.SetAsync("showtimeId", ShowtimeData.Id);
+                    await BrowserStorage.SetAsync("selectedSeats", string.Join(", ", selectedSeats.Select(x => $"{x.RowNum}{x.SeatNum}")));
+
+                    Navigation.NavigateTo("checkout");
+                }
+                else
+                {
+                    Navigation.NavigateTo("login", true);
+                }
             }
         }
     }

@@ -29,7 +29,10 @@ namespace BetaCinema.Application.Features.Showtimes.Commands
                 .Where(s => s.CinemaId == request.CinemaId && s.MovieId == request.MovieId && s.StartTime.HasValue && s.StartTime.Value.Date == request.ShowDate.Date)
                 .Include(s => s.Movie)
                 .Include(s => s.Cinema)
+                .Include(s => s.Reservations)
+                    .ThenInclude(r => r.ReservationItems)
                 .OrderBy(s => s.StartTime.Value)
+                .AsNoTracking()
                 .ToList();
         }
     }

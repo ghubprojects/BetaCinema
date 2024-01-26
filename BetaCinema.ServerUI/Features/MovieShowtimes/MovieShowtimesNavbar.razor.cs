@@ -1,4 +1,5 @@
-﻿using BetaCinema.Application.Features.Showtimes.Commands;
+﻿using BetaCinema.Application.Features.Seats.Commands;
+using BetaCinema.Application.Features.Showtimes.Commands;
 using BetaCinema.Domain.Models;
 using BetaCinema.ServerUI.Store.CinemaUseCase;
 using Fluxor;
@@ -17,6 +18,7 @@ namespace BetaCinema.ServerUI.Features.MovieShowtimes
         [Inject] private IMediator Mediator { get; set; }
 
         protected List<Showtime> showtimeList { get; set; } = new();
+        protected int totalSeats { get; set; } = 0;
 
         public Dictionary<string, DateTime> currentWeekDays { get; set; }
 
@@ -47,6 +49,9 @@ namespace BetaCinema.ServerUI.Features.MovieShowtimes
                 MovieId = MovieData.Id,
                 ShowDate = currentWeekDays.First().Value
             });
+
+            var result = await Mediator.Send(new GetAllSeatsQuery() { });
+            totalSeats = result.Count;
         }
 
         protected async Task GetShowtimes(string weekDay)

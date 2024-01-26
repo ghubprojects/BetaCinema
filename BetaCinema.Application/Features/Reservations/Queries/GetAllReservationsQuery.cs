@@ -20,6 +20,9 @@ namespace BetaCinema.Application.Features.Reservations.Queries
         {
             var reservations = await _context.Reservations
                 .Include(r => r.Showtime)
+                    .ThenInclude(s => s.Movie)
+                .Include(r => r.Showtime)
+                    .ThenInclude(s => s.Cinema)
                 .Include(r => r.ReservationItems)
                     .ThenInclude(ri => ri.Seat)
                 .Include(r => r.User)

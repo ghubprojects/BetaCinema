@@ -70,6 +70,15 @@ namespace BetaCinema.Domain.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ghế.
+        /// </summary>
+        public static string Seat {
+            get {
+                return ResourceManager.GetString("Seat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Số ghế.
         /// </summary>
         public static string SeatNum {

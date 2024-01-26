@@ -5,6 +5,6 @@
         <div class="@ShowtimeClass" onclick="@ShowConfirmShowtimeDialog">
             @ShowtimeData.StartTime.Value.ToString("HH:mm")
         </div>
-        <span class="seats-unsold">? ghế trống</span>
+        <span class="seats-unsold">@($"{UnsoldSeats} ghế trống")</span>
     </div>
 </MudCard>

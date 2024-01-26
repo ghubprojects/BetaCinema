@@ -4,15 +4,21 @@
     <MudImage Src="@($"/assets/images/posters/{MovieData.Poster}")" Fluid="true" Style="border-radius: 20px" />
     <MudCardContent Class="p-0 mb-6">
         <MudLink Href="@uri" Class="d-block mt-2 mb-2">
-            <span class="movie-title">@MovieData.MovieName</span>
+            <div class="movie-title">@MovieData.MovieName</div>
         </MudLink>
 
         <MudText>
-            <span class="info"><b class="info-title">Thể loại: </b>abc</span>
+            <span class="info">
+                <b class="info-title">Thể loại: </b>
+                @(string.Join(", ", MovieData.MovieCategories.Select(mc => mc.Category.CategoryName)))
+            </span>
         </MudText>
 
         <MudText>
-            <span class="info"><b class="info-title">Thời lượng: </b>@($"{MovieData.Duration} phút")</span>
+            <span class="info">
+                <b class="info-title">Thời lượng: </b>
+                @($"{MovieData.Duration} phút")
+            </span>
         </MudText>
 
         @if (MovieData.ReleaseDate.Value.Date > DateTime.Now.Date)
@@ -29,9 +35,9 @@
     @if (MovieData.ReleaseDate.Value.Date <= DateTime.Now.Date)
     {
         <MudCardActions Class="p-0">
-        <MudButton Variant="Variant.Filled" Color="Color.Primary" FullWidth>
-            <span class="booking-button">Mua vé</span>
-        </MudButton>
-    </MudCardActions>
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" FullWidth>
+             <span class="booking-button">Mua vé</span>
+         </MudButton>
+     </MudCardActions>
     }
 </MudCard>

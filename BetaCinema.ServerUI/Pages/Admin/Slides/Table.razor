@@ -36,27 +36,23 @@
         }
         else
         {
-            <MudTable Items="@slideNames" Elevation="0" Dense Hover FixedHeader
-                       Class="admin-table" Context="tableContext">
-                 <HeaderContent>
-                     <MudTh>Slide</MudTh>
-                     <MudTh>@SharedResources.OptionsColumnTitle</MudTh>
-                 </HeaderContent>
-
-                 <RowTemplate>
-                     <MudTd>
-                         <MudImage Src="@($"/assets/images/slides/{tableContext}")" Width="400" />
-                     </MudTd>
-                     <MudTd>
-                         <MudStack Row Spacing="2">
-                             <MudIconButton Size="@Size.Small" Variant="@Variant.Text" Color="@Color.Error"
-                                            Icon="@Icons.Material.Filled.Delete" Class="rounded-circle"
-                                            OnClick="@(() => Delete(tableContext))">
-                             </MudIconButton>
-                         </MudStack>
-                     </MudTd>
-                 </RowTemplate>
-         </MudTable>
+            <MudCarousel ShowArrows="false" AutoCycle="false" EnableSwipeGesture ShowBullets="true" TData="object"
+                          Class="mud-width-full rounded-lg" Style="height:453px">
+                 @foreach (var slideName in slideNames)
+                {
+                    <MudCarouselItem Class="mud-width-full" Transition="Transition.Slide" Color="@Color.Transparent">
+                        <div class="d-flex justify-content-center" style="height:453px">
+                            <MudImage Src="@($"/assets/images/slides/{slideName}")" />
+                            <div class="position-absolute" style="top:12px;right:12px">
+                                <MudIconButton Size="@Size.Medium" Variant="@Variant.Filled" Color="@Color.Error"
+                                               Icon="@Icons.Material.Filled.Delete" Class="rounded-circle"
+                                               OnClick="@(() => Delete(slideName))">
+                                </MudIconButton>
+                            </div>
+                        </div>
+                    </MudCarouselItem>
+                }
+            </MudCarousel>
         }
     </Authorized>
 </AuthorizeView>

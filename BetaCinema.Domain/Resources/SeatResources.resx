@@ -120,6 +120,9 @@
   <data name="RowNum" xml:space="preserve">
     <value>Số hàng</value>
   </data>
+  <data name="Seat" xml:space="preserve">
+    <value>Ghế</value>
+  </data>
   <data name="SeatNum" xml:space="preserve">
     <value>Số ghế</value>
   </data>

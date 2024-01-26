@@ -12,7 +12,9 @@
         <div class="d-flex gap-3">
             <MudText>
                 <i class="fas fa-tags" style="font-size:16px;color:#03599d"></i>
-                <span class="info">Category</span>
+                <span class="info">
+                    @(string.Join(", ", MovieData.MovieCategories.Select(mc => mc.Category.CategoryName)))
+                </span>
             </MudText>
 
             <MudText>

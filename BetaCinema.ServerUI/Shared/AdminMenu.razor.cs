@@ -10,6 +10,7 @@ namespace BetaCinema.ServerUI.Shared
             new SidebarItem("Người dùng", "admin/users", "fas fa-user"),
             new SidebarItem("Phim", "admin/movies", "fas fa-film"),
             new SidebarItem("Suất chiếu", "admin/showtimes", "fas fa-clock"),
+            new SidebarItem("Đặt chỗ", "admin/reservations", "fas fa-cubes"),
             new SidebarItem("Hóa đơn", "admin/payments", "fas fa-money-bill"),
             new SidebarItem("Rạp phim", "admin/cinemas", "fas fa-location-dot"),
             new SidebarItem("Thể loại", "admin/categories", "fas fa-list"),

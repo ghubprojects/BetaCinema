@@ -51,7 +51,7 @@
                        Class="admin-table" Context="tableContext">
                  <ToolBarContent>
                      <MudSpacer />
-                     <MudTextField @bind-Value="_searchString" Variant="Variant.Outlined" Margin="Margin.Dense"
+                     <MudTextField @bind-Value="_searchString" Variant="Variant.Outlined" Margin="Margin.Dense" Immediate
                                    Placeholder="@SharedResources.Search" Adornment="Adornment.Start"
                                    AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0">
                      </MudTextField>
@@ -81,7 +81,7 @@
                  </RowTemplate>
 
                  <PagerContent>
-                     <MudTablePager />
+                     <MudTablePager RowsPerPageString="Số bản ghi mỗi trang" />
                  </PagerContent>
              </MudTable>
         }

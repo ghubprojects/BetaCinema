@@ -1,6 +1,7 @@
 ﻿using BetaCinema.Application.Interfaces;
 using BetaCinema.Domain.Models;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace BetaCinema.Application.Features.Movies.Commands
 {
@@ -18,6 +19,8 @@ namespace BetaCinema.Application.Features.Movies.Commands
         public async Task<List<Movie>> Handle(GetShowingMoviesQuery request, CancellationToken cancellationToken)
         {
             return _context.Movies
+                .Include(m => m.MovieCategories)
+                    .ThenInclude(mc => mc.Category)
                 .Where(m => !m.DeleteFlag && m.ReleaseDate <= DateTime.Today)
                 .OrderByDescending(movie => movie.ReleaseDate)
                 .ToList();
