@@ -1,0 +1,12 @@
+﻿global using BetaCinema.Domain.Enums;
+global using BetaCinema.Domain.Models;
+global using BetaCinema.Domain.Resources;
+global using BetaCinema.ServerUI.Components.Dialogs;
+global using BetaCinema.ServerUI.Resources;
+global using Fluxor;
+global using MediatR;
+global using Microsoft.AspNetCore.Components;
+global using Microsoft.JSInterop;
+global using MudBlazor;
+global using System.Data;
+global using Severity = MudBlazor.Severity;

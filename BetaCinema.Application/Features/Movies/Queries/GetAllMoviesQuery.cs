@@ -1,13 +1,14 @@
 ﻿using BetaCinema.Application.Interfaces;
-using BetaCinema.Domain.Models;
+using BetaCinema.Domain.Resources;
+using BetaCinema.Domain.Wrappers;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace BetaCinema.Application.Features.Movies.Commands
 {
-    public class GetAllMoviesQuery : IRequest<List<Movie>> { }
+    public class GetAllMoviesQuery : IRequest<ServiceResult> { }
 
-    public class GetAllMoviesQueryHandler : IRequestHandler<GetAllMoviesQuery, List<Movie>>
+    public class GetAllMoviesQueryHandler : IRequestHandler<GetAllMoviesQuery, ServiceResult>
     {
         private readonly IAppDbContext _context;
 
@@ -16,15 +17,25 @@ namespace BetaCinema.Application.Features.Movies.Commands
             _context = context;
         }
 
-        public async Task<List<Movie>> Handle(GetAllMoviesQuery request, CancellationToken cancellationToken)
+        public async Task<ServiceResult> Handle(GetAllMoviesQuery request, CancellationToken cancellationToken)
         {
-            return _context.Movies
-                .Include(m => m.MovieCategories)
-                    .ThenInclude(mc => mc.Category)
-                .Where(m => !m.DeleteFlag)
-                .OrderByDescending(m => m.ModifiedDate)
-                .ThenByDescending(m => m.ReleaseDate)
-                .ToList();
+            try
+            {
+                var data = await _context.Movies
+                    .Include(m => m.MovieCategories)
+                        .ThenInclude(mc => mc.Category)
+                    .Where(m => !m.DeleteFlag)
+                    .OrderByDescending(m => m.ModifiedDate)
+                    .ThenByDescending(m => m.ReleaseDate)
+                    .AsNoTracking()
+                    .ToListAsync(cancellationToken);
+
+                return new ServiceResult(true, "", data);
+            }
+            catch (Exception)
+            {
+                return new ServiceResult(false, ErrorResources.UnhandledError);
+            }
         }
     }
 }

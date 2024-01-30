@@ -187,6 +187,15 @@ namespace BetaCinema.ServerUI.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Xóa tất cả.
+        /// </summary>
+        public static string MultipleDelete {
+            get {
+                return ResourceManager.GetString("MultipleDelete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Không có dữ liệu.
         /// </summary>
         public static string NoRecord {

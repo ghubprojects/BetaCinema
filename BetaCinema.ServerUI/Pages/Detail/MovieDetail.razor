@@ -16,20 +16,43 @@
             <p class="description">@MovieData.Description</p>
 
             <div class="detail-infos">
-                <p class="info"><b class="info-title">Đạo diễn: </b>@MovieData.Director</p>
+                <p class="info">
+                    <b class="info-title">
+                        @($"{MovieResources.Director}:")
+                    </b>
+                    @MovieData.Director
+                </p>
 
-                <p class="info"><b class="info-title">Diễn viên: </b>@MovieData.Actor</p>
+                <p class="info">
+                    <b class="info-title">
+                        @($"{MovieResources.Actor}:")
+                    </b>
+                    @MovieData.Actor
+                </p>
 
-                <p class="info"><b class="info-title">Thể loại: </b>Category</p>
+                <p class="info">
+                    <b class="info-title">
+                        @($"{MovieResources.Category}:")
+                    </b>
+                    @string.Join(", ", MovieData.MovieCategories.Select(mc => mc.Category.CategoryName))
+                </p>
 
-                <p class="info"><b class="info-title">Thời lượng: </b>@($"{MovieData.Duration} phút")</p>
+                <p class="info">
+                    <b class="info-title">
+                        @($"{MovieResources.Duration}:")
+                    </b>
+                    @($"{MovieData.Duration} phút")
+                </p>
 
-                <p class="info"><b class="info-title">Ngày khởi chiếu: </b>@MovieData.ReleaseDate</p>
+                <p class="info">
+                    <b class="info-title">Ngày khởi chiếu: </b>
+                    @(MovieData.ReleaseDate.HasValue ? MovieData.ReleaseDate.Value.ToString("dd/MM/yyyy") : "")
+                </p>
             </div>
         </MudCardContent>
     </MudCard>
 
     <div class="pt-4">
-        <MovieShowtimesNavbar MovieData="@MovieData"/>
+        <MovieShowtimesNavbar MovieData="@MovieData" />
     </div>
 </div>

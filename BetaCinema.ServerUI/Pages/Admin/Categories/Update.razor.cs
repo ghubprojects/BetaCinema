@@ -1,15 +1,10 @@
 ﻿using BetaCinema.Application.Features.Categories.Commands;
-using BetaCinema.Domain.Models;
-using MediatR;
-using Microsoft.AspNetCore.Components;
-using Microsoft.JSInterop;
-using MudBlazor;
 
 namespace BetaCinema.ServerUI.Pages.Admin.Categories
 {
     public class UpdateBase : ComponentBase
     {
-        [Inject] protected IJSRuntime js { get; set; }
+        [Inject] IDialogService DialogService { get; set; }
 
         [Inject] protected NavigationManager Navigation { get; set; }
 
@@ -20,18 +15,45 @@ namespace BetaCinema.ServerUI.Pages.Admin.Categories
         [Parameter] public string CategoryId { get; set; }
 
         public Category CategoryData { get; set; } = new();
+        public Category OldData { get; set; } = new();
 
         protected async override Task OnParametersSetAsync()
         {
-            CategoryData = await Mediator.Send(new GetCategoryByIdQuery() { Id = CategoryId });
+            var result = await Mediator.Send(new GetCategoryByIdQuery() { Id = CategoryId });
+
+            if (result.IsSuccess)
+            {
+                CategoryData = result.Data;
+                OldData = result.Data;
+            }
+            else
+            {
+                DialogService.Show<ErrorMessageDialog>(SharedResources.Error,
+                    new DialogParameters<ErrorMessageDialog>
+                    {
+                        { x => x.ContentText, result.Message },
+                    }, new DialogOptions() { MaxWidth = MaxWidth.ExtraSmall });
+            }
         }
 
         protected async Task SaveChanges()
         {
-            await Mediator.Send(new UpdateCategoryCommand() { Data = CategoryData });
+            var result = await Mediator.Send(new UpdateCategoryCommand()
+            { Data = CategoryData, OldData = OldData });
 
-            SnackBar.Add("Update successfully", Severity.Success);
-            Navigation.NavigateTo("admin/categories");
+            if (result.IsSuccess)
+            {
+                SnackBar.Add(SnackbarResources.UpdateSuccess, Severity.Success);
+                Navigation.NavigateTo("admin/categories");
+            }
+            else
+            {
+                DialogService.Show<ErrorMessageDialog>(SharedResources.Error,
+                    new DialogParameters<ErrorMessageDialog>
+                    {
+                        { x => x.ContentText, result.Message },
+                    }, new DialogOptions() { MaxWidth = MaxWidth.ExtraSmall });
+            }
         }
     }
 }

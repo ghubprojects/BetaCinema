@@ -1,15 +1,7 @@
 ﻿using BetaCinema.Application.Features.Movies.Commands;
 using BetaCinema.Application.Features.Movies.Queries;
 using BetaCinema.Application.Requests;
-using BetaCinema.Domain.Enums;
-using BetaCinema.Domain.Models;
-using BetaCinema.ServerUI.Components.Dialog;
-using BetaCinema.ServerUI.Resources;
-using MediatR;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
-using Microsoft.JSInterop;
-using MudBlazor;
 
 namespace BetaCinema.ServerUI.Pages.Admin.Movies
 {
@@ -26,6 +18,7 @@ namespace BetaCinema.ServerUI.Pages.Admin.Movies
         [Inject] private IMediator Mediator { get; set; }
 
         protected List<Movie>? movies;
+        protected HashSet<Movie> selectedItems = new();
 
         protected string _searchString;
 
@@ -49,36 +42,60 @@ namespace BetaCinema.ServerUI.Pages.Admin.Movies
 
         protected override async Task OnInitializedAsync()
         {
-            movies = await Mediator.Send(new GetAllMoviesQuery());
-        }
+            var result = await Mediator.Send(new GetAllMoviesQuery());
 
-        protected void NavigateToCreateForm()
-        {
-            Navigation.NavigateTo("admin/movies/create");
+            if (result.IsSuccess)
+            {
+                movies = result.Data;
+            }
+            else
+            {
+                DialogService.Show<ErrorMessageDialog>(SharedResources.Error,
+                    new DialogParameters<ErrorMessageDialog>
+                    {
+                        { x => x.ContentText, result.Message },
+                    }, new DialogOptions() { MaxWidth = MaxWidth.ExtraSmall });
+            }
         }
 
         protected async Task Delete(string movieId)
         {
             var movie = movies.First(x => x.Id == movieId);
-            if (await js.InvokeAsync<bool>("confirm", $"Do you want to delete Movie <{movie.MovieName}>?"))
-            {
-                var result = await Mediator.Send(new DeleteMovieCommand() { Id = movieId });
 
-                if (result.IsSuccess)
-                {
-                    SnackBar.Add("Delete successfully", Severity.Success);
-                    await OnInitializedAsync();
-                }
-                else
-                {
-                    DialogService.Show<ErrorMessageDialog>(SharedResources.Error,
-                        new DialogParameters<ErrorMessageDialog>
-                        {
-                            { x => x.ContentText, result.Message },
-                            { x => x.ButtonText, SharedResources.Close },
-                            { x => x.Color, Color.Error }
-                        }, new DialogOptions() { MaxWidth = MaxWidth.ExtraSmall });
-                }
+            var dialog = DialogService.Show<DeleteConfirmation>(DialogResources.DeleteTitle, new DialogParameters<DeleteConfirmation>
+            {
+                { x => x.Command,  new DeleteMovieCommand() { Id = movieId } },
+                { x => x.ContentText, string.Format(DialogResources.ConfirmDelete, MovieResources.Movie,movie.MovieName ) }
+            }, new DialogOptions
+            {
+                MaxWidth = MaxWidth.ExtraSmall,
+                DisableBackdropClick = true
+            });
+
+            var state = await dialog.Result;
+            if (!state.Canceled)
+            {
+                await OnInitializedAsync();
+            }
+        }
+
+        protected async Task DeleteMultiple()
+        {
+            var dialog = DialogService.Show<DeleteConfirmation>(DialogResources.DeleteTitle, new DialogParameters<DeleteConfirmation>
+            {
+                { x => x.Command,
+                    new DeleteMultipleMoviesCommand() { RemovedList = selectedItems.ToList() } },
+                { x => x.ContentText, DialogResources.ConfirmDeleteMultiple }
+            }, new DialogOptions
+            {
+                MaxWidth = MaxWidth.ExtraSmall,
+                DisableBackdropClick = true
+            });
+
+            var state = await dialog.Result;
+            if (!state.Canceled)
+            {
+                await OnInitializedAsync();
             }
         }
 
@@ -119,8 +136,8 @@ namespace BetaCinema.ServerUI.Pages.Admin.Movies
 
                 if (result.IsSuccess)
                 {
-                    SnackBar.Add("Import successfully", Severity.Success);
-                    Navigation.NavigateTo("admin/movies", true);
+                    SnackBar.Add(SnackbarResources.ImportSuccess, Severity.Success);
+                    await OnInitializedAsync();
                 }
                 else
                 {
@@ -128,8 +145,6 @@ namespace BetaCinema.ServerUI.Pages.Admin.Movies
                         new DialogParameters<ErrorMessageDialog>
                         {
                             { x => x.ContentText, result.Message },
-                            { x => x.ButtonText, SharedResources.Close },
-                            { x => x.Color, Color.Error }
                         }, new DialogOptions() { MaxWidth = MaxWidth.ExtraSmall });
                 }
 

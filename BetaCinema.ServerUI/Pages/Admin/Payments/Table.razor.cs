@@ -1,12 +1,5 @@
-﻿using BetaCinema.Application.Features.Movies.Queries;
-using BetaCinema.Application.Features.Payments.Commands;
-using BetaCinema.Application.Features.Users.Commands;
-using BetaCinema.Domain.Models;
-using MediatR;
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Forms;
-using Microsoft.JSInterop;
-using MudBlazor;
+﻿using BetaCinema.Application.Features.Payments.Commands;
+using BetaCinema.Application.Features.Payments.Queries;
 
 namespace BetaCinema.ServerUI.Pages.Admin.Payments
 {
@@ -43,30 +36,30 @@ namespace BetaCinema.ServerUI.Pages.Admin.Payments
 
         protected override async Task OnInitializedAsync()
         {
-            payments = await Mediator.Send(new GetAllPaymentsQuery());
-        }
+            var result = await Mediator.Send(new GetAllPaymentsQuery());
 
-        protected async Task Delete(string paymentId)
-        {
-            var payment = payments.First(x => x.Id == paymentId);
-            if (await js.InvokeAsync<bool>("confirm", $"Do you want to delete Movie <{payment.Id}>?"))
+            if (result.IsSuccess)
             {
-                await Mediator.Send(new DeleteUserCommand() { Id = paymentId });
-                SnackBar.Add("Delete successfully", Severity.Success);
-                await OnInitializedAsync();
+                payments = result.Data;
+            }
+            else
+            {
+                DialogService.Show<ErrorMessageDialog>(SharedResources.Error,
+                    new DialogParameters<ErrorMessageDialog>
+                    {
+                        { x => x.ContentText, result.Message },
+                    }, new DialogOptions() { MaxWidth = MaxWidth.ExtraSmall });
             }
         }
 
         protected async Task DownloadExcelFile()
         {
-            var excelBytes = await Mediator.Send(new ExportMoviesToExcelQuery(""));
+            var excelBytes = await Mediator.Send(new ExportPaymentsToExcelQuery(""));
 
             // Tạo 1 unique filename cho file excel
-            string fileName = $"{typeof(Movie).Name}_{DateTime.Now:yyyyMMddHHmmss}.xlsx";
+            string fileName = $"{typeof(Payment).Name}_{DateTime.Now:yyyyMMddHHmmss}.xlsx";
 
             await js.InvokeVoidAsync("saveAsFile", fileName, Convert.ToBase64String(excelBytes));
         }
-
-        protected IList<IBrowserFile> files = new List<IBrowserFile>();
     }
 }

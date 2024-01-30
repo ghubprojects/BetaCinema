@@ -106,6 +106,15 @@ namespace BetaCinema.Domain.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Phim.
+        /// </summary>
+        public static string Movie {
+            get {
+                return ResourceManager.GetString("Movie", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tên phim.
         /// </summary>
         public static string MovieName {

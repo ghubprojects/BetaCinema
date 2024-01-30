@@ -1,9 +1,5 @@
 ﻿using BetaCinema.Application.Features.Showtimes.Commands;
-using BetaCinema.Domain.Models;
 using BetaCinema.ServerUI.Store.CinemaUseCase;
-using Fluxor;
-using MediatR;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.WebUtilities;
 
 namespace BetaCinema.ServerUI.Pages.Showtimes.Components
@@ -15,6 +11,8 @@ namespace BetaCinema.ServerUI.Pages.Showtimes.Components
         [Inject] private IState<CinemaState> CinemaState { get; set; }
 
         [Inject] private IMediator Mediator { get; set; }
+
+        [Inject] IDialogService DialogService { get; set; }
 
         #endregion
 
@@ -54,12 +52,25 @@ namespace BetaCinema.ServerUI.Pages.Showtimes.Components
 
         protected override async Task OnParametersSetAsync()
         {
-            showtimeList = await Mediator.Send(new GetShowtimesByWeekDayQuery()
+            var result = await Mediator.Send(new GetShowtimesByWeekDayQuery()
             {
                 CinemaId = CinemaState.Value.Cinema.Id,
                 MovieId = MovieData.Id,
                 ShowDate = ShowDate
             });
+
+            if (result.IsSuccess)
+            {
+                showtimeList = result.Data;
+            }
+            else
+            {
+                DialogService.Show<ErrorMessageDialog>(SharedResources.Error,
+                    new DialogParameters<ErrorMessageDialog>
+                    {
+                        { x => x.ContentText, result.Message },
+                    }, new DialogOptions() { MaxWidth = MaxWidth.ExtraSmall });
+            }
         }
     }
 }

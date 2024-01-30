@@ -1,15 +1,10 @@
 ﻿using BetaCinema.Application.Features.Cinemas.Commands;
-using BetaCinema.Domain.Models;
-using MediatR;
-using Microsoft.AspNetCore.Components;
-using Microsoft.JSInterop;
-using MudBlazor;
 
 namespace BetaCinema.ServerUI.Pages.Admin.Cinemas
 {
     public class UpdateBase : ComponentBase
     {
-        [Inject] protected IJSRuntime js { get; set; }
+        [Inject] IDialogService DialogService { get; set; }
 
         [Inject] protected NavigationManager Navigation { get; set; }
 
@@ -19,19 +14,47 @@ namespace BetaCinema.ServerUI.Pages.Admin.Cinemas
 
         [Parameter] public string CinemaId { get; set; }
 
+        public Cinema OldData { get; set; } = new();
+
         public Cinema CinemaData { get; set; } = new();
 
         protected async override Task OnParametersSetAsync()
         {
-            CinemaData = await Mediator.Send(new GetCinemaByIdQuery() { Id = CinemaId });
+            var result = await Mediator.Send(new GetCinemaByIdQuery() { Id = CinemaId });
+
+            if (result.IsSuccess)
+            {
+                CinemaData = result.Data;
+                OldData = result.Data;
+            }
+            else
+            {
+                DialogService.Show<ErrorMessageDialog>(SharedResources.Error,
+                    new DialogParameters<ErrorMessageDialog>
+                    {
+                        { x => x.ContentText, result.Message },
+                    }, new DialogOptions() { MaxWidth = MaxWidth.ExtraSmall });
+            }
         }
 
         protected async Task SaveChanges()
         {
-            await Mediator.Send(new UpdateCinemaCommand() { Data = CinemaData });
+            var result = await Mediator.Send(new UpdateCinemaCommand()
+            { Data = CinemaData, OldData = OldData });
 
-            SnackBar.Add("Update successfully", Severity.Success);
-            Navigation.NavigateTo("admin/cinemas");
+            if (result.IsSuccess)
+            {
+                SnackBar.Add(SnackbarResources.UpdateSuccess, Severity.Success);
+                Navigation.NavigateTo("admin/cinemas");
+            }
+            else
+            {
+                DialogService.Show<ErrorMessageDialog>(SharedResources.Error,
+                    new DialogParameters<ErrorMessageDialog>
+                    {
+                        { x => x.ContentText, result.Message },
+                    }, new DialogOptions() { MaxWidth = MaxWidth.ExtraSmall });
+            }
         }
     }
 }

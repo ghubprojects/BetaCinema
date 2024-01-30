@@ -1,5 +1,6 @@
 ﻿using BetaCinema.Application.Interfaces;
 using BetaCinema.Domain.Models;
+using BetaCinema.Domain.Resources;
 using BetaCinema.Domain.Wrappers;
 using MediatR;
 
@@ -22,17 +23,25 @@ namespace BetaCinema.Application.Features.ReservationItems.Commands
 
         public async Task<ServiceResult> Handle(CreateMultipleReservationItemsCommand request, CancellationToken cancellationToken)
         {
-            var reservationItemList = new List<ReservationItem>();
-            var selectedSeatsString = request.SelectedSeatList.Split(", ");
-
-            foreach (var seat in selectedSeatsString)
+            try
             {
-                var searchResult = _context.Seats
-                     .Where(x => string.Concat(x.RowNum, x.SeatNum.ToString()) == seat)
-                     .FirstOrDefault();
+                var reservationItemList = new List<ReservationItem>();
+                var selectedSeatsString = request.SelectedSeatList.Split(", ");
 
-                if (searchResult != null)
+                if (!selectedSeatsString.Any())
+                    return new ServiceResult(false, string.Format(MessageResouces.Required, SeatResources.Seat));
+
+                foreach (var seat in selectedSeatsString)
                 {
+                    var searchResult = _context.Seats
+                         .Where(x => string.Concat(x.RowNum, x.SeatNum.ToString()) == seat)
+                         .FirstOrDefault();
+
+                    if (searchResult == null)
+                    {
+                        return new ServiceResult(false, string.Format(MessageResouces.NotExisted, $"{SeatResources.Seat} <{seat}>"));
+                    }
+
                     reservationItemList.Add(new ReservationItem()
                     {
                         Id = Guid.NewGuid().ToString(),
@@ -43,11 +52,15 @@ namespace BetaCinema.Application.Features.ReservationItems.Commands
                         ModifiedDate = DateTime.Now,
                     });
                 }
-            }
 
-            _context.ReservationItems.AddRange(reservationItemList);
-            await _context.SaveChangesAsync(cancellationToken);
-            return new ServiceResult(true);
+                _context.ReservationItems.AddRange(reservationItemList);
+                await _context.SaveChangesAsync(cancellationToken);
+                return new ServiceResult(true);
+            }
+            catch (Exception)
+            {
+                return new ServiceResult(false, ErrorResources.UnhandledError);
+            }
         }
     }
 }

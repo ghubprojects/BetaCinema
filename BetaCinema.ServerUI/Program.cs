@@ -1,10 +1,7 @@
 ﻿using BetaCinema.Application;
-using BetaCinema.Domain.Exceptions;
 using BetaCinema.Infrastructure;
 using BetaCinema.Infrastructure.Persistence;
 using BetaCinema.ServerUI.Middlewares;
-using Fluxor;
-using MudBlazor;
 using MudBlazor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,8 +13,10 @@ var builder = WebApplication.CreateBuilder(args);
     builder.Services.AddMudServices(config =>
     {
         config.SnackbarConfiguration.PositionClass = Defaults.Classes.Position.BottomRight;
+        config.SnackbarConfiguration.PreventDuplicates = false;
+        config.SnackbarConfiguration.NewestOnTop = true;
         config.SnackbarConfiguration.ShowCloseIcon = true;
-        config.SnackbarConfiguration.VisibleStateDuration = 3000;
+        config.SnackbarConfiguration.VisibleStateDuration = 5000;
         config.SnackbarConfiguration.HideTransitionDuration = 300;
         config.SnackbarConfiguration.ShowTransitionDuration = 300;
         config.SnackbarConfiguration.SnackbarVariant = Variant.Filled;
@@ -31,21 +30,6 @@ var builder = WebApplication.CreateBuilder(args);
     });
 
     builder.Services.AddInfrastructure(builder.Configuration).AddApplication();
-
-    builder.Services.AddMvc().ConfigureApiBehaviorOptions(options =>
-    {
-        options.InvalidModelStateResponseFactory = context =>
-        {
-            throw new ValidateException()
-            {
-                ErrorCode = StatusCodes.Status400BadRequest,
-                UserMessage = "Yêu cầu không hợp lệ",
-                DevMessage = "Bad request",
-                TraceId = context.HttpContext.TraceIdentifier,
-                Errors = context.ModelState.ToDictionary(kvp => kvp.Key, kvp => kvp.Value.Errors.Select(error => error.ErrorMessage).ToArray())
-            };
-        };
-    });
 }
 
 var app = builder.Build();

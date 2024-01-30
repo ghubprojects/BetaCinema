@@ -1,6 +1,8 @@
 ﻿using BetaCinema.Application.Interfaces;
+using BetaCinema.Domain.Resources;
 using BetaCinema.Domain.Wrappers;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace BetaCinema.Application.Features.Users.Commands
 {
@@ -22,12 +24,18 @@ namespace BetaCinema.Application.Features.Users.Commands
         {
             try
             {
-                var userData = await _context.Users.FindAsync(request.Id);
-                return new ServiceResult(true, "", userData);
+                var user = await _context.Users
+                    .Where(u => !u.DeleteFlag)
+                    .FirstOrDefaultAsync(u => u.Id == request.Id, cancellationToken);
+
+                if (user == null)
+                    return new ServiceResult(false, string.Format(MessageResouces.NotExisted, UserResources.User));
+
+                return new ServiceResult(true, "", user);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return new ServiceResult(false, ex.Message);
+                return new ServiceResult(false, ErrorResources.UnhandledError);
             }
         }
     }

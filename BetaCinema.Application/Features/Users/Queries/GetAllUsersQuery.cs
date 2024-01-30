@@ -1,12 +1,14 @@
 ﻿using BetaCinema.Application.Interfaces;
-using BetaCinema.Domain.Models;
+using BetaCinema.Domain.Resources;
+using BetaCinema.Domain.Wrappers;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace BetaCinema.Application.Features.Users.Commands
 {
-    public class GetAllUsersQuery : IRequest<List<User>> { }
+    public class GetAllUsersQuery : IRequest<ServiceResult> { }
 
-    public class GetAllUsersQueryHandler : IRequestHandler<GetAllUsersQuery, List<User>>
+    public class GetAllUsersQueryHandler : IRequestHandler<GetAllUsersQuery, ServiceResult>
     {
         private readonly IAppDbContext _context;
 
@@ -15,11 +17,23 @@ namespace BetaCinema.Application.Features.Users.Commands
             _context = context;
         }
 
-        public async Task<List<User>> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
+        public async Task<ServiceResult> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
         {
-            return _context.Users
-                .Where(u => !u.DeleteFlag)
-                .ToList();
+            try
+            {
+                var data = await _context.Users
+                    .Where(u => !u.DeleteFlag)
+                    .OrderBy(u => u.Role)
+                    .ThenBy(u => u.UserName)
+                    .AsNoTracking()
+                    .ToListAsync(cancellationToken);
+
+                return new ServiceResult(true, "", data);
+            }
+            catch (Exception)
+            {
+                return new ServiceResult(false, ErrorResources.UnhandledError);
+            }
         }
     }
 }

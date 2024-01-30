@@ -11,6 +11,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Resources\ErrorResources.Designer.cs">
+      <DependentUpon>ErrorResources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
     <Compile Update="Resources\PaymentResources.Designer.cs">
       <DependentUpon>PaymentResources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
@@ -59,6 +64,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Update="Resources\ErrorResources.resx">
+      <LastGenOutput>ErrorResources.Designer.cs</LastGenOutput>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="Resources\PaymentResources.resx">
       <LastGenOutput>PaymentResources.Designer.cs</LastGenOutput>
       <Generator>PublicResXFileCodeGenerator</Generator>

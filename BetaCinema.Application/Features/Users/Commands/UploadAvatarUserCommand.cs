@@ -1,6 +1,7 @@
 ﻿using BetaCinema.Application.Interfaces;
 using BetaCinema.Application.Requests;
 using BetaCinema.Domain.Models;
+using BetaCinema.Domain.Resources;
 using BetaCinema.Domain.Wrappers;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -31,10 +32,11 @@ namespace BetaCinema.Application.Features.Users.Commands
 
             public async Task<ServiceResult> Handle(UploadAvatarUserCommand request, CancellationToken cancellationToken)
             {
-                var avatarFile = request.UploadRequest.UploadedFiles[0];
-
                 try
                 {
+                    var avatarFile = request.UploadRequest.UploadedFiles[0];
+
+
                     // create file name
                     string newFileName = Path.ChangeExtension(Path.GetRandomFileName(), Path.GetExtension(avatarFile.Name));
 
@@ -54,9 +56,9 @@ namespace BetaCinema.Application.Features.Users.Commands
                     await _context.SaveChangesAsync(cancellationToken);
                     return new ServiceResult(true);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-                    return new ServiceResult(false, ex.Message);
+                    return new ServiceResult(false, ErrorResources.UnhandledError);
                 }
             }
         }

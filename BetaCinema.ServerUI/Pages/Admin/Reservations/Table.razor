@@ -14,11 +14,6 @@
 
                 <div class="form-group d-flex gap-2">
                     <MudButton Size="Size.Small" Variant="@Variant.Filled" Color="@Color.Primary"
-                               OnClick="@NavigateToCreateForm">
-                        @SharedResources.Create
-                        <MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.Add" Class="ml-1" />
-                    </MudButton>
-                    <MudButton Size="Size.Small" Variant="@Variant.Filled" Color="@Color.Primary"
                                OnClick="@DownloadExcelFile">
                         @SharedResources.ExportExcel
                         <MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.CloudDownload" Class="ml-2" />
@@ -40,7 +35,7 @@
         else
         {
             <MudTable Items="@reservations" Elevation="0" Dense Hover FixedHeader Filter="@_quickFilter"
-                       Class="admin-table" Context="tableContext">
+                       Class="admin-table toolbar" Context="tableContext">
                  <ToolBarContent>
                      <MudSpacer />
                      <MudTextField @bind-Value="_searchString" Variant="Variant.Outlined" Margin="Margin.Dense" Immediate
@@ -48,6 +43,14 @@
                                    AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0">
                      </MudTextField>
                  </ToolBarContent>
+
+                 <ColGroup>
+                     <col />
+                     <col />
+                     <col />
+                     <col />
+                     <col />
+                 </ColGroup>
 
                  <HeaderContent>
                      <MudTh>@UserResources.UserName</MudTh>
@@ -67,7 +70,7 @@
                  </RowTemplate>
 
                  <PagerContent>
-                     <MudTablePager RowsPerPageString="Số bản ghi mỗi trang" />
+                     <MudTablePager RowsPerPageString="Số bản ghi mỗi trang" PageSizeOptions="new int[] { 20, 30, 50, 80, 100 }" />
                  </PagerContent>
              </MudTable>
         }

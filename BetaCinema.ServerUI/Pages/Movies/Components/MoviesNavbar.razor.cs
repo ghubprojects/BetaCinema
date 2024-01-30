@@ -1,13 +1,12 @@
 ﻿using BetaCinema.Application.Features.Movies.Commands;
-using BetaCinema.Domain.Models;
-using MediatR;
-using Microsoft.AspNetCore.Components;
 
 namespace BetaCinema.ServerUI.Pages.Movies.Components
 {
     public class MoviesNavbarBase : ComponentBase
     {
         [Inject] private IMediator Mediator { get; set; }
+
+        [Inject] IDialogService DialogService { get; set; }
 
         protected int activeTabIndex = 1;
 
@@ -17,17 +16,43 @@ namespace BetaCinema.ServerUI.Pages.Movies.Components
 
         protected override async Task OnParametersSetAsync()
         {
-            showingMovies = await Mediator.Send(new GetShowingMoviesQuery());
+            await GetShowingMovies();
         }
 
         protected async Task GetShowingMovies()
         {
-            showingMovies = await Mediator.Send(new GetShowingMoviesQuery());
+            var result = await Mediator.Send(new GetShowingMoviesQuery());
+
+            if (result.IsSuccess)
+            {
+                showingMovies = result.Data;
+            }
+            else
+            {
+                DialogService.Show<ErrorMessageDialog>(SharedResources.Error,
+                    new DialogParameters<ErrorMessageDialog>
+                    {
+                        { x => x.ContentText, result.Message },
+                    }, new DialogOptions() { MaxWidth = MaxWidth.ExtraSmall });
+            }
         }
 
         protected async Task GetComingMovies()
         {
-            comingMovies = await Mediator.Send(new GetComingMoviesQuery());
+            var result = await Mediator.Send(new GetComingMoviesQuery());
+
+            if (result.IsSuccess)
+            {
+                comingMovies = result.Data;
+            }
+            else
+            {
+                DialogService.Show<ErrorMessageDialog>(SharedResources.Error,
+                    new DialogParameters<ErrorMessageDialog>
+                    {
+                        { x => x.ContentText, result.Message },
+                    }, new DialogOptions() { MaxWidth = MaxWidth.ExtraSmall });
+            }
         }
     }
 }

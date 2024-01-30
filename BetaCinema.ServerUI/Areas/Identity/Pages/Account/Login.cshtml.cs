@@ -1,4 +1,3 @@
-using BetaCinema.Domain.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -9,10 +8,10 @@ namespace BetaCinema.ServerUI.Areas.Identity.Pages.Account
 {
     public class LoginInput
     {
-        [Required]
+        [Required(ErrorMessage = "Tên ng??i dùng không ???c ?? tr?ng")]
         public string UserName { set; get; }
 
-        [Required]
+        [Required(ErrorMessage = "M?t kh?u không ???c ?? tr?ng")]
         [DataType(DataType.Password)]
         public string Password { get; set; }
     }
@@ -46,6 +45,7 @@ namespace BetaCinema.ServerUI.Areas.Identity.Pages.Account
         public async Task<IActionResult> OnPostAsync()
         {
             ReturnUrl = Url.Content("~/");
+            ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
             if (ModelState.IsValid)
             {
@@ -53,8 +53,7 @@ namespace BetaCinema.ServerUI.Areas.Identity.Pages.Account
                 Input.UserName,
                 Input.Password,
                 isPersistent: false,
-                lockoutOnFailure: false
-            );
+                lockoutOnFailure: false);
 
                 if (signInResult.Succeeded)
                 {

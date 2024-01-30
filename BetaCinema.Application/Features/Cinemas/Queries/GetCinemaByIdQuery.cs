@@ -1,15 +1,17 @@
 ﻿using BetaCinema.Application.Interfaces;
-using BetaCinema.Domain.Models;
+using BetaCinema.Domain.Resources;
+using BetaCinema.Domain.Wrappers;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace BetaCinema.Application.Features.Cinemas.Commands
 {
-    public class GetCinemaByIdQuery : IRequest<Cinema>
+    public class GetCinemaByIdQuery : IRequest<ServiceResult>
     {
         public string Id { get; set; } = null!;
     }
 
-    public class GetCinemaByIdQueryHandler : IRequestHandler<GetCinemaByIdQuery, Cinema>
+    public class GetCinemaByIdQueryHandler : IRequestHandler<GetCinemaByIdQuery, ServiceResult>
     {
         private readonly IAppDbContext _context;
 
@@ -18,9 +20,23 @@ namespace BetaCinema.Application.Features.Cinemas.Commands
             _context = context;
         }
 
-        public async Task<Cinema> Handle(GetCinemaByIdQuery request, CancellationToken cancellationToken)
+        public async Task<ServiceResult> Handle(GetCinemaByIdQuery request, CancellationToken cancellationToken)
         {
-            return await _context.Cinemas.FindAsync(request.Id);
+            try
+            {
+                var item = await _context.Cinemas
+                    .Where(c => !c.DeleteFlag)
+                    .FirstOrDefaultAsync(c => c.Id == request.Id, cancellationToken);
+
+                if (item == null)
+                    return new ServiceResult(false, string.Format(MessageResouces.NotExisted, CinemaResources.CinemaName));
+
+                return new ServiceResult(true, "", item);
+            }
+            catch (Exception)
+            {
+                return new ServiceResult(false, ErrorResources.UnhandledError);
+            }
         }
     }
 }

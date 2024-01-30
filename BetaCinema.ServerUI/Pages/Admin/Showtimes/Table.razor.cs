@@ -1,11 +1,7 @@
 ﻿using BetaCinema.Application.Features.Showtimes.Commands;
 using BetaCinema.Application.Features.Showtimes.Queries;
-using BetaCinema.Domain.Models;
-using MediatR;
-using Microsoft.AspNetCore.Components;
+using BetaCinema.Application.Requests;
 using Microsoft.AspNetCore.Components.Forms;
-using Microsoft.JSInterop;
-using MudBlazor;
 
 namespace BetaCinema.ServerUI.Pages.Admin.Showtimes
 {
@@ -22,6 +18,7 @@ namespace BetaCinema.ServerUI.Pages.Admin.Showtimes
         [Inject] private IMediator Mediator { get; set; }
 
         protected List<Showtime>? showtimes = new();
+        protected HashSet<Showtime> selectedItems = new();
 
         protected string _searchString;
 
@@ -46,23 +43,61 @@ namespace BetaCinema.ServerUI.Pages.Admin.Showtimes
             return false;
         };
 
-        protected override async Task OnParametersSetAsync()
+        protected override async Task OnInitializedAsync()
         {
-            showtimes = await Mediator.Send(new GetAllShowtimesQuery());
-        }
+            var result = await Mediator.Send(new GetAllShowtimesQuery());
 
-        protected void NavigateToCreateForm()
-        {
-            Navigation.NavigateTo("admin/showtimes/create");
+            if (result.IsSuccess)
+            {
+                showtimes = result.Data;
+            }
+            else
+            {
+                DialogService.Show<ErrorMessageDialog>(SharedResources.Error,
+                    new DialogParameters<ErrorMessageDialog>
+                    {
+                        { x => x.ContentText, result.Message },
+                    }, new DialogOptions() { MaxWidth = MaxWidth.ExtraSmall });
+            }
         }
 
         protected async Task Delete(string showtimeId)
         {
             var showtime = showtimes.First(x => x.Id == showtimeId);
-            if (await js.InvokeAsync<bool>("confirm", $"Do you want to delete this showtime ?"))
+
+            var dialog = DialogService.Show<DeleteConfirmation>(DialogResources.DeleteTitle, new DialogParameters<DeleteConfirmation>
             {
-                await Mediator.Send(new DeleteShowtimeCommand() { Id = showtimeId });
-                SnackBar.Add("Delete successfully", Severity.Success);
+                { x => x.Command,  new DeleteShowtimeCommand() { Id = showtimeId } },
+                { x => x.ContentText, string.Format(DialogResources.ConfirmDelete, ShowtimeResources.Showtime,showtime.StartTime.Value.ToString("HH:mm")) }
+            }, new DialogOptions
+            {
+                MaxWidth = MaxWidth.ExtraSmall,
+                DisableBackdropClick = true
+            });
+
+            var state = await dialog.Result;
+            if (!state.Canceled)
+            {
+                await OnInitializedAsync();
+            }
+        }
+
+        protected async Task DeleteMultiple()
+        {
+            var dialog = DialogService.Show<DeleteConfirmation>(DialogResources.DeleteTitle, new DialogParameters<DeleteConfirmation>
+            {
+                { x => x.Command,
+                    new DeleteMultipleShowtimesCommand() { RemovedList = selectedItems.ToList() } },
+                { x => x.ContentText, DialogResources.ConfirmDeleteMultiple }
+            }, new DialogOptions
+            {
+                MaxWidth = MaxWidth.ExtraSmall,
+                DisableBackdropClick = true
+            });
+
+            var state = await dialog.Result;
+            if (!state.Canceled)
+            {
                 await OnInitializedAsync();
             }
         }
@@ -81,45 +116,43 @@ namespace BetaCinema.ServerUI.Pages.Admin.Showtimes
 
         protected async Task UploadFiles(IBrowserFile file)
         {
-            //files.Add(file);
+            files.Add(file);
 
-            //if (files.Any())
-            //{
-            //    var uploadFile = files[0];
+            if (files.Any())
+            {
+                var uploadFile = files[0];
 
-            //    var buffer = new byte[uploadFile.Size];
-            //    var extension = Path.GetExtension(uploadFile.Name);
-            //    await uploadFile.OpenReadStream(uploadFile.Size).ReadAsync(buffer);
+                var buffer = new byte[uploadFile.Size];
+                var extension = Path.GetExtension(uploadFile.Name);
+                await uploadFile.OpenReadStream(uploadFile.Size).ReadAsync(buffer);
 
-            //    var importRequest = new ImportRequest
-            //    {
-            //        Data = buffer,
-            //        FileName = uploadFile.Name,
-            //        UploadType = UploadType.Document,
-            //        Extension = extension
-            //    };
+                var importRequest = new ImportRequest
+                {
+                    Data = buffer,
+                    FileName = uploadFile.Name,
+                    UploadType = UploadType.Document,
+                    Extension = extension
+                };
 
-            //    var result = await Mediator.Send(new ImportShowtimesFromExcelCommand()
-            //    { ImportRequest = importRequest });
+                var result = await Mediator.Send(new ImportShowtimesFromExcelCommand()
+                { ImportRequest = importRequest });
 
-            //    if (result.IsSuccess)
-            //    {
-            //        SnackBar.Add("Import successfully", Severity.Success);
-            //        Navigation.NavigateTo("admin/showtimes", true);
-            //    }
-            //    else
-            //    {
-            //        DialogService.Show<ErrorMessageDialog>(SharedResources.Error,
-            //            new DialogParameters<ErrorMessageDialog>
-            //            {
-            //                { x => x.ContentText, result.Message },
-            //                { x => x.ButtonText, SharedResources.Close },
-            //                { x => x.Color, Color.Error }
-            //            }, new DialogOptions() { MaxWidth = MaxWidth.ExtraSmall });
-            //    }
+                if (result.IsSuccess)
+                {
+                    SnackBar.Add(SnackbarResources.ImportSuccess, Severity.Success);
+                    await OnInitializedAsync();
+                }
+                else
+                {
+                    DialogService.Show<ErrorMessageDialog>(SharedResources.Error,
+                        new DialogParameters<ErrorMessageDialog>
+                        {
+                            { x => x.ContentText, result.Message },
+                        }, new DialogOptions() { MaxWidth = MaxWidth.ExtraSmall });
+                }
 
-            //    files.Clear();
-            //}
+                files.Clear();
+            }
         }
     }
 }

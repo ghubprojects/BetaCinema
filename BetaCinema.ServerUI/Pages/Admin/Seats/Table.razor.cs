@@ -2,15 +2,7 @@
 using BetaCinema.Application.Features.Seats.Queries;
 using BetaCinema.Application.Features.Users.Commands;
 using BetaCinema.Application.Requests;
-using BetaCinema.Domain.Enums;
-using BetaCinema.Domain.Models;
-using BetaCinema.ServerUI.Components.Dialog;
-using BetaCinema.ServerUI.Resources;
-using MediatR;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
-using Microsoft.JSInterop;
-using MudBlazor;
 
 namespace BetaCinema.ServerUI.Pages.Admin.Seats
 {
@@ -30,21 +22,39 @@ namespace BetaCinema.ServerUI.Pages.Admin.Seats
 
         protected override async Task OnInitializedAsync()
         {
-            seats = await Mediator.Send(new GetAllSeatsQuery());
-        }
+            var result = await Mediator.Send(new GetAllSeatsQuery());
 
-        protected void NavigateToCreateForm()
-        {
-            Navigation.NavigateTo("admin/seats/create");
+            if (result.IsSuccess)
+            {
+                seats = result.Data;
+            }
+            else
+            {
+                DialogService.Show<ErrorMessageDialog>(SharedResources.Error,
+                    new DialogParameters<ErrorMessageDialog>
+                    {
+                        { x => x.ContentText, result.Message },
+                    }, new DialogOptions() { MaxWidth = MaxWidth.ExtraSmall });
+            }
         }
 
         protected async Task Delete(string seatId)
         {
             var seat = seats.First(x => x.Id == seatId);
-            if (await js.InvokeAsync<bool>("confirm", $"Do you want to delete Seat <{seat.RowNum}{seat.SeatNum}>?"))
+
+            var dialog = DialogService.Show<DeleteConfirmation>(DialogResources.DeleteTitle, new DialogParameters<DeleteConfirmation>
             {
-                await Mediator.Send(new DeleteSeatCommand() { Id = seatId });
-                SnackBar.Add("Delete successfully", Severity.Success);
+                { x => x.Command,  new DeleteSeatCommand() { Id = seatId } },
+                { x => x.ContentText, string.Format(DialogResources.ConfirmDelete, SeatResources.Seat,$"{seat.RowNum}{seat.SeatNum}" ) }
+            }, new DialogOptions
+            {
+                MaxWidth = MaxWidth.ExtraSmall,
+                DisableBackdropClick = true
+            });
+
+            var state = await dialog.Result;
+            if (!state.Canceled)
+            {
                 await OnInitializedAsync();
             }
         }
@@ -86,8 +96,8 @@ namespace BetaCinema.ServerUI.Pages.Admin.Seats
 
                 if (result.IsSuccess)
                 {
-                    SnackBar.Add("Import successfully", Severity.Success);
-                    Navigation.NavigateTo("admin/seats", true);
+                    SnackBar.Add(SnackbarResources.ImportSuccess, Severity.Success);
+                    await OnInitializedAsync();
                 }
                 else
                 {
@@ -95,8 +105,6 @@ namespace BetaCinema.ServerUI.Pages.Admin.Seats
                         new DialogParameters<ErrorMessageDialog>
                         {
                             { x => x.ContentText, result.Message },
-                            { x => x.ButtonText, SharedResources.Close },
-                            { x => x.Color, Color.Error }
                         }, new DialogOptions() { MaxWidth = MaxWidth.ExtraSmall });
                 }
 

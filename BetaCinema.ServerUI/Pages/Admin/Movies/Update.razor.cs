@@ -1,21 +1,12 @@
 ﻿using BetaCinema.Application.Features.Categories.Commands;
 using BetaCinema.Application.Features.Movies.Commands;
 using BetaCinema.Application.Requests;
-using BetaCinema.Domain.Models;
-using BetaCinema.ServerUI.Components.Dialog;
-using BetaCinema.ServerUI.Resources;
-using MediatR;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
-using Microsoft.JSInterop;
-using MudBlazor;
 
 namespace BetaCinema.ServerUI.Pages.Admin.Movies
 {
     public class UpdateBase : ComponentBase
     {
-        [Inject] protected IJSRuntime js { get; set; }
-
         [Inject] protected NavigationManager Navigation { get; set; }
 
         [Inject] protected ISnackbar SnackBar { get; set; }
@@ -37,24 +28,48 @@ namespace BetaCinema.ServerUI.Pages.Admin.Movies
 
         protected async override Task OnParametersSetAsync()
         {
-            MovieData = await Mediator.Send(new GetMovieByIdQuery() { Id = MovieId });
-            CategoryList = await Mediator.Send(new GetAllCategoriesQuery());
-            OldData = MovieData;
-            categoryOptions = MovieData.MovieCategories.Select(mc => mc.Category.CategoryName);
+            // Get Movie Data
+            var movieResult = await Mediator.Send(new GetMovieByIdQuery() { Id = MovieId });
+
+            if (movieResult.IsSuccess)
+            {
+                MovieData = movieResult.Data;
+                OldData = movieResult.Data;
+                categoryOptions = MovieData.MovieCategories.Select(mc => mc.Category.CategoryName);
+            }
+            else
+            {
+                DialogService.Show<ErrorMessageDialog>(SharedResources.Error,
+                    new DialogParameters<ErrorMessageDialog>
+                    {
+                        { x => x.ContentText, movieResult.Message },
+                    }, new DialogOptions() { MaxWidth = MaxWidth.ExtraSmall });
+            }
+
+            // Get Categories
+            var categoryResult = await Mediator.Send(new GetAllCategoriesQuery());
+
+            if (categoryResult.IsSuccess)
+                CategoryList = categoryResult.Data;
+            else
+                DialogService.Show<ErrorMessageDialog>(SharedResources.Error,
+                    new DialogParameters<ErrorMessageDialog>
+                    { { x => x.ContentText, categoryResult.Message } },
+                    new DialogOptions() { MaxWidth = MaxWidth.ExtraSmall });
         }
 
         protected async Task SaveChanges()
         {
             var result = await Mediator.Send(new UpdateMovieCommand()
             {
+                Data = MovieData,
                 OldData = OldData,
-                MovieInfo = MovieData,
                 Categories = categoryOptions.ToList()
             });
 
             if (result.IsSuccess)
             {
-                SnackBar.Add("Update successfully", Severity.Success);
+                SnackBar.Add(SnackbarResources.UpdateSuccess, Severity.Success);
                 Navigation.NavigateTo("admin/movies");
             }
             else
@@ -63,8 +78,6 @@ namespace BetaCinema.ServerUI.Pages.Admin.Movies
                     new DialogParameters<ErrorMessageDialog>
                     {
                         { x => x.ContentText, result.Message },
-                        { x => x.ButtonText, SharedResources.Close },
-                        { x => x.Color, Color.Error }
                     }, new DialogOptions() { MaxWidth = MaxWidth.ExtraSmall });
             }
         }
@@ -75,9 +88,9 @@ namespace BetaCinema.ServerUI.Pages.Admin.Movies
 
         protected IList<IBrowserFile> files = new List<IBrowserFile>();
 
-        protected async Task UploadPoster(IBrowserFile imgFile)
+        protected async Task UploadPoster(IBrowserFile file)
         {
-            files.Add(imgFile);
+            files.Add(file);
 
             if (files.Any())
             {
@@ -95,7 +108,15 @@ namespace BetaCinema.ServerUI.Pages.Admin.Movies
 
                 if (result.IsSuccess)
                 {
-                    SnackBar.Add("Upload poster successfully", Severity.Success);
+                    SnackBar.Add(SnackbarResources.UploadSuccess, Severity.Success);
+                }
+                else
+                {
+                    DialogService.Show<ErrorMessageDialog>(SharedResources.Error,
+                        new DialogParameters<ErrorMessageDialog>
+                        {
+                            { x => x.ContentText, result.Message },
+                        }, new DialogOptions() { MaxWidth = MaxWidth.ExtraSmall });
                 }
             }
 

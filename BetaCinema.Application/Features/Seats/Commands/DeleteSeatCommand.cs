@@ -1,15 +1,17 @@
 ﻿using BetaCinema.Application.Interfaces;
+using BetaCinema.Domain.Resources;
+using BetaCinema.Domain.Wrappers;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace BetaCinema.Application.Features.Seats.Commands
 {
-    public class DeleteSeatCommand : IRequest
+    public class DeleteSeatCommand : IRequest<ServiceResult>
     {
         public string Id { get; set; } = null!;
     }
 
-    public class DeleteSeatCommandHandler : IRequestHandler<DeleteSeatCommand>
+    public class DeleteSeatCommandHandler : IRequestHandler<DeleteSeatCommand, ServiceResult>
     {
         private readonly IAppDbContext _context;
 
@@ -18,14 +20,27 @@ namespace BetaCinema.Application.Features.Seats.Commands
             _context = context;
         }
 
-        public async Task Handle(DeleteSeatCommand request, CancellationToken cancellationToken)
+        public async Task<ServiceResult> Handle(DeleteSeatCommand request, CancellationToken cancellationToken)
         {
-            var seat = await _context.Seats.FindAsync(request.Id);
-            if (seat != null)
+            try
             {
+                var seat = await _context.Seats
+                    .Where(c => !c.DeleteFlag)
+                    .FirstOrDefaultAsync(c => c.Id == request.Id, cancellationToken);
+
+                // If errors, return false
+                if (seat == null)
+                    return new ServiceResult(false, string.Format(MessageResouces.NotExisted, SeatResources.Seat));
+
+                // Delete item
                 seat.DeleteFlag = true;
                 _context.Entry(seat).State = EntityState.Modified;
                 await _context.SaveChangesAsync(cancellationToken);
+                return new ServiceResult(true);
+            }
+            catch (Exception)
+            {
+                return new ServiceResult(false, ErrorResources.UnhandledError);
             }
         }
     }

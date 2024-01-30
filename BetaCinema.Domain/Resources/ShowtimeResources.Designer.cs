@@ -70,6 +70,15 @@ namespace BetaCinema.Domain.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Suất chiếu.
+        /// </summary>
+        public static string Showtime {
+            get {
+                return ResourceManager.GetString("Showtime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Giờ chiếu.
         /// </summary>
         public static string StartTime {

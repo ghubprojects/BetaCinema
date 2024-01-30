@@ -1,5 +1,6 @@
 ﻿.showtime-navbar-container {
     max-width: 1150px;
+    min-height: 240px;
     margin: auto;
 }
 

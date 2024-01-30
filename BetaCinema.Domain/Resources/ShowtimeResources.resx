@@ -120,6 +120,9 @@
   <data name="ShowDate" xml:space="preserve">
     <value>Ngày chiếu</value>
   </data>
+  <data name="Showtime" xml:space="preserve">
+    <value>Suất chiếu</value>
+  </data>
   <data name="StartTime" xml:space="preserve">
     <value>Giờ chiếu</value>
   </data>

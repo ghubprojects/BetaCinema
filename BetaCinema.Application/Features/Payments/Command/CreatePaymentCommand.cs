@@ -25,29 +25,36 @@ namespace BetaCinema.Application.Features.Payments.Commands
 
         public async Task<ServiceResult> Handle(CreatePaymentCommand request, CancellationToken cancellationToken)
         {
-            // Validate
-            var validateResult = await ValidateAsync(request.ReservationData);
+            try
+            {
+                // Validate
+                var validateResult = await ValidateAsync(request.ReservationData);
 
-            if (validateResult.Any())
-            {
-                return new ServiceResult(false, validateResult.First());
-            }
-            else
-            {
-                var payment = new Payment()
+                if (validateResult.Any())
                 {
-                    Id = Guid.NewGuid().ToString(),
-                    ReservationId = request.ReservationData.Id,
-                    TotalPrice = request.TotalPrice,
-                    PaymentMethod = request.PaymentMethod,
-                    DeleteFlag = false,
-                    CreatedDate = DateTime.Now,
-                    ModifiedDate = DateTime.Now,
-                };
+                    return new ServiceResult(false, validateResult.First());
+                }
+                else
+                {
+                    var payment = new Payment()
+                    {
+                        Id = Guid.NewGuid().ToString(),
+                        ReservationId = request.ReservationData.Id,
+                        TotalPrice = request.TotalPrice,
+                        PaymentMethod = request.PaymentMethod,
+                        DeleteFlag = false,
+                        CreatedDate = DateTime.Now,
+                        ModifiedDate = DateTime.Now,
+                    };
 
-                _context.Payments.Add(payment);
-                await _context.SaveChangesAsync(cancellationToken);
-                return new ServiceResult(true, "", payment);
+                    _context.Payments.Add(payment);
+                    await _context.SaveChangesAsync(cancellationToken);
+                    return new ServiceResult(true, "", payment);
+                }
+            }
+            catch (Exception)
+            {
+                return new ServiceResult(false, ErrorResources.UnhandledError);
             }
         }
 

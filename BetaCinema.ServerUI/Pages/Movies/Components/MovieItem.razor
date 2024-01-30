@@ -9,14 +9,14 @@
 
         <MudText>
             <span class="info">
-                <b class="info-title">Thể loại: </b>
+                <b class="info-title">@($"{CategoryResources.CategoryName}:")</b>
                 @(string.Join(", ", MovieData.MovieCategories.Select(mc => mc.Category.CategoryName)))
             </span>
         </MudText>
 
         <MudText>
             <span class="info">
-                <b class="info-title">Thời lượng: </b>
+                <b class="info-title">@($"{MovieResources.Duration}:")</b>
                 @($"{MovieData.Duration} phút")
             </span>
         </MudText>
@@ -25,7 +25,7 @@
         {
             <MudText>
                 <span class="info">
-                    <b class="info-title">Ngày khởi chiếu: </b>
+                    <b class="info-title">@($"{MovieResources.ReleaseDate}:")</b>
                     <span class="info-time">@MovieData.ReleaseDate.Value.ToString("dd/MM/yyyy")</span>
                 </span>
             </MudText>
@@ -35,9 +35,9 @@
     @if (MovieData.ReleaseDate.Value.Date <= DateTime.Now.Date)
     {
         <MudCardActions Class="p-0">
-            <MudButton Variant="Variant.Filled" Color="Color.Primary" FullWidth>
-             <span class="booking-button">Mua vé</span>
-         </MudButton>
-     </MudCardActions>
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" FullWidth OnClick="ShowDialogShowtime">
+                 <span class="booking-button">Mua vé</span>
+             </MudButton>
+         </MudCardActions>
     }
 </MudCard>

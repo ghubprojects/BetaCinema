@@ -51,16 +51,15 @@ namespace BetaCinema.ServerUI.Middlewares
 
                 switch (error)
                 {
-                    case ValidateException validateException:
+                    case BaseException ex:
                         response.StatusCode = StatusCodes.Status400BadRequest;
-                        await response.WriteAsJsonAsync(new ValidateException()
+                        await response.WriteAsJsonAsync(new BaseException()
                         {
-                            ErrorCode = validateException.ErrorCode,
+                            ErrorCode = ex.ErrorCode,
                             UserMessage = error.Message,
                             DevMessage = error.Message,
                             TraceId = context.TraceIdentifier,
                             MoreInfo = error.HelpLink,
-                            Errors = validateException.Errors
                         }, jsonSerializerOptions);
                         break;
 

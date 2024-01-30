@@ -3,15 +3,9 @@ using BetaCinema.Application.Features.ReservationItems.Commands;
 using BetaCinema.Application.Features.Reservations.Commands;
 using BetaCinema.Application.Features.Showtimes.Commands;
 using BetaCinema.Application.Features.Users.Commands;
-using BetaCinema.Domain.Models;
 using BetaCinema.Domain.Wrappers;
-using BetaCinema.ServerUI.Components.Dialog;
-using BetaCinema.ServerUI.Resources;
-using MediatR;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
-using MudBlazor;
 
 namespace BetaCinema.ServerUI.Pages.Checkout
 {
@@ -52,10 +46,18 @@ namespace BetaCinema.ServerUI.Pages.Checkout
                 var createReservationResult = await Mediator.Send(new CreateReservationCommand()
                 {
                     UserId = storedUserId.Value,
-                    ShowtimeData = showtime
+                    ShowtimeData = showtime.Data
                 });
 
-                if (createReservationResult.IsSuccess)
+                if (!createReservationResult.IsSuccess)
+                {
+                    DialogService.Show<ErrorMessageDialog>(SharedResources.Error,
+                        new DialogParameters<ErrorMessageDialog>
+                        {
+                            { x => x.ContentText, createReservationResult.Message },
+                        }, new DialogOptions() { MaxWidth = MaxWidth.ExtraSmall });
+                }
+                else
                 {
                     // create multiple reservation items if success
                     var newReservation = (Domain.Models.Reservation)createReservationResult.Data;
@@ -69,8 +71,15 @@ namespace BetaCinema.ServerUI.Pages.Checkout
                         SelectedSeatList = selectedSeats.Value
                     });
 
-                    // create payments if success
-                    if (createMultipleReservationItemResult.IsSuccess)
+                    if (!createMultipleReservationItemResult.IsSuccess)
+                    {
+                        DialogService.Show<ErrorMessageDialog>(SharedResources.Error,
+                            new DialogParameters<ErrorMessageDialog>
+                            {
+                            { x => x.ContentText, createMultipleReservationItemResult.Message },
+                            }, new DialogOptions() { MaxWidth = MaxWidth.ExtraSmall });
+                    }
+                    else
                     {
                         // get seat count
                         var seatCount = selectedSeats.Value.Split(", ").ToList().Count;
@@ -80,7 +89,7 @@ namespace BetaCinema.ServerUI.Pages.Checkout
                         {
                             ReservationData = newReservation,
                             PaymentMethod = "Ví VnPay",
-                            TotalPrice = seatCount * showtime.TicketPrice
+                            TotalPrice = seatCount * showtime.Data.TicketPrice
                         });
 
                         if (createPaymentResult.IsSuccess)
@@ -97,6 +106,14 @@ namespace BetaCinema.ServerUI.Pages.Checkout
                             await BrowserStorage.DeleteAsync("showtimeId");
                             await BrowserStorage.DeleteAsync("selectedSeats");
                         }
+                        else
+                        {
+                            DialogService.Show<ErrorMessageDialog>(SharedResources.Error,
+                            new DialogParameters<ErrorMessageDialog>
+                            {
+                                { x => x.ContentText, createPaymentResult.Message },
+                            }, new DialogOptions() { MaxWidth = MaxWidth.ExtraSmall });
+                        }
                     }
                 }
             }
@@ -106,11 +123,8 @@ namespace BetaCinema.ServerUI.Pages.Checkout
                     new DialogParameters<ErrorMessageDialog>
                     {
                         { x => x.ContentText, "Giao dịch thất bại" },
-                        { x => x.ButtonText, SharedResources.Close },
-                        { x => x.Color, Color.Error }
                     }, new DialogOptions() { MaxWidth = MaxWidth.ExtraSmall });
             }
-
         }
 
         protected void NavigateToHome()

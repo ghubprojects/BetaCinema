@@ -32,7 +32,7 @@
         else
         {
             <MudTable Items="@payments" Elevation="0" Dense Hover FixedHeader Filter="@_quickFilter"
-                       Class="admin-table" Context="tableContext">
+                       Class="admin-table toolbar" Context="tableContext">
                  <ToolBarContent>
                      <MudSpacer />
                      <MudTextField @bind-Value="_searchString" Variant="Variant.Outlined" Margin="Margin.Dense" Immediate
@@ -41,24 +41,32 @@
                      </MudTextField>
                  </ToolBarContent>
 
+                 <ColGroup>
+                     <col />
+                     <col />
+                     <col />
+                     <col />
+                 </ColGroup>
+
                  <HeaderContent>
-                     <MudTh>Id</MudTh>
-                     <MudTh>Reservation Id</MudTh>
+                     <MudTh>@UserResources.UserName</MudTh>
+                     <MudTh>@UserResources.Email</MudTh>
                      <MudTh>@PaymentResources.TotalPrice</MudTh>
                      <MudTh>@PaymentResources.PaymentTime</MudTh>
                  </HeaderContent>
 
                  <RowTemplate>
-                     <MudTd>@tableContext.Id</MudTd>
-                     <MudTd>@tableContext.ReservationId</MudTd>
+                     <MudTd>@tableContext.Reservation.User.UserName</MudTd>
+                     <MudTd>@tableContext.Reservation.User.Email</MudTd>
                      <MudTd>@string.Format("{0} đ", tableContext.TotalPrice.ToString("#,##0"))</MudTd>
                      <MudTd>@tableContext.CreatedDate.ToString("dd/MM/yyyy HH:mm:ss")</MudTd>
                  </RowTemplate>
 
                  <PagerContent>
-                     <MudTablePager RowsPerPageString="Số bản ghi mỗi trang" />
+                     <MudTablePager RowsPerPageString="Số bản ghi mỗi trang"
+                                    PageSizeOptions="new int[] { 20, 30, 50, 80, 100 }" />
                  </PagerContent>
-         </MudTable>
+             </MudTable>
         }
     </Authorized>
 </AuthorizeView>

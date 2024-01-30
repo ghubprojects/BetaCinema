@@ -1,4 +1,5 @@
 ﻿using BetaCinema.Application.Requests;
+using BetaCinema.Domain.Resources;
 using BetaCinema.Domain.Wrappers;
 using MediatR;
 using Microsoft.Extensions.Configuration;
@@ -23,9 +24,9 @@ namespace BetaCinema.Application.Features.Slides.Commands
 
             public async Task<ServiceResult> Handle(UploadSlidesCommand request, CancellationToken cancellationToken)
             {
-                foreach (var file in request.UploadRequest.UploadedFiles)
+                try
                 {
-                    try
+                    foreach (var file in request.UploadRequest.UploadedFiles)
                     {
                         string newFileName = Path.ChangeExtension(Path.GetRandomFileName(), Path.GetExtension(file.Name));
 
@@ -37,13 +38,13 @@ namespace BetaCinema.Application.Features.Slides.Commands
                         await using FileStream fs = new(path, FileMode.Create);
                         await file.OpenReadStream(request.UploadRequest.MaxFileSize).CopyToAsync(fs);
                     }
-                    catch (Exception ex)
-                    {
-                        return new ServiceResult(false, ex.Message);
-                    }
-                }
 
-                return new ServiceResult(true);
+                    return new ServiceResult(true);
+                }
+                catch (Exception)
+                {
+                    return new ServiceResult(false, ErrorResources.UnhandledError);
+                }
             }
         }
     }

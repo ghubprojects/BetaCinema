@@ -1,10 +1,5 @@
 ﻿using BetaCinema.Application.Features.Cinemas.Commands;
-using BetaCinema.Domain.Models;
 using BetaCinema.ServerUI.Store.CinemaUseCase;
-using Fluxor;
-using MediatR;
-using Microsoft.AspNetCore.Components;
-using MudBlazor;
 
 namespace BetaCinema.ServerUI.Features.LocationMenu
 {
@@ -16,6 +11,8 @@ namespace BetaCinema.ServerUI.Features.LocationMenu
 
         [Inject] protected NavigationManager Navigation { get; set; }
 
+        [Inject] IDialogService DialogService { get; set; }
+
         protected MudTheme Theme = new();
         protected MudMenu locationMenuRef = new();
 
@@ -24,8 +21,21 @@ namespace BetaCinema.ServerUI.Features.LocationMenu
 
         protected override async Task OnInitializedAsync()
         {
-            cinemas = await Mediator.Send(new GetAllCinemasQuery());
-            locationMenu = BuildMenu(cinemas);
+            var result = await Mediator.Send(new GetAllCinemasQuery());
+
+            if (result.IsSuccess)
+            {
+                cinemas = result.Data;
+                locationMenu = BuildMenu(cinemas);
+            }
+            else
+            {
+                DialogService.Show<ErrorMessageDialog>(SharedResources.Error,
+                    new DialogParameters<ErrorMessageDialog>
+                    {
+                        { x => x.ContentText, result.Message },
+                    }, new DialogOptions() { MaxWidth = MaxWidth.ExtraSmall });
+            }
         }
 
         private Menu BuildMenu(List<Cinema> cinemas)

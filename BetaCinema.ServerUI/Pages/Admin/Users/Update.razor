@@ -10,40 +10,38 @@
     <Authorized>
         <h3 class="mb-8">@string.Format(SharedResources.UpdateTitle, "người dùng")</h3>
 
-        <EditForm Model="@UserData" OnValidSubmit="@SaveUser" Context="formContext">
+        <EditForm Model="@UserData" OnValidSubmit="@SaveChanges" Context="formContext">
             <DataAnnotationsValidator />
             <MudGrid xs="12">
                 <MudContainer MaxWidth="MaxWidth.Medium">
                     <MudCard Class="p-4">
                         <MudCardContent Class="p-0 mb-4 d-flex flex-column gap-2">
                             <MudTextField @bind-Value="@UserData.UserName"
-                                          Label="UserName"
+                                          Label="@UserResources.UserName"
                                           Variant="Variant.Outlined"
                                           Margin="Margin.Dense">
                             </MudTextField>
                             <MudTextField @bind-Value="@UserData.FullName"
-                                          Label="FullName"
+                                          Label="@UserResources.FullName"
                                           Variant="Variant.Outlined"
                                           Margin="Margin.Dense">
                             </MudTextField>
                             <MudTextField @bind-Value="@UserData.Email"
-                                          Label="Email"
+                                          Label="@UserResources.Email"
                                           Variant="Variant.Outlined"
                                           Margin="Margin.Dense">
                             </MudTextField>
                             <MudTextField @bind-Value="@UserData.Password"
-                                          Label="Password"
+                                          Label="@UserResources.Password"
                                           Variant="Variant.Outlined"
-                                          Margin="Margin.Dense"
-                                                ReadOnly>
+                                          Margin="Margin.Dense" ReadOnly>
                             </MudTextField>
                             <MudSelect @bind-Value="@UserData.Role"
                                        T="string"
-                                       Label="Role"
+                                       Label="@UserResources.Role"
                                        AnchorOrigin="Origin.BottomCenter"
                                        Variant="Variant.Outlined"
-                                       Margin="Margin.Dense"
-                                          ReadOnly>
+                                       Margin="Margin.Dense" ReadOnly>
                                 <MudSelectItem Value="UserRole.Admin.ToString()" />
                                 <MudSelectItem Value="UserRole.Customer.ToString()" />
                             </MudSelect>

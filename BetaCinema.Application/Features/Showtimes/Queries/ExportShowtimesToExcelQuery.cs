@@ -1,10 +1,11 @@
 ﻿using AutoMapper;
 using BetaCinema.Application.Helpers;
 using BetaCinema.Application.Interfaces;
-using BetaCinema.Domain.DTO;
+using BetaCinema.Domain.DTOs;
 using BetaCinema.Domain.Models;
 using MediatR;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 
 namespace BetaCinema.Application.Features.Showtimes.Queries
 {
@@ -37,13 +38,20 @@ namespace BetaCinema.Application.Features.Showtimes.Queries
         public async Task<byte[]> Handle(ExportShowtimesToExcelQuery request, CancellationToken cancellationToken)
         {
             // Lấy dữ liệu từ database
-            var dataExportList = _mapper.Map<List<ShowtimeExport>>(_context.Showtimes);
+            var data = await _context.Showtimes
+                .OrderBy(s => s.StartTime.Value)
+                .Include(s => s.Movie)
+                .Include(s => s.Cinema)
+                .AsNoTracking()
+                .ToListAsync(cancellationToken);
+
+            var dataExport = _mapper.Map<List<ShowtimeExport>>(data);
 
             // Define đường dẫn tới file excel mẫu
             var templateFileInfo = new FileInfo(Path.Combine(_env.ContentRootPath, "Template", "ExportTemplates", $"{typeof(Showtime).Name}Export.xlsx"));
 
             // Gọi đến helper để lấy dữ liệu cho file excel
-            var excelData = ExportToExcelHelper<ShowtimeExport>.GenerateExcelFile(dataExportList, templateFileInfo);
+            var excelData = ExportToExcelHelper<ShowtimeExport>.GenerateExcelFile(dataExport, templateFileInfo);
 
             return excelData;
         }

@@ -1,0 +1,26 @@
+﻿<MudDialog>
+    <TitleContent>
+        <span style="font-family:'Source Sans Pro',sans-serif;font-size:20px;font-weight:500">
+            @DialogResources.ErrorTitle
+        </span>
+    </TitleContent>
+    <DialogContent>
+        <MudText>@ContentText</MudText>
+    </DialogContent>
+    <DialogActions>
+        <div class="p-2">
+            <MudButton Size="Size.Small" Color="Color.Error" Variant="Variant.Filled" OnClick="Submit">
+                <MudText>@DialogResources.Close</MudText>
+            </MudButton>
+        </div>
+
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+
+    [Parameter] public string ContentText { get; set; }
+
+    void Submit() => MudDialog.Close(DialogResult.Ok(true));
+}

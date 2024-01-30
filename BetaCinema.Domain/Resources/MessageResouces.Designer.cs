@@ -61,6 +61,15 @@ namespace BetaCinema.Domain.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} phải có ít nhất {1} ký tự.
+        /// </summary>
+        public static string AtLeast {
+            get {
+                return ResourceManager.GetString("AtLeast", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} đã tồn tại.
         /// </summary>
         public static string Duplicated {
@@ -102,6 +111,15 @@ namespace BetaCinema.Domain.Resources {
         public static string NotExisted {
             get {
                 return ResourceManager.GetString("NotExisted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} không được lớn hơn {1}.
+        /// </summary>
+        public static string NotGreaterThan {
+            get {
+                return ResourceManager.GetString("NotGreaterThan", resourceCulture);
             }
         }
         

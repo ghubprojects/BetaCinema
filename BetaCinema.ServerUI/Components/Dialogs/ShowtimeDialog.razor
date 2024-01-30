@@ -1,0 +1,19 @@
+﻿@using BetaCinema.ServerUI.Features.MovieShowtimes
+@inherits ShowtimeDialogBase
+
+<MudDialog Class="showtime-dialog">
+    <TitleContent>
+        <p class="movie-title">
+            @($"LỊCH CHIẾU - {MovieData.MovieName}")
+        </p>
+    </TitleContent>
+    <DialogContent>
+        <div class="d-flex flex-column">
+            <p class="cinema-name">@CinemaState.Value.Cinema.CinemaName</p>
+
+            <div class="pt-4" style="height:430px">
+                <MovieShowtimesNavbar MovieData="@MovieData" />
+            </div>
+        </div>
+    </DialogContent>
+</MudDialog>

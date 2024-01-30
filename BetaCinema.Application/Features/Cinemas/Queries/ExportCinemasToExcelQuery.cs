@@ -1,10 +1,11 @@
 ﻿using AutoMapper;
 using BetaCinema.Application.Helpers;
 using BetaCinema.Application.Interfaces;
-using BetaCinema.Domain.DTO;
+using BetaCinema.Domain.DTOs;
 using BetaCinema.Domain.Models;
 using MediatR;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 
 namespace BetaCinema.Application.Features.Cinemas.Queries
 {
@@ -37,9 +38,12 @@ namespace BetaCinema.Application.Features.Cinemas.Queries
         public async Task<byte[]> Handle(ExportCinemasToExcelQuery request, CancellationToken cancellationToken)
         {
             // Lấy dữ liệu từ database
-            var dataList = _context.Cinemas;
+            var data = await _context.Cinemas
+                .OrderBy(c => c.CinemaName)
+                .AsNoTracking()
+                .ToListAsync(cancellationToken);
 
-            var dataExportList = _mapper.Map<List<CinemaExport>>(dataList);
+            var dataExportList = _mapper.Map<List<CinemaExport>>(data);
 
             // Define đường dẫn tới file excel mẫu
             var templateFileInfo = new FileInfo(Path.Combine(_env.ContentRootPath, "Template", "ExportTemplates", $"{typeof(Cinema).Name}Export.xlsx"));

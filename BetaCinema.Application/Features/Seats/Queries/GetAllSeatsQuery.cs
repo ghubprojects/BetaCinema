@@ -1,12 +1,14 @@
 ﻿using BetaCinema.Application.Interfaces;
-using BetaCinema.Domain.Models;
+using BetaCinema.Domain.Resources;
+using BetaCinema.Domain.Wrappers;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace BetaCinema.Application.Features.Seats.Commands
 {
-    public class GetAllSeatsQuery : IRequest<List<Seat>> { }
+    public class GetAllSeatsQuery : IRequest<ServiceResult> { }
 
-    public class GetAllSeatsQueryHandler : IRequestHandler<GetAllSeatsQuery, List<Seat>>
+    public class GetAllSeatsQueryHandler : IRequestHandler<GetAllSeatsQuery, ServiceResult>
     {
         private readonly IAppDbContext _context;
 
@@ -15,13 +17,23 @@ namespace BetaCinema.Application.Features.Seats.Commands
             _context = context;
         }
 
-        public async Task<List<Seat>> Handle(GetAllSeatsQuery request, CancellationToken cancellationToken)
+        public async Task<ServiceResult> Handle(GetAllSeatsQuery request, CancellationToken cancellationToken)
         {
-            return _context.Seats
-                .Where(s => !s.DeleteFlag)
-                .OrderBy(s => s.RowNum)
-                .ThenBy(s => s.SeatNum)
-                .ToList();
+            try
+            {
+                var data = await _context.Seats
+                    .Where(s => !s.DeleteFlag)
+                    .OrderBy(s => s.RowNum)
+                    .ThenBy(s => s.SeatNum)
+                    .AsNoTracking()
+                    .ToListAsync(cancellationToken);
+
+                return new ServiceResult(true, "", data);
+            }
+            catch (Exception)
+            {
+                return new ServiceResult(false, ErrorResources.UnhandledError);
+            }
         }
     }
 }

@@ -9,8 +9,7 @@
                     <div class="list-wrapper">
                         @foreach (var showtime in showtimeList)
                         {
-                            <MovieShowtimeItem IsFullWidth="true" ShowtimeData="showtime"
-                                               UnsoldSeats="@(totalSeats - showtime.Reservations.Select(r => r.ReservationItems).ToList().Count)" />
+                            <MovieShowtimeItem IsFullWidth="true" ShowtimeData="showtime" />
                         }
                     </div>
                 </ChildContent>

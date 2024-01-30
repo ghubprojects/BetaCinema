@@ -97,6 +97,15 @@ namespace BetaCinema.Domain.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Người dùng.
+        /// </summary>
+        public static string User {
+            get {
+                return ResourceManager.GetString("User", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tên người dùng.
         /// </summary>
         public static string UserName {

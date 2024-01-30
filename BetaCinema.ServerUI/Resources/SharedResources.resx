@@ -159,6 +159,9 @@
   <data name="Loading" xml:space="preserve">
     <value>Đang tải</value>
   </data>
+  <data name="MultipleDelete" xml:space="preserve">
+    <value>Xóa tất cả</value>
+  </data>
   <data name="NoRecord" xml:space="preserve">
     <value>Không có dữ liệu</value>
   </data>

@@ -13,7 +13,8 @@
                 <h4 class="mb-0">@string.Format(SharedResources.TableTitle, "giờ chiếu")</h4>
 
                 <div class="form-group d-flex gap-2">
-                    <MudButton Size="Size.Small" Variant="@Variant.Filled" Color="@Color.Primary" OnClick="@NavigateToCreateForm">
+                    <MudButton Size="Size.Small" Variant="@Variant.Filled" Color="@Color.Primary"
+                               OnClick="@(()=>Navigation.NavigateTo("admin/showtimes/create"))">
                         @SharedResources.Create
                         <MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.Add" Class="ml-1" />
                     </MudButton>
@@ -48,14 +49,38 @@
         else
         {
             <MudTable Items="@showtimes" Elevation="0" Dense Hover FixedHeader Filter="@_quickFilter"
-                       Class="admin-table" Context="tableContext">
+                       MultiSelection="true" @bind-SelectedItems="selectedItems"
+                       Class="admin-table toolbar" Context="tableContext">
                  <ToolBarContent>
-                     <MudSpacer />
-                     <MudTextField @bind-Value="_searchString" Variant="Variant.Outlined" Margin="Margin.Dense" Immediate
+                     @if (selectedItems.Count >= 2)
+                    {
+                        <div class="mr-6 font-14">
+                            <span>Đã chọn: </span>
+                            <b>@selectedItems.Count</b>
+                        </div>
+
+                        <MudButton Size="Size.Small" Variant="@Variant.Filled" Color="@Color.Error"
+                                   OnClick="@DeleteMultiple" Class="multiple-delete-btn">
+                            <MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.Delete" Class="mr-1" />
+                            <span class="font-14">@SharedResources.MultipleDelete</span>
+                        </MudButton>
+                    }
+
+                    <MudSpacer />
+                    <MudTextField @bind-Value="_searchString" Variant="Variant.Outlined" Margin="Margin.Dense" Immediate
                                    Placeholder="@SharedResources.Search" Adornment="Adornment.Start"
                                    AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0">
                      </MudTextField>
                  </ToolBarContent>
+
+                 <ColGroup>
+                     <col style="width: 2%;" />
+                     <col />
+                     <col />
+                     <col />
+                     <col />
+                     <col style="width: 10%;" />
+                 </ColGroup>
 
                  <HeaderContent>
                      <MudTh>@MovieResources.MovieName</MudTh>
@@ -85,7 +110,8 @@
                  </RowTemplate>
 
                  <PagerContent>
-                     <MudTablePager RowsPerPageString="Số bản ghi mỗi trang" />
+                     <MudTablePager RowsPerPageString="Số bản ghi mỗi trang"
+                                    PageSizeOptions="new int[] { 20, 30, 50, 80, 100 }" />
                  </PagerContent>
              </MudTable>
         }

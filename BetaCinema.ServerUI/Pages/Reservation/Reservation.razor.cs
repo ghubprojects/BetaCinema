@@ -1,19 +1,11 @@
 ﻿using BetaCinema.Application.Features.Seats.Commands;
 using BetaCinema.Application.Features.Showtimes.Commands;
 using BetaCinema.Application.Features.Users.Commands;
-using BetaCinema.Domain.Models;
-using BetaCinema.Domain.Resources;
-using BetaCinema.ServerUI.Components.Dialog;
-using BetaCinema.ServerUI.Resources;
 using BetaCinema.ServerUI.Store.ReservationUseCase;
-using Fluxor;
-using MediatR;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Primitives;
-using MudBlazor;
 
 namespace BetaCinema.ServerUI.Pages.Reservation
 {
@@ -53,13 +45,87 @@ namespace BetaCinema.ServerUI.Pages.Reservation
 
         protected async override Task OnInitializedAsync()
         {
-            seats = await Mediator.Send(new GetAllSeatsQuery());
+            await GetAllSeats();
 
             var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
             if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("id", out StringValues id))
             {
-                ShowtimeData = await Mediator.Send(new GetShowtimeByIdQuery() { Id = Convert.ToString(id) });
-                soldSeats = await Mediator.Send(new GetSoldSeatsByShowtimeId() { ShowtimeId = ShowtimeData.Id });
+                // get showtime data by id and assign to ShowtimeData
+                await GetShowtimeById(id);
+
+                // get sold seats
+                await GetSoldSeats(ShowtimeData.Id);
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="weekDay"></param>
+        /// <returns></returns>
+        protected async Task GetAllSeats()
+        {
+            var result = await Mediator.Send(new GetAllSeatsQuery());
+
+            if (result.IsSuccess)
+            {
+                seats = result.Data;
+            }
+            else
+            {
+                DialogService.Show<ErrorMessageDialog>(SharedResources.Error,
+                    new DialogParameters<ErrorMessageDialog>
+                    {
+                        { x => x.ContentText, result.Message },
+                    }, new DialogOptions() { MaxWidth = MaxWidth.ExtraSmall });
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="weekDay"></param>
+        /// <returns></returns>
+        protected async Task GetShowtimeById(string showtimeId)
+        {
+            var result = await Mediator.Send(new GetShowtimeByIdQuery()
+            { Id = Convert.ToString(showtimeId) });
+
+            if (result.IsSuccess)
+            {
+                ShowtimeData = result.Data;
+            }
+            else
+            {
+                DialogService.Show<ErrorMessageDialog>(SharedResources.Error,
+                    new DialogParameters<ErrorMessageDialog>
+                    {
+                        { x => x.ContentText, result.Message },
+                    }, new DialogOptions() { MaxWidth = MaxWidth.ExtraSmall });
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="weekDay"></param>
+        /// <returns></returns>
+        protected async Task GetSoldSeats(string showtimeId)
+        {
+            var result = await Mediator.Send(new GetSoldSeatsByShowtimeId()
+            { ShowtimeId = showtimeId });
+
+            if (result.IsSuccess)
+            {
+                soldSeats = result.Data;
+            }
+            else
+            {
+                DialogService.Show<ErrorMessageDialog>(SharedResources.Error,
+                    new DialogParameters<ErrorMessageDialog>
+                    {
+                        { x => x.ContentText, result.Message },
+                    }, new DialogOptions() { MaxWidth = MaxWidth.ExtraSmall });
             }
         }
 
@@ -68,10 +134,10 @@ namespace BetaCinema.ServerUI.Pages.Reservation
             roomSeats = BuildRoomSeats(seats);
 
             movieInfos.AddRange(new List<InfoItem>()
-                {
-                    new InfoItem(CategoryResources.CategoryName, "{ Category }", "fas fa-tags"),
-                    new InfoItem(MovieResources.Duration, ShowtimeData.Movie.Duration.ToString(), "far fa-clock")
-                });
+            {
+                new InfoItem(CategoryResources.CategoryName, string.Join(", ", ShowtimeData.Movie.MovieCategories.Select(mc => mc.Category.CategoryName)), "fas fa-tags"),
+                new InfoItem(MovieResources.Duration, $"{ShowtimeData.Movie.Duration} phút", "far fa-clock")
+            });
 
             showtimeInfos.AddRange(new List<InfoItem>()
                 {
@@ -161,8 +227,6 @@ namespace BetaCinema.ServerUI.Pages.Reservation
                     new DialogParameters<ErrorMessageDialog>
                     {
                         { x => x.ContentText, "Vui lòng chọn ít nhất 1 ghế để tiếp tục." },
-                        { x => x.ButtonText, SharedResources.Close },
-                        { x => x.Color, Color.Error }
                     }, new DialogOptions() { MaxWidth = MaxWidth.ExtraSmall });
             }
             else

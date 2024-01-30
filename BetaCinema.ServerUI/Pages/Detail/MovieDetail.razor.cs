@@ -1,7 +1,4 @@
 ﻿using BetaCinema.Application.Features.Movies.Commands;
-using BetaCinema.Domain.Models;
-using MediatR;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using Microsoft.AspNetCore.WebUtilities;
@@ -12,6 +9,8 @@ namespace BetaCinema.ServerUI.Pages.Detail
     public class MovieDetailBase : ComponentBase
     {
         [Inject] private IMediator Mediator { get; set; }
+
+        [Inject] IDialogService DialogService { get; set; }
 
         [Inject] protected NavigationManager Navigation { get; set; }
 
@@ -30,7 +29,21 @@ namespace BetaCinema.ServerUI.Pages.Detail
             var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
             if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("id", out StringValues id))
             {
-                MovieData = await Mediator.Send(new GetMovieByIdQuery() { Id = Convert.ToString(id) });
+                var result = await Mediator.Send(new GetMovieByIdQuery()
+                { Id = Convert.ToString(id) });
+
+                if (result.IsSuccess)
+                {
+                    MovieData = result.Data;
+                }
+                else
+                {
+                    DialogService.Show<ErrorMessageDialog>(SharedResources.Error,
+                        new DialogParameters<ErrorMessageDialog>
+                        {
+                            { x => x.ContentText, result.Message },
+                        }, new DialogOptions() { MaxWidth = MaxWidth.ExtraSmall });
+                }
             }
         }
 

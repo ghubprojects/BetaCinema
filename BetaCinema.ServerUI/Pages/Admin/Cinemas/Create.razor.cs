@@ -1,18 +1,9 @@
 ﻿using BetaCinema.Application.Features.Cinemas.Commands;
-using BetaCinema.Domain.Models;
-using BetaCinema.ServerUI.Components.Dialog;
-using BetaCinema.ServerUI.Resources;
-using MediatR;
-using Microsoft.AspNetCore.Components;
-using Microsoft.JSInterop;
-using MudBlazor;
 
 namespace BetaCinema.ServerUI.Pages.Admin.Cinemas
 {
     public class CreateBase : ComponentBase
     {
-        [Inject] protected IJSRuntime js { get; set; }
-
         [Inject] protected NavigationManager Navigation { get; set; }
 
         [Inject] protected ISnackbar SnackBar { get; set; }
@@ -40,7 +31,7 @@ namespace BetaCinema.ServerUI.Pages.Admin.Cinemas
 
             if (result.IsSuccess)
             {
-                SnackBar.Add("Add new cinema successfully", Severity.Success);
+                SnackBar.Add(SnackbarResources.AddSuccess, Severity.Success);
                 Navigation.NavigateTo("admin/cinemas");
             }
             else
@@ -49,8 +40,6 @@ namespace BetaCinema.ServerUI.Pages.Admin.Cinemas
                     new DialogParameters<ErrorMessageDialog>
                     {
                         { x => x.ContentText, result.Message },
-                        { x => x.ButtonText, SharedResources.Close },
-                        { x => x.Color, Color.Error }
                     }, new DialogOptions() { MaxWidth = MaxWidth.ExtraSmall });
             }
         }

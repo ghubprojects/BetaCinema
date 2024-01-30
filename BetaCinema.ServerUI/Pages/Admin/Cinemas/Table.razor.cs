@@ -1,16 +1,7 @@
 ﻿using BetaCinema.Application.Features.Cinemas.Commands;
 using BetaCinema.Application.Features.Cinemas.Queries;
-using BetaCinema.Application.Features.Users.Commands;
 using BetaCinema.Application.Requests;
-using BetaCinema.Domain.Enums;
-using BetaCinema.Domain.Models;
-using BetaCinema.ServerUI.Components.Dialog;
-using BetaCinema.ServerUI.Resources;
-using MediatR;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
-using Microsoft.JSInterop;
-using MudBlazor;
 
 namespace BetaCinema.ServerUI.Pages.Admin.Cinemas
 {
@@ -50,21 +41,39 @@ namespace BetaCinema.ServerUI.Pages.Admin.Cinemas
 
         protected override async Task OnInitializedAsync()
         {
-            cinemas = await Mediator.Send(new GetAllCinemasQuery());
-        }
+            var result = await Mediator.Send(new GetAllCinemasQuery());
 
-        protected void NavigateToCreateForm()
-        {
-            Navigation.NavigateTo("admin/cinemas/create");
+            if (result.IsSuccess)
+            {
+                cinemas = result.Data;
+            }
+            else
+            {
+                DialogService.Show<ErrorMessageDialog>(SharedResources.Error,
+                    new DialogParameters<ErrorMessageDialog>
+                    {
+                        { x => x.ContentText, result.Message },
+                    }, new DialogOptions() { MaxWidth = MaxWidth.ExtraSmall });
+            }
         }
 
         protected async Task Delete(string cinemaId)
         {
             var cinema = cinemas.First(x => x.Id == cinemaId);
-            if (await js.InvokeAsync<bool>("confirm", $"Do you want to delete Cinema <{cinema.CinemaName}>?"))
+
+            var dialog = DialogService.Show<DeleteConfirmation>(DialogResources.DeleteTitle, new DialogParameters<DeleteConfirmation>
             {
-                await Mediator.Send(new DeleteCinemaCommand() { Id = cinemaId });
-                SnackBar.Add("Delete successfully", Severity.Success);
+                { x => x.Command,  new DeleteCinemaCommand() { Id = cinemaId } },
+                { x => x.ContentText, string.Format(DialogResources.ConfirmDelete, CinemaResources.CinemaName,cinema.CinemaName ) }
+            }, new DialogOptions
+            {
+                MaxWidth = MaxWidth.ExtraSmall,
+                DisableBackdropClick = true
+            });
+
+            var state = await dialog.Result;
+            if (!state.Canceled)
+            {
                 await OnInitializedAsync();
             }
         }
@@ -101,13 +110,13 @@ namespace BetaCinema.ServerUI.Pages.Admin.Cinemas
                     Extension = extension
                 };
 
-                var result = await Mediator.Send(new ImportUsersFromExcelCommand()
+                var result = await Mediator.Send(new ImportCinemasFromExcelCommand()
                 { ImportRequest = importRequest });
 
                 if (result.IsSuccess)
                 {
-                    SnackBar.Add("Import successfully", Severity.Success);
-                    Navigation.NavigateTo("admin/cinemas", true);
+                    SnackBar.Add(SnackbarResources.ImportSuccess, Severity.Success);
+                    await OnInitializedAsync();
                 }
                 else
                 {
@@ -115,8 +124,6 @@ namespace BetaCinema.ServerUI.Pages.Admin.Cinemas
                         new DialogParameters<ErrorMessageDialog>
                         {
                             { x => x.ContentText, result.Message },
-                            { x => x.ButtonText, SharedResources.Close },
-                            { x => x.Color, Color.Error }
                         }, new DialogOptions() { MaxWidth = MaxWidth.ExtraSmall });
                 }
 

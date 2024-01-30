@@ -17,28 +17,28 @@
                     <MudCard Class="p-4">
                         <MudCardContent Class="p-0 mb-4 d-flex flex-column gap-2">
                             <MudTextField @bind-Value="@UserData.UserName"
-                                          Label="UserName"
+                                          Label="@UserResources.UserName"
                                           Variant="Variant.Outlined"
                                           Margin="Margin.Dense">
                             </MudTextField>
                             <MudTextField @bind-Value="@UserData.FullName"
-                                          Label="FullName"
+                                          Label="@UserResources.FullName"
                                           Variant="Variant.Outlined"
                                           Margin="Margin.Dense">
                             </MudTextField>
                             <MudTextField @bind-Value="@UserData.Email"
-                                          Label="Email"
+                                          Label="@UserResources.Email"
                                           Variant="Variant.Outlined"
                                           Margin="Margin.Dense">
                             </MudTextField>
                             <MudTextField @bind-Value="@UserData.Password"
-                                          Label="Password"
+                                          Label="@UserResources.Password"
                                           Variant="Variant.Outlined"
                                           Margin="Margin.Dense">
                             </MudTextField>
                             <MudSelect @bind-Value="@UserData.Role"
                                        T="string"
-                                       Label="Role"
+                                       Label="@UserResources.Role"
                                        AnchorOrigin="Origin.BottomCenter"
                                        Variant="Variant.Outlined"
                                        Margin="Margin.Dense">

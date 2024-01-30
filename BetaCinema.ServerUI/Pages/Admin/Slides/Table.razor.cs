@@ -1,13 +1,7 @@
 ﻿using BetaCinema.Application.Features.Slides.Commands;
 using BetaCinema.Application.Features.Slides.Queries;
 using BetaCinema.Application.Requests;
-using BetaCinema.ServerUI.Components.Dialog;
-using BetaCinema.ServerUI.Resources;
-using MediatR;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
-using Microsoft.JSInterop;
-using MudBlazor;
 
 namespace BetaCinema.ServerUI.Pages.Admin.Slides
 {
@@ -27,20 +21,38 @@ namespace BetaCinema.ServerUI.Pages.Admin.Slides
 
         protected override async Task OnInitializedAsync()
         {
-            slideNames = await Mediator.Send(new GetAllSlidesQuery());
+            var result = await Mediator.Send(new GetAllSlidesQuery());
+
+            if (result.IsSuccess)
+            {
+                slideNames = result.Data;
+            }
+            else
+            {
+                DialogService.Show<ErrorMessageDialog>(SharedResources.Error,
+                    new DialogParameters<ErrorMessageDialog>
+                    {
+                        { x => x.ContentText, result.Message },
+                    }, new DialogOptions() { MaxWidth = MaxWidth.ExtraSmall });
+            }
         }
 
         protected async Task Delete(string fileName)
         {
-            if (await js.InvokeAsync<bool>("confirm", $"Do you want to delete this slide ?"))
+            var dialog = DialogService.Show<DeleteConfirmation>(DialogResources.DeleteTitle, new DialogParameters<DeleteConfirmation>
             {
-                var result = await Mediator.Send(new DeleteSlideCommand() { FileName = fileName });
+                { x => x.Command,  new DeleteSlideCommand() { FileName = fileName } },
+                { x => x.ContentText, string.Format(DialogResources.ConfirmDelete, "slide", "đã chọn") }
+            }, new DialogOptions
+            {
+                MaxWidth = MaxWidth.ExtraSmall,
+                DisableBackdropClick = true
+            });
 
-                if (result.IsSuccess)
-                {
-                    SnackBar.Add("Delete successfully", Severity.Success);
-                    await OnInitializedAsync();
-                }
+            var state = await dialog.Result;
+            if (!state.Canceled)
+            {
+                await OnInitializedAsync();
             }
         }
 
@@ -61,9 +73,7 @@ namespace BetaCinema.ServerUI.Pages.Admin.Slides
                     DialogService.Show<ErrorMessageDialog>(SharedResources.Error,
                     new DialogParameters<ErrorMessageDialog>
                     {
-                        { x => x.ContentText, $"Attempting to upload {files.Count} files, but only {maxAllowedFiles} files are allowed"},
-                        { x => x.ButtonText, SharedResources.Close },
-                        { x => x.Color, Color.Error }
+                        { x => x.ContentText, $"Bạn đang tải lên {files.Count} tập tin. Số tập tin không được vượt quá {maxAllowedFiles}."},
                     },
                     new DialogOptions() { MaxWidth = MaxWidth.ExtraSmall });
                 }
@@ -79,8 +89,16 @@ namespace BetaCinema.ServerUI.Pages.Admin.Slides
 
                     if (result.IsSuccess)
                     {
-                        SnackBar.Add("Upload slide images successfully", Severity.Success);
+                        SnackBar.Add(SnackbarResources.UploadSuccess, Severity.Success);
                         await OnInitializedAsync();
+                    }
+                    else
+                    {
+                        DialogService.Show<ErrorMessageDialog>(SharedResources.Error,
+                            new DialogParameters<ErrorMessageDialog>
+                            {
+                                { x => x.ContentText, result.Message },
+                            }, new DialogOptions() { MaxWidth = MaxWidth.ExtraSmall });
                     }
                 }
 

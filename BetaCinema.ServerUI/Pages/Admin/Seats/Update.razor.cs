@@ -1,15 +1,12 @@
 ﻿using BetaCinema.Application.Features.Seats.Commands;
-using BetaCinema.Domain.Models;
-using MediatR;
-using Microsoft.AspNetCore.Components;
-using Microsoft.JSInterop;
-using MudBlazor;
 
 namespace BetaCinema.ServerUI.Pages.Admin.Seats
 {
     public class UpdateBase : ComponentBase
     {
         [Inject] protected IJSRuntime js { get; set; }
+
+        [Inject] IDialogService DialogService { get; set; }
 
         [Inject] protected NavigationManager Navigation { get; set; }
 
@@ -19,19 +16,46 @@ namespace BetaCinema.ServerUI.Pages.Admin.Seats
 
         [Parameter] public string SeatId { get; set; }
 
+        public Seat OldData { get; set; } = new();
         public Seat SeatData { get; set; } = new();
 
         protected async override Task OnParametersSetAsync()
         {
-            SeatData = await Mediator.Send(new GetSeatByIdQuery() { Id = SeatId });
+            var result = await Mediator.Send(new GetSeatByIdQuery() { Id = SeatId });
+
+            if (result.IsSuccess)
+            {
+                SeatData = result.Data;
+                OldData = result.Data;
+            }
+            else
+            {
+                DialogService.Show<ErrorMessageDialog>(SharedResources.Error,
+                    new DialogParameters<ErrorMessageDialog>
+                    {
+                        { x => x.ContentText, result.Message },
+                    }, new DialogOptions() { MaxWidth = MaxWidth.ExtraSmall });
+            }
         }
 
         protected async Task SaveChanges()
         {
-            await Mediator.Send(new UpdateSeatCommand() { Data = SeatData });
+            var result = await Mediator.Send(new UpdateSeatCommand()
+            { Data = SeatData, OldData = OldData });
 
-            SnackBar.Add("Update successfully", Severity.Success);
-            Navigation.NavigateTo("admin/seats");
+            if (result.IsSuccess)
+            {
+                SnackBar.Add(SnackbarResources.UpdateSuccess, Severity.Success);
+                Navigation.NavigateTo("admin/seats");
+            }
+            else
+            {
+                DialogService.Show<ErrorMessageDialog>(SharedResources.Error,
+                    new DialogParameters<ErrorMessageDialog>
+                    {
+                        { x => x.ContentText, result.Message },
+                    }, new DialogOptions() { MaxWidth = MaxWidth.ExtraSmall });
+            }
         }
     }
 }

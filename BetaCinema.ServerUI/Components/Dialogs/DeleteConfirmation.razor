@@ -1,0 +1,50 @@
+﻿@using BetaCinema.Domain.Wrappers;
+@using MediatR;
+@inject IMediator Mediator
+
+<MudDialog>
+    <TitleContent>
+        <span style="font-family:'Source Sans Pro',sans-serif;font-size:20px;font-weight:500">
+            @DialogResources.DeleteTitle
+        </span>
+    </TitleContent>
+    <DialogContent>
+        <MudText>@ContentText</MudText>
+    </DialogContent>
+    <DialogActions>
+        <div class="p-2 d-flex gap-2">
+            <MudButton Size="Size.Small" Variant="Variant.Outlined" OnClick="Cancel">
+                @DialogResources.Cancel
+            </MudButton>
+            <MudButton Size="Size.Small" Color="Color.Error" Variant="Variant.Filled" OnClick="Submit">
+                @DialogResources.Delete
+            </MudButton>
+        </div>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter] private MudDialogInstance MudDialog { get; set; } = default!;
+
+    [Parameter] public string ContentText { get; set; }
+    [Parameter] public IRequest<ServiceResult> Command { get; set; } = default!;
+
+    private async Task Submit()
+    {
+        var result = await Mediator.Send(Command);
+        if (result.IsSuccess)
+        {
+            Snackbar.Add(SnackbarResources.DeleteSuccess, Severity.Success);
+            MudDialog.Close(DialogResult.Ok(true));
+        }
+        else
+        {
+            Snackbar.Add($"{result.Message}", Severity.Error);
+        }
+    }
+
+    private void Cancel()
+    {
+        MudDialog.Cancel();
+    }
+}

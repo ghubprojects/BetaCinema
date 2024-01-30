@@ -6,28 +6,28 @@
         <div class="title">Đăng ký tài khoản</div>
         <div class="form-wrapper">
             <form asp-route-returnUrl="@Model.ReturnUrl" id="account" method="post">
-                <div asp-validation-summary="All" class="text-danger"></div>
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
                 <div class="form-input-wrapper">
-                    <label asp-for="Input.FullName" class="form-label">Họ tên</label>
+                    <label asp-for="Input.FullName" class="form-label">@UserResources.FullName</label>
                     <input asp-for="Input.FullName" class="form-control form-control-sm" />
                     <span asp-validation-for="Input.FullName" class="text-danger"></span>
                 </div>
 
                 <div class="form-input-wrapper">
-                    <label asp-for="Input.UserName" class="form-label">Tên đăng nhập</label>
+                    <label asp-for="Input.UserName" class="form-label">@UserResources.UserName</label>
                     <input asp-for="Input.UserName" class="form-control form-control-sm" />
                     <span asp-validation-for="Input.UserName" class="text-danger"></span>
                 </div>
 
                 <div class="form-input-wrapper">
-                    <label asp-for="Input.Password" class="form-label">Mật khẩu</label>
+                    <label asp-for="Input.Password" class="form-label">@UserResources.Password</label>
                     <input asp-for="Input.Password" class="form-control form-control-sm" />
                     <span asp-validation-for="Input.Password" class="text-danger"></span>
                 </div>
 
                 <div class="form-input-wrapper">
-                    <label asp-for="Input.Email" class="form-label">Email</label>
+                    <label asp-for="Input.Email" class="form-label">@UserResources.Email</label>
                     <input asp-for="Input.Email" class="form-control form-control-sm" />
                     <span asp-validation-for="Input.Email" class="text-danger"></span>
                 </div>

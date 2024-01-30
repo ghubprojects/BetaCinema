@@ -1,11 +1,4 @@
 ﻿using BetaCinema.Application.Features.Users.Commands;
-using BetaCinema.Domain.Models;
-using BetaCinema.ServerUI.Components.Dialog;
-using BetaCinema.ServerUI.Resources;
-using MediatR;
-using Microsoft.AspNetCore.Components;
-using Microsoft.JSInterop;
-using MudBlazor;
 
 namespace BetaCinema.ServerUI.Pages.Admin.Users
 {
@@ -23,6 +16,7 @@ namespace BetaCinema.ServerUI.Pages.Admin.Users
 
         [Parameter] public string UserId { get; set; }
 
+        public User OldData { get; set; } = new();
         public User UserData { get; set; } = new();
 
         protected async override Task OnParametersSetAsync()
@@ -31,24 +25,36 @@ namespace BetaCinema.ServerUI.Pages.Admin.Users
             if (result.IsSuccess)
             {
                 UserData = result.Data;
+                OldData = result.Data;
             }
             else
             {
-                DialogService.Show<ErrorMessageDialog>("Lỗi", new DialogParameters<ErrorMessageDialog>
-                {
-                    { x => x.ContentText, result.Message },
-                    { x => x.ButtonText, SharedResources.Close },
-                    { x => x.Color, Color.Error }
-                }, new DialogOptions() { MaxWidth = MaxWidth.ExtraSmall });
+                DialogService.Show<ErrorMessageDialog>(SharedResources.Error,
+                    new DialogParameters<ErrorMessageDialog>
+                    {
+                        { x => x.ContentText, result.Message },
+                    }, new DialogOptions() { MaxWidth = MaxWidth.ExtraSmall });
             }
         }
 
-        protected async Task SaveUser()
+        protected async Task SaveChanges()
         {
-            await Mediator.Send(new UpdateUserCommand() { Data = UserData });
+            var result = await Mediator.Send(new UpdateUserCommand()
+            { Data = UserData, OldData = OldData });
 
-            SnackBar.Add("Update successfully", Severity.Success);
-            Navigation.NavigateTo("admin/users");
+            if (result.IsSuccess)
+            {
+                SnackBar.Add(SnackbarResources.UpdateSuccess, Severity.Success);
+                Navigation.NavigateTo("admin/users");
+            }
+            else
+            {
+                DialogService.Show<ErrorMessageDialog>(SharedResources.Error,
+                    new DialogParameters<ErrorMessageDialog>
+                    {
+                        { x => x.ContentText, result.Message },
+                    }, new DialogOptions() { MaxWidth = MaxWidth.ExtraSmall });
+            }
         }
     }
 }

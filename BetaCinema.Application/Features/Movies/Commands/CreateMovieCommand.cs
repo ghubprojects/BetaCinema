@@ -9,7 +9,7 @@ namespace BetaCinema.Application.Features.Movies.Commands
 {
     public class CreateMovieCommand : IRequest<ServiceResult>
     {
-        public Movie MovieInfo { get; set; }
+        public Movie Data { get; set; }
         public List<string> Categories { get; set; }
     }
 
@@ -24,55 +24,51 @@ namespace BetaCinema.Application.Features.Movies.Commands
 
         public async Task<ServiceResult> Handle(CreateMovieCommand request, CancellationToken cancellationToken)
         {
-            // Validate
-            var validateResult = await ValidateAsync(request.MovieInfo, request.Categories);
+            try
+            {
+                // Validate
+                var validateResult = await ValidateAsync(request.Data, request.Categories);
 
-            if (validateResult.Any())
-            {
-                return new ServiceResult(false, validateResult.First());
-            }
-            else
-            {
-                try
+                // If errors, return false
+                if (validateResult.Any())
+                    return new ServiceResult(false, validateResult.First());
+
+                // Add item
+                request.Data.Id = Guid.NewGuid().ToString();
+                request.Data.DeleteFlag = false;
+                request.Data.CreatedDate = DateTime.Now;
+                request.Data.ModifiedDate = DateTime.Now;
+
+                _context.Movies.Add(request.Data);
+
+                // Add movie categories
+                foreach (var categoryName in request.Categories)
                 {
-                    // Add Movie Info
-                    request.MovieInfo.Id = Guid.NewGuid().ToString();
-                    request.MovieInfo.DeleteFlag = false;
-                    request.MovieInfo.CreatedDate = DateTime.Now;
-                    request.MovieInfo.ModifiedDate = DateTime.Now;
+                    var category = await _context.Categories
+                        .Where(c => !c.DeleteFlag)
+                        .FirstOrDefaultAsync(c => c.CategoryName.ToLower() == categoryName.ToLower(), cancellationToken);
 
-                    _context.Movies.Add(request.MovieInfo);
-
-
-                    // Add movie categories
-                    foreach (var categoryName in request.Categories)
+                    if (category != null)
                     {
-                        var category = await _context.Categories
-                            .FirstOrDefaultAsync(c => c.CategoryName == categoryName);
-
-                        if (category != null)
+                        var movieCategory = new MovieCategory
                         {
-                            var movieCategory = new MovieCategory
-                            {
-                                Id = Guid.NewGuid().ToString(),
-                                MovieId = request.MovieInfo.Id,
-                                CategoryId = category.Id,
-                                CreatedDate = DateTime.Now,
-                                ModifiedDate = DateTime.Now
-                            };
+                            Id = Guid.NewGuid().ToString(),
+                            MovieId = request.Data.Id,
+                            CategoryId = category.Id,
+                            CreatedDate = DateTime.Now,
+                            ModifiedDate = DateTime.Now
+                        };
 
-                            _context.MovieCategories.Add(movieCategory);
-                        }
+                        _context.MovieCategories.Add(movieCategory);
                     }
-
-                    await _context.SaveChangesAsync(cancellationToken);
-
-                    return new ServiceResult(true);
                 }
-                catch (Exception)
-                {
-                    return new ServiceResult(false, "Có lỗi xảy ra khi cập nhật phim và thể loại.");
-                }
+
+                await _context.SaveChangesAsync(cancellationToken);
+                return new ServiceResult(true);
+            }
+            catch (Exception)
+            {
+                return new ServiceResult(false, ErrorResources.UnhandledError);
             }
         }
 
@@ -104,7 +100,8 @@ namespace BetaCinema.Application.Features.Movies.Commands
                 foreach (var categoryName in categories)
                 {
                     var category = await _context.Categories
-                        .FirstOrDefaultAsync(c => c.CategoryName == categoryName);
+                        .Where(c => !c.DeleteFlag)
+                        .FirstOrDefaultAsync(c => c.CategoryName.ToLower() == categoryName.ToLower());
 
                     if (category == null)
                     {

@@ -1,12 +1,14 @@
 ﻿using BetaCinema.Application.Interfaces;
-using BetaCinema.Domain.Models;
+using BetaCinema.Domain.Resources;
+using BetaCinema.Domain.Wrappers;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace BetaCinema.Application.Features.Categories.Commands
 {
-    public class GetAllCategoriesQuery : IRequest<List<Category>> { }
+    public class GetAllCategoriesQuery : IRequest<ServiceResult> { }
 
-    public class GetAllCategoriesQueryHandler : IRequestHandler<GetAllCategoriesQuery, List<Category>>
+    public class GetAllCategoriesQueryHandler : IRequestHandler<GetAllCategoriesQuery, ServiceResult>
     {
         private readonly IAppDbContext _context;
 
@@ -15,11 +17,22 @@ namespace BetaCinema.Application.Features.Categories.Commands
             _context = context;
         }
 
-        public async Task<List<Category>> Handle(GetAllCategoriesQuery request, CancellationToken cancellationToken)
+        public async Task<ServiceResult> Handle(GetAllCategoriesQuery request, CancellationToken cancellationToken)
         {
-            return _context.Categories
-                .Where(c => !c.DeleteFlag)
-                .ToList();
+            try
+            {
+                var data = await _context.Categories
+                    .Where(c => !c.DeleteFlag)
+                    .OrderBy(c => c.CategoryName)
+                    .AsNoTracking()
+                    .ToListAsync(cancellationToken);
+
+                return new ServiceResult(true, "", data);
+            }
+            catch (Exception)
+            {
+                return new ServiceResult(false, ErrorResources.UnhandledError);
+            }
         }
     }
 }

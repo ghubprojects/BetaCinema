@@ -22,17 +22,25 @@ namespace BetaCinema.Application.Features.Movies.Commands
 
         public async Task<ServiceResult> Handle(DeleteMovieCommand request, CancellationToken cancellationToken)
         {
-            var movie = await _context.Movies.FindAsync(request.Id);
-            if (movie != null)
+            try
             {
+                var movie = await _context.Movies
+                    .Where(c => !c.DeleteFlag)
+                    .FirstOrDefaultAsync(c => c.Id == request.Id, cancellationToken);
+
+                // If errors, return false
+                if (movie == null)
+                    return new ServiceResult(false, string.Format(MessageResouces.NotExisted, MovieResources.Movie));
+
+                // Delete item
                 movie.DeleteFlag = true;
                 _context.Entry(movie).State = EntityState.Modified;
                 await _context.SaveChangesAsync(cancellationToken);
                 return new ServiceResult(true);
             }
-            else
+            catch (Exception)
             {
-                return new ServiceResult(false, string.Format(MessageResouces.NotExisted), "Phim");
+                return new ServiceResult(false, ErrorResources.UnhandledError);
             }
         }
     }

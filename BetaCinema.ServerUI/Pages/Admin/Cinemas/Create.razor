@@ -17,13 +17,13 @@
                     <MudCard Class="p-4">
                         <MudCardContent Class="p-0 mb-4 d-flex flex-column gap-2">
                             <MudTextField @bind-Value="@CinemaData.CinemaName"
-                                          Label="CinemaName"
+                                          Label="@CinemaResources.CinemaName"
                                           Variant="Variant.Outlined"
                                           Margin="Margin.Dense"
                                                 Required>
                             </MudTextField>
                             <MudTextField @bind-Value="@CinemaData.CinemaLocation"
-                                          Label="CinemaLocation"
+                                          Label="@CinemaResources.CinemaLocation"
                                           Variant="Variant.Outlined"
                                           Margin="Margin.Dense">
                             </MudTextField>

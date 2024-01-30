@@ -132,6 +132,9 @@
   <data name="Duration" xml:space="preserve">
     <value>Thời lượng</value>
   </data>
+  <data name="Movie" xml:space="preserve">
+    <value>Phim</value>
+  </data>
   <data name="MovieName" xml:space="preserve">
     <value>Tên phim</value>
   </data>

@@ -9,13 +9,13 @@
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
                 <div class="form-input-wrapper">
-                    <label asp-for="Input.UserName" class="form-label">Tên đăng nhập</label>
+                    <label asp-for="Input.UserName" class="form-label">@UserResources.UserName</label>
                     <input asp-for="Input.UserName" class="form-control form-control-sm" />
                     <span asp-validation-for="Input.UserName" class="text-danger"></span>
                 </div>
 
                 <div class="form-input-wrapper">
-                    <label asp-for="Input.Password" class="form-label">Mật khẩu</label>
+                    <label asp-for="Input.Password" class="form-label">@UserResources.Password</label>
                     <input asp-for="Input.Password" class="form-control form-control-sm" />
                     <span asp-validation-for="Input.Password" class="text-danger"></span>
                 </div>

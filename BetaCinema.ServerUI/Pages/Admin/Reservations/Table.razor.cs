@@ -1,8 +1,4 @@
 ﻿using BetaCinema.Application.Features.Reservations.Queries;
-using MediatR;
-using Microsoft.AspNetCore.Components;
-using Microsoft.JSInterop;
-using MudBlazor;
 
 namespace BetaCinema.ServerUI.Pages.Admin.Reservations
 {
@@ -48,22 +44,30 @@ namespace BetaCinema.ServerUI.Pages.Admin.Reservations
 
         protected override async Task OnParametersSetAsync()
         {
-            reservations = await Mediator.Send(new GetAllReservationsQuery());
-        }
+            var result = await Mediator.Send(new GetAllReservationsQuery());
 
-        protected void NavigateToCreateForm()
-        {
-            Navigation.NavigateTo("admin/reservations/create");
+            if (result.IsSuccess)
+            {
+                reservations = result.Data;
+            }
+            else
+            {
+                DialogService.Show<ErrorMessageDialog>(SharedResources.Error,
+                    new DialogParameters<ErrorMessageDialog>
+                    {
+                        { x => x.ContentText, result.Message },
+                    }, new DialogOptions() { MaxWidth = MaxWidth.ExtraSmall });
+            }
         }
 
         protected async Task DownloadExcelFile()
         {
-            //var excelBytes = await Mediator.Send(new ExportReservationsToExcelQuery(""));
+            var excelBytes = await Mediator.Send(new ExportReservationsToExcelQuery(""));
 
-            //// Tạo 1 unique filename cho file excel
-            //string fileName = $"{typeof(Domain.Models.Reservation).Name}_{DateTime.Now:yyyyMMddHHmmss}.xlsx";
+            // Tạo 1 unique filename cho file excel
+            string fileName = $"{typeof(Domain.Models.Reservation).Name}_{DateTime.Now:yyyyMMddHHmmss}.xlsx";
 
-            //await js.InvokeVoidAsync("saveAsFile", fileName, Convert.ToBase64String(excelBytes));
+            await js.InvokeVoidAsync("saveAsFile", fileName, Convert.ToBase64String(excelBytes));
         }
     }
 }

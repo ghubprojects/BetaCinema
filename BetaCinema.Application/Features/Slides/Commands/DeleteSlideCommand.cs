@@ -1,4 +1,5 @@
-﻿using BetaCinema.Domain.Wrappers;
+﻿using BetaCinema.Domain.Resources;
+using BetaCinema.Domain.Wrappers;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 
@@ -26,13 +27,12 @@ namespace BetaCinema.Application.Features.Slides.Commands
                 var removedFile = new FileInfo(Path.Combine(_configuration.GetValue<string>("FileStorage:Images"), "slides", request.FileName));
 
                 removedFile.Delete();
+                return new ServiceResult(true);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return new ServiceResult(false, ex.Message);
+                return new ServiceResult(false, ErrorResources.UnhandledError);
             }
-
-            return new ServiceResult(true);
         }
     }
 }

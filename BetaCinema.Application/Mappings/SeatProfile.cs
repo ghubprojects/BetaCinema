@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using BetaCinema.Application.Helpers;
-using BetaCinema.Domain.DTO;
+using BetaCinema.Domain.DTOs;
 using BetaCinema.Domain.Models;
 
 namespace BetaCinema.Application.Mappings

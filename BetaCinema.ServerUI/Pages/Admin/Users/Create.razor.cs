@@ -1,12 +1,5 @@
 ﻿using BetaCinema.Application.Features.Users.Commands;
-using BetaCinema.Domain.Enums;
-using BetaCinema.Domain.Models;
-using BetaCinema.ServerUI.Components.Dialog;
-using MediatR;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.JSInterop;
-using MudBlazor;
 
 namespace BetaCinema.ServerUI.Pages.Admin.Users
 {
@@ -46,21 +39,16 @@ namespace BetaCinema.ServerUI.Pages.Admin.Users
 
             if (result.IsSuccess)
             {
-                SnackBar.Add("Add new user successfully", Severity.Success);
+                SnackBar.Add(SnackbarResources.AddSuccess, Severity.Success);
                 Navigation.NavigateTo("admin/users");
             }
             else
             {
-                var parameters = new DialogParameters<ErrorMessageDialog>
-                {
-                    { x => x.ContentText, result.Message },
-                    { x => x.ButtonText, "Close" },
-                    { x => x.Color, Color.Error }
-                };
-
-                var options = new DialogOptions() { MaxWidth = MaxWidth.ExtraSmall };
-
-                DialogService.Show<ErrorMessageDialog>("Lỗi", parameters, options);
+                DialogService.Show<ErrorMessageDialog>(SharedResources.Error,
+                    new DialogParameters<ErrorMessageDialog>
+                    {
+                        { x => x.ContentText, result.Message },
+                    }, new DialogOptions() { MaxWidth = MaxWidth.ExtraSmall });
             }
         }
     }

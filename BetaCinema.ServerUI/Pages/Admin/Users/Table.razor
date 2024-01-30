@@ -12,9 +12,10 @@
             <MudPaper Elevation="0" Class="d-flex gap-4 justify-space-between align-items-center admin-table-title">
                 <h4 class="mb-0">@string.Format(SharedResources.TableTitle, "người dùng")</h4>
                 <div class="form-group d-flex gap-2">
-                    <MudButton Size="Size.Small" Variant="@Variant.Filled" Color="@Color.Primary" OnClick="@NavigateToCreateForm">
+                    <MudButton Size="Size.Small" Variant="@Variant.Filled" Color="@Color.Primary"
+                               OnClick="@(()=>Navigation.NavigateTo("admin/users/create"))">
                         @SharedResources.Create
-                        <MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.Add" />
+                        <MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.Add" Class="ml-1" />
                     </MudButton>
                     <MudButton Size="Size.Small" Variant="@Variant.Filled" Color="@Color.Primary" OnClick="@DownloadExcelFile">
                         @SharedResources.ExportExcel
@@ -48,14 +49,39 @@
         else
         {
             <MudTable Items="@users" Elevation="0" Dense Hover FixedHeader Filter="@_quickFilter"
-                       Class="admin-table" Context="tableContext">
+                       MultiSelection="true" @bind-SelectedItems="selectedItems"
+                       Class="admin-table toolbar" Context="tableContext">
                  <ToolBarContent>
-                     <MudSpacer />
-                     <MudTextField @bind-Value="_searchString" Variant="Variant.Outlined" Margin="Margin.Dense" Immediate
+                     @if (selectedItems.Count >= 2)
+                    {
+                        <div class="mr-6 font-14">
+                            <span>Đã chọn: </span>
+                            <b>@selectedItems.Count</b>
+                        </div>
+
+                        <MudButton Size="Size.Small" Variant="@Variant.Filled" Color="@Color.Error"
+                                   OnClick="@DeleteMultiple" Class="multiple-delete-btn">
+                            <MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.Delete" Class="mr-1" />
+                            <span class="font-14">@SharedResources.MultipleDelete</span>
+                        </MudButton>
+                    }
+
+                    <MudSpacer />
+                    <MudTextField @bind-Value="_searchString" Variant="Variant.Outlined" Margin="Margin.Dense" Immediate
                                    Placeholder="@SharedResources.Search" Adornment="Adornment.Start"
                                    AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0">
                      </MudTextField>
                  </ToolBarContent>
+
+                 <ColGroup>
+                     <col style="width: 2%;" />
+                     <col />
+                     <col />
+                     <col />
+                     <col />
+                     <col />
+                     <col style="width: 10%;" />
+                 </ColGroup>
 
                  <HeaderContent>
                      <MudTh>@UserResources.UserName</MudTh>
@@ -87,7 +113,7 @@
                  </RowTemplate>
 
                  <PagerContent>
-                     <MudTablePager RowsPerPageString="Số bản ghi mỗi trang" />
+                     <MudTablePager RowsPerPageString="Số bản ghi mỗi trang" PageSizeOptions="new int[] { 20, 30, 50, 80, 100 }" />
                  </PagerContent>
              </MudTable>
         }

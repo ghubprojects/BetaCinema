@@ -1,11 +1,6 @@
 ﻿using BetaCinema.Application.Interfaces.Services;
-using BetaCinema.Domain.Models;
-using BetaCinema.Domain.Resources;
 using BetaCinema.ServerUI.Store.ReservationUseCase;
-using Fluxor;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.WebUtilities;
-using MudBlazor;
 
 namespace BetaCinema.ServerUI.Pages.Checkout
 {
@@ -36,15 +31,15 @@ namespace BetaCinema.ServerUI.Pages.Checkout
         protected List<InfoItem> showtimeInfos = new();
         protected int totalPrice = 0;
 
-        protected override async Task OnParametersSetAsync()
+        protected override void OnParametersSet()
         {
             Showtime showtimeData = ReservationState.Value.Showtime;
             totalPrice = ReservationState.Value.SelectedSeat.Count * showtimeData.TicketPrice;
 
             movieInfos.AddRange(new List<InfoItem>()
             {
-                new InfoItem(CategoryResources.CategoryName, "{ Category }", "fas fa-tags"),
-                new InfoItem(MovieResources.Duration, showtimeData.Movie.Duration.ToString(), "far fa-clock")
+                new InfoItem(CategoryResources.CategoryName, string.Join(", ", showtimeData.Movie.MovieCategories.Select(mc => mc.Category.CategoryName)), "fas fa-tags"),
+                new InfoItem(MovieResources.Duration, $"{showtimeData.Movie.Duration} phút", "far fa-clock")
             });
 
             showtimeInfos.AddRange(new List<InfoItem>()

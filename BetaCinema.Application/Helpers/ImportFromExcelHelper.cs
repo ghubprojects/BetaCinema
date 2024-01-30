@@ -1,4 +1,5 @@
 ﻿using BetaCinema.Domain.Exceptions;
+using BetaCinema.Domain.Resources;
 using OfficeOpenXml;
 using System.Data;
 
@@ -8,51 +9,67 @@ namespace BetaCinema.Application.Helpers
     {
         public static async Task<IEnumerable<TEntity>> ImportAsync(Stream stream, Dictionary<string, Func<DataRow, TEntity, object>> mappers, string sheetName = "Sheet1")
         {
-            var result = new List<TEntity>();
+            // Thiết lập license context của EPPlus
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-            using var p = new ExcelPackage();
-            stream.Position = 0;
-            await p.LoadAsync(stream);
 
-            var ws = p.Workbook.Worksheets[sheetName] ?? throw new BaseException()
-            {
-                UserMessage = "Sheet with name {0} does not exist!",
-                DevMessage = "Sheet with name {0} does not exist!"
-            };
+            using var package = new ExcelPackage();
+            stream.Position = 0;
+            await package.LoadAsync(stream);
+
+            var ws = package.Workbook.Worksheets[sheetName]
+                ?? throw new BaseException()
+                {
+                    DevMessage = string.Format(ErrorResources.NotExistedExcelSheet, sheetName),
+                    UserMessage = string.Format(ErrorResources.NotExistedExcelSheet, sheetName)
+                };
 
             var dt = new DataTable();
 
-            var titleInSheet = true;
-            var headerRow = titleInSheet ? 3 : 1;
+            // Hàng tiêu đề và hàng bắt đầu đọc dữ liệu
+            var headerRow = 3;
+            var startDataRow = 4;
 
-            var titlesInFirstRow = true;
-            var startRow = titlesInFirstRow ? 4 : 3;
-
-            foreach (var firstRowCell in ws.Cells[headerRow, 1, headerRow, ws.Dimension.End.Column])
+            // Đọc header
+            try
             {
-                dt.Columns.Add(titlesInFirstRow ? firstRowCell.Text : $"Column {firstRowCell.Start.Column}");
+                foreach (var headerCell in ws.Cells[headerRow, 1, headerRow, ws.Dimension.End.Column])
+                {
+                    dt.Columns.Add(headerCell.Text);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new BaseException()
+                {
+                    DevMessage = ex.Message,
+                    UserMessage = ErrorResources.ReadHeaderError
+                };
             }
 
-            var headers = mappers.Keys.Select(x => x).ToList();
+            // Kiểm tra tất cả cột trong sheet trùng khớp với mappers
+            var headers = mappers.Keys.ToList();
             var errors = new List<string>();
 
             foreach (var header in headers)
             {
                 if (!dt.Columns.Contains(header))
                 {
-                    errors.Add(string.Format("Header '{0}' does not exist in table!", header));
+                    errors.Add(string.Format(ErrorResources.NotExistedHeader, header));
                 }
             }
 
             if (errors.Any())
             {
-                throw new ValidateException()
+                throw new BaseException()
                 {
-                    Errors = errors
+                    DevMessage = errors.First(),
+                    UserMessage = $"{errors.First()} {ErrorResources.NotFollowImportTemplate}"
                 };
             }
 
-            for (var rowNum = startRow; rowNum <= ws.Dimension.End.Row; rowNum++)
+            // Đọc dữ liệu
+            var result = new List<TEntity>();
+            for (var rowNum = startDataRow; rowNum <= ws.Dimension.End.Row; rowNum++)
             {
                 try
                 {
@@ -66,12 +83,12 @@ namespace BetaCinema.Application.Helpers
                     headers.ForEach(x => mappers[x](row, item));
                     result.Add(item);
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
                     throw new BaseException()
                     {
-                        DevMessage = e.Message,
-                        UserMessage = e.Message
+                        DevMessage = ex.Message,
+                        UserMessage = ErrorResources.ReadDataError
                     };
                 }
             }

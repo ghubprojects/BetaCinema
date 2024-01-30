@@ -1,13 +1,7 @@
 ﻿using BetaCinema.Application.Features.Users.Commands;
 using BetaCinema.Application.Requests;
-using BetaCinema.Domain.Models;
-using BetaCinema.ServerUI.Components.Dialog;
-using BetaCinema.ServerUI.Resources;
-using MediatR;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Forms;
-using MudBlazor;
 
 namespace BetaCinema.ServerUI.Pages.Member
 {
@@ -53,8 +47,6 @@ namespace BetaCinema.ServerUI.Pages.Member
                 DialogService.Show<ErrorMessageDialog>("Lỗi", new DialogParameters<ErrorMessageDialog>
                 {
                     { x => x.ContentText, result.Message },
-                    { x => x.ButtonText, SharedResources.Close },
-                    { x => x.Color, Color.Error }
                 }, new DialogOptions() { MaxWidth = MaxWidth.ExtraSmall });
             }
         }
@@ -63,7 +55,7 @@ namespace BetaCinema.ServerUI.Pages.Member
         {
             await Mediator.Send(new UpdateUserCommand() { Data = UserData });
 
-            SnackBar.Add("Update successfully", Severity.Success);
+            SnackBar.Add(SnackbarResources.UpdateSuccess, Severity.Success);
         }
 
         /// <summary>

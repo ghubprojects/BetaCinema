@@ -1,10 +1,5 @@
-﻿using BetaCinema.Application.Features.Seats.Commands;
-using BetaCinema.Application.Features.Showtimes.Commands;
-using BetaCinema.Domain.Models;
+﻿using BetaCinema.Application.Features.Showtimes.Commands;
 using BetaCinema.ServerUI.Store.CinemaUseCase;
-using Fluxor;
-using MediatR;
-using Microsoft.AspNetCore.Components;
 
 namespace BetaCinema.ServerUI.Features.MovieShowtimes
 {
@@ -17,10 +12,44 @@ namespace BetaCinema.ServerUI.Features.MovieShowtimes
 
         [Inject] private IMediator Mediator { get; set; }
 
+        [Inject] IDialogService DialogService { get; set; }
+
         protected List<Showtime> showtimeList { get; set; } = new();
-        protected int totalSeats { get; set; } = 0;
 
         public Dictionary<string, DateTime> currentWeekDays { get; set; }
+
+        protected override void OnInitialized()
+        {
+            currentWeekDays = GetCurrentWeekDays();
+        }
+
+        protected override async Task OnParametersSetAsync()
+        {
+            await GetShowtimes(currentWeekDays.Keys.First());
+        }
+
+        protected async Task GetShowtimes(string weekDay)
+        {
+            var result = await Mediator.Send(new GetShowtimesByWeekDayQuery()
+            {
+                CinemaId = CinemaState.Value.Cinema.Id,
+                MovieId = MovieData.Id,
+                ShowDate = currentWeekDays[weekDay]
+            });
+
+            if (result.IsSuccess)
+            {
+                showtimeList = result.Data;
+            }
+            else
+            {
+                DialogService.Show<ErrorMessageDialog>(SharedResources.Error,
+                    new DialogParameters<ErrorMessageDialog>
+                    {
+                        { x => x.ContentText, result.Message },
+                    }, new DialogOptions() { MaxWidth = MaxWidth.ExtraSmall });
+            }
+        }
 
         private Dictionary<string, DateTime> GetCurrentWeekDays()
         {
@@ -38,30 +67,6 @@ namespace BetaCinema.ServerUI.Features.MovieShowtimes
             }
 
             return weekDays;
-        }
-
-        protected override async Task OnInitializedAsync()
-        {
-            currentWeekDays = GetCurrentWeekDays();
-            showtimeList = await Mediator.Send(new GetShowtimesByWeekDayQuery()
-            {
-                CinemaId = CinemaState.Value.Cinema.Id,
-                MovieId = MovieData.Id,
-                ShowDate = currentWeekDays.First().Value
-            });
-
-            var result = await Mediator.Send(new GetAllSeatsQuery() { });
-            totalSeats = result.Count;
-        }
-
-        protected async Task GetShowtimes(string weekDay)
-        {
-            showtimeList = await Mediator.Send(new GetShowtimesByWeekDayQuery()
-            {
-                CinemaId = CinemaState.Value.Cinema.Id,
-                MovieId = MovieData.Id,
-                ShowDate = currentWeekDays[weekDay]
-            });
         }
     }
 }

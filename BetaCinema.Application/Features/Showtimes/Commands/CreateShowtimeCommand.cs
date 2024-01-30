@@ -3,6 +3,7 @@ using BetaCinema.Domain.Models;
 using BetaCinema.Domain.Resources;
 using BetaCinema.Domain.Wrappers;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace BetaCinema.Application.Features.Showtimes.Commands
 {
@@ -22,22 +23,16 @@ namespace BetaCinema.Application.Features.Showtimes.Commands
 
         public async Task<ServiceResult> Handle(CreateShowtimeCommand request, CancellationToken cancellationToken)
         {
-            // Validate
-            var validateResult = await ValidateAsync(request.Data);
-
-            if (validateResult.Any())
+            try
             {
-                return new ServiceResult(false, validateResult.First());
-            }
-            else
-            {
-                // Determine the day of the week for the StartTime
-                var dayOfWeek = request.Data.StartTime.Value.DayOfWeek;
+                // Validate
+                var validateResult = await ValidateAsync(request.Data);
 
-                // Set ticketPrice based on the day of the week
-                var ticketPrice = (dayOfWeek >= DayOfWeek.Monday && dayOfWeek <= DayOfWeek.Friday) ? 40000 : 60000;
+                // If errors, return false
+                if (validateResult.Any())
+                    return new ServiceResult(false, validateResult.First());
 
-                request.Data.TicketPrice = ticketPrice;
+                // Add item
                 request.Data.Id = Guid.NewGuid().ToString();
                 request.Data.DeleteFlag = false;
                 request.Data.CreatedDate = DateTime.Now;
@@ -46,6 +41,10 @@ namespace BetaCinema.Application.Features.Showtimes.Commands
                 _context.Showtimes.Add(request.Data);
                 await _context.SaveChangesAsync(cancellationToken);
                 return new ServiceResult(true);
+            }
+            catch (Exception)
+            {
+                return new ServiceResult(false, ErrorResources.UnhandledError);
             }
         }
 
@@ -60,11 +59,17 @@ namespace BetaCinema.Application.Features.Showtimes.Commands
             }
             else
             {
-                var searchResult = await _context.Movies.FindAsync(showtime.MovieId);
+                var searchResult = await _context.Movies
+                    .Where(m => !m.DeleteFlag)
+                    .FirstOrDefaultAsync(m => m.Id == showtime.MovieId);
 
                 if (searchResult == null)
                 {
                     errors.Add(string.Format(MessageResouces.NotExisted, MovieResources.MovieName));
+                }
+                else if (showtime.StartTime.Value.Date < searchResult.ReleaseDate.Value.Date)
+                {
+                    errors.Add(string.Format(MessageResouces.NotGreaterThan, ShowtimeResources.ShowDate, MovieResources.ReleaseDate));
                 }
             }
 
@@ -75,7 +80,9 @@ namespace BetaCinema.Application.Features.Showtimes.Commands
             }
             else
             {
-                var searchResult = await _context.Cinemas.FindAsync(showtime.CinemaId);
+                var searchResult = await _context.Cinemas
+                    .Where(c => !c.DeleteFlag)
+                    .FirstOrDefaultAsync(c => c.Id == showtime.CinemaId);
 
                 if (searchResult == null)
                 {
@@ -86,13 +93,29 @@ namespace BetaCinema.Application.Features.Showtimes.Commands
             // Check duplicated showtime by movieId and cinemaId
             if (!string.IsNullOrWhiteSpace(showtime.MovieId) && !string.IsNullOrWhiteSpace(showtime.CinemaId))
             {
-                bool showtimeExists = _context.Showtimes
+                var showtimeExists = _context.Showtimes
                     .Any(s => s.MovieId == showtime.MovieId && s.CinemaId == showtime.CinemaId && s.StartTime == showtime.StartTime);
 
                 if (showtimeExists)
                 {
                     errors.Add(string.Format(MessageResouces.Duplicated, ShowtimeResources.StartTime));
                 }
+            }
+
+            // Validate StartTime
+            if (!showtime.StartTime.HasValue)
+            {
+                errors.Add(string.Format(MessageResouces.Required, ShowtimeResources.StartTime));
+            }
+            else if (showtime.StartTime.Value < DateTime.Now)
+            {
+                errors.Add(string.Format(MessageResouces.GreaterThanNow, ShowtimeResources.StartTime));
+            }
+
+            // Validate TicketPrice
+            if (showtime.TicketPrice <= 0)
+            {
+                errors.Add(string.Format(MessageResouces.GreaterThan0, ShowtimeResources.TicketPrice));
             }
 
             return errors;
