@@ -1,5 +1,7 @@
 ﻿using BetaCinema.Application.Features.Categories.Commands;
 using BetaCinema.Application.Features.Movies.Commands;
+using BetaCinema.Application.Requests;
+using Microsoft.AspNetCore.Components.Forms;
 
 namespace BetaCinema.ServerUI.Pages.Admin.Movies
 {
@@ -60,6 +62,45 @@ namespace BetaCinema.ServerUI.Pages.Admin.Movies
                         { x => x.ContentText, result.Message },
                     }, new DialogOptions() { MaxWidth = MaxWidth.ExtraSmall });
             }
+        }
+
+        /// <summary>
+        /// Upload Poster
+        /// </summary>
+
+        protected IList<IBrowserFile> files = new List<IBrowserFile>();
+
+        protected async Task UploadPoster(IBrowserFile file)
+        {
+            files.Add(file);
+
+            if (files.Any())
+            {
+                var uploadRequest = new UploadRequest()
+                {
+                    MaxFileSize = 1024 * 1024 * 3,
+                    UploadedFiles = files
+                };
+
+                var result = await Mediator.Send(new UploadPosterMovieCommand()
+                { UploadRequest = uploadRequest });
+
+                if (result.IsSuccess)
+                {
+                    MovieData.Poster = result.Data;
+                    SnackBar.Add(SnackbarResources.UploadSuccess, Severity.Success);
+                }
+                else
+                {
+                    DialogService.Show<ErrorMessageDialog>(SharedResources.Error,
+                        new DialogParameters<ErrorMessageDialog>
+                        {
+                            { x => x.ContentText, result.Message },
+                        }, new DialogOptions() { MaxWidth = MaxWidth.ExtraSmall });
+                }
+            }
+
+            files.Clear();
         }
     }
 }

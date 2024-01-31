@@ -37,9 +37,6 @@ namespace BetaCinema.ServerUI.Pages.Admin.Showtimes
             if (x.StartTime.Value.ToString("dd/MM/yyyy HH:mm:ss").Contains(_searchString, StringComparison.OrdinalIgnoreCase))
                 return true;
 
-            if ($"{x.Movie.MovieName} {x.Cinema.CinemaName} {x.StartTime.Value.ToString("dd/MM/yyyy HH:mm:ss")}".Contains(_searchString))
-                return true;
-
             return false;
         };
 
@@ -104,7 +101,8 @@ namespace BetaCinema.ServerUI.Pages.Admin.Showtimes
 
         protected async Task DownloadExcelFile()
         {
-            var excelBytes = await Mediator.Send(new ExportShowtimesToExcelQuery(""));
+            var excelBytes = await Mediator.Send(new ExportShowtimesToExcelQuery()
+            { Keyword = _searchString, SelectedItems = selectedItems.ToList() });
 
             // Tạo 1 unique filename cho file excel
             string fileName = $"{typeof(Showtime).Name}_{DateTime.Now:yyyyMMddHHmmss}.xlsx";

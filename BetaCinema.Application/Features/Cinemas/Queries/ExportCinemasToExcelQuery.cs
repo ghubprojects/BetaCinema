@@ -12,11 +12,7 @@ namespace BetaCinema.Application.Features.Cinemas.Queries
     public class ExportCinemasToExcelQuery : IRequest<byte[]>
     {
         public string? Keyword { get; set; } = string.Empty;
-
-        public ExportCinemasToExcelQuery(string? keyword)
-        {
-            Keyword = keyword;
-        }
+        public List<Cinema>? SelectedItems { get; set; } = new();
     }
 
     /// <summary>
@@ -38,7 +34,9 @@ namespace BetaCinema.Application.Features.Cinemas.Queries
         public async Task<byte[]> Handle(ExportCinemasToExcelQuery request, CancellationToken cancellationToken)
         {
             // Lấy dữ liệu từ database
-            var data = await _context.Cinemas
+            var data = request.SelectedItems.Any() ? request.SelectedItems :
+                await _context.Cinemas
+                .Where(x => string.IsNullOrWhiteSpace(request.Keyword.ToLower()) || x.CinemaName.ToLower().Contains(request.Keyword.ToLower()) || x.CinemaLocation.ToLower().Contains(request.Keyword.ToLower()))
                 .OrderBy(c => c.CinemaName)
                 .AsNoTracking()
                 .ToListAsync(cancellationToken);

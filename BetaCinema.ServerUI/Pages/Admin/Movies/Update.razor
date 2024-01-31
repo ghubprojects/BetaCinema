@@ -1,6 +1,4 @@
-﻿@using BetaCinema.Domain.Enums;
-@using BetaCinema.Domain.Models;
-@page "/admin/movies/edit/{MovieId}"
+﻿@page "/admin/movies/edit/{MovieId}"
 @layout AdminLayout
 @inherits UpdateBase
 
@@ -48,10 +46,9 @@
                     </MudSelect>
 
                     <MudStack Row>
-                        <MudTextField @bind-Value="@MovieData.Duration"
-                                      Variant="Variant.Outlined" Margin="Margin.Dense"
-                                      Label="@(string.Format("{0} (phút)",MovieResources.Duration))" Class="flex-1">
-                        </MudTextField>
+                        <MudNumericField @bind-Value="@MovieData.Duration" HideSpinButtons="true" Min="0"
+                                         Variant="Variant.Outlined" Margin="Margin.Dense"
+                                         Label="@($"{MovieResources.Duration} (phút)")" Class="flex-1" />
                         <MudDatePicker @bind-Date="@MovieData.ReleaseDate"
                                        Variant="Variant.Outlined" Margin="Margin.Dense"
                                        MinDate="DateTime.Now" DisableToolbar="true"

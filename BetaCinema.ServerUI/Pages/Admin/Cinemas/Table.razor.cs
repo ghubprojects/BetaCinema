@@ -33,9 +33,6 @@ namespace BetaCinema.ServerUI.Pages.Admin.Cinemas
             if (x.CinemaLocation.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
                 return true;
 
-            if ($"{x.CinemaName} {x.CinemaLocation}".Contains(_searchString))
-                return true;
-
             return false;
         };
 
@@ -80,7 +77,8 @@ namespace BetaCinema.ServerUI.Pages.Admin.Cinemas
 
         protected async Task DownloadExcelFile()
         {
-            var excelBytes = await Mediator.Send(new ExportCinemasToExcelQuery(""));
+            var excelBytes = await Mediator.Send(new ExportCinemasToExcelQuery()
+            { Keyword = _searchString });
 
             // Tạo 1 unique filename cho file excel
             string fileName = $"{typeof(Cinema).Name}_{DateTime.Now:yyyyMMddHHmmss}.xlsx";

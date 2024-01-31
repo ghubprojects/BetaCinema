@@ -12,11 +12,7 @@ namespace BetaCinema.Application.Features.Showtimes.Queries
     public class ExportShowtimesToExcelQuery : IRequest<byte[]>
     {
         public string? Keyword { get; set; } = string.Empty;
-
-        public ExportShowtimesToExcelQuery(string? keyword)
-        {
-            Keyword = keyword;
-        }
+        public List<Showtime>? SelectedItems { get; set; } = new();
     }
 
     /// <summary>
@@ -38,12 +34,12 @@ namespace BetaCinema.Application.Features.Showtimes.Queries
         public async Task<byte[]> Handle(ExportShowtimesToExcelQuery request, CancellationToken cancellationToken)
         {
             // Lấy dữ liệu từ database
-            var data = await _context.Showtimes
+            var data = request.SelectedItems.Any() ? request.SelectedItems :
+                _context.Showtimes.AsNoTracking()
                 .OrderBy(s => s.StartTime.Value)
                 .Include(s => s.Movie)
-                .Include(s => s.Cinema)
-                .AsNoTracking()
-                .ToListAsync(cancellationToken);
+                .Include(s => s.Cinema).ToList()
+                .Where(x => string.IsNullOrWhiteSpace(request.Keyword) || x.Movie.MovieName.ToLower().Contains(request.Keyword.ToLower()) || x.Cinema.CinemaName.ToLower().Contains(request.Keyword.ToLower()) || x.StartTime.Value.ToString("dd/MM/yyyy HH:mm:ss").ToLower().Contains(request.Keyword.ToLower()));
 
             var dataExport = _mapper.Map<List<ShowtimeExport>>(data);
 

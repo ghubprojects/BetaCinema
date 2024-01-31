@@ -51,5 +51,28 @@ namespace BetaCinema.ServerUI.Pages.Admin.Users
                     }, new DialogOptions() { MaxWidth = MaxWidth.ExtraSmall });
             }
         }
+
+        /// <summary>
+        /// Handle toggle show password
+        /// </summary>
+        private bool isShow;
+        protected InputType PasswordInput = InputType.Password;
+        protected string PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+
+        protected void ToggleShowPassword()
+        {
+            if (isShow)
+            {
+                isShow = false;
+                PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+                PasswordInput = InputType.Password;
+            }
+            else
+            {
+                isShow = true;
+                PasswordInputIcon = Icons.Material.Filled.Visibility;
+                PasswordInput = InputType.Text;
+            }
+        }
     }
 }

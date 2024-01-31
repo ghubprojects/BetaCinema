@@ -1,18 +1,13 @@
-﻿using BetaCinema.Application.Interfaces;
-using BetaCinema.Application.Requests;
-using BetaCinema.Domain.Models;
+﻿using BetaCinema.Application.Requests;
 using BetaCinema.Domain.Resources;
 using BetaCinema.Domain.Wrappers;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
 namespace BetaCinema.Application.Features.Movies.Commands
 {
     public class UploadPosterMovieCommand : IRequest<ServiceResult>
     {
-        public Movie MovieData { get; set; }
-
         public UploadRequest UploadRequest { get; set; }
 
         /// <summary>
@@ -22,12 +17,9 @@ namespace BetaCinema.Application.Features.Movies.Commands
         {
             private readonly IConfiguration _configuration;
 
-            private readonly IAppDbContext _context;
-
-            public UploadPosterMovieCommandHandler(IConfiguration configuration, IAppDbContext context)
+            public UploadPosterMovieCommandHandler(IConfiguration configuration)
             {
                 _configuration = configuration;
-                _context = context;
             }
 
             public async Task<ServiceResult> Handle(UploadPosterMovieCommand request, CancellationToken cancellationToken)
@@ -49,12 +41,7 @@ namespace BetaCinema.Application.Features.Movies.Commands
                     await using FileStream fs = new(path, FileMode.Create);
                     await posterFile.OpenReadStream(request.UploadRequest.MaxFileSize).CopyToAsync(fs);
 
-                    // update to database
-                    request.MovieData.Poster = newFileName;
-                    request.MovieData.ModifiedDate = DateTime.Now;
-                    _context.Entry(request.MovieData).State = EntityState.Modified;
-                    await _context.SaveChangesAsync(cancellationToken);
-                    return new ServiceResult(true);
+                    return new ServiceResult(true, "", newFileName);
                 }
                 catch (Exception)
                 {

@@ -1,5 +1,4 @@
-﻿@using BetaCinema.Domain.Enums;
-@page "/admin/movies/create"
+﻿@page "/admin/movies/create"
 @layout AdminLayout
 @inherits CreateBase
 
@@ -14,27 +13,43 @@
             <DataAnnotationsValidator />
 
             <MudCard Elevation="0" Class="d-flex px-6 py-5 gap-3">
+                <MudCardContent Class="d-flex flex-column align-items-center gap-3">
+                    <MudImage ObjectFit="ObjectFit.Cover" Src="@($"/assets/images/posters/{MovieData.Poster}")"
+                              Width="228" Height="360" Class="rounded" />
+
+                    <MudFileUpload T="IBrowserFile" Accept=".png, .jpg" FilesChanged="UploadPoster"
+                                   Context="uploadContext" Class="mt-0">
+                        <ButtonTemplate>
+                            <MudButton HtmlTag="label" Variant="Variant.Filled" Color="Color.Primary"
+                                       for="@uploadContext.Id">
+                                @SharedResources.Upload
+                                <MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.Image" Class="ml-2" />
+                            </MudButton>
+                        </ButtonTemplate>
+                    </MudFileUpload>
+                </MudCardContent>
+
                 <MudCardContent Class="flex-1 d-flex flex-column gap-3 justify-start">
                     <MudTextField @bind-Value="@MovieData.MovieName"
                                   Variant="Variant.Outlined" Margin="Margin.Dense"
                                   Label="@MovieResources.MovieName" Required Class="justify-end">
-                    </MudTextField>
+                     </MudTextField>
 
-                    <MudSelect T="string" @bind-Value="categoriesValue" @bind-SelectedValues="categoryOptions"
-                               Variant="Variant.Outlined" Margin="Margin.Dense"
-                               Label="@MovieResources.Category" MultiSelection="true"
-                               AnchorOrigin="Origin.BottomCenter">
-                        @foreach (var category in CategoryList)
+                     <MudSelect T="string" @bind-Value="categoriesValue" @bind-SelectedValues="categoryOptions"
+                                Variant="Variant.Outlined" Margin="Margin.Dense"
+                                Label="@MovieResources.Category" MultiSelection="true"
+                                AnchorOrigin="Origin.BottomCenter">
+                         @foreach (var category in CategoryList)
                         {
                             <MudSelectItem T="string" Value="@category.CategoryName">@category.CategoryName</MudSelectItem>
                         }
                     </MudSelect>
 
                     <MudStack Row>
-                        <MudTextField @bind-Value="@MovieData.Duration"
-                                      Variant="Variant.Outlined" Margin="Margin.Dense"
-                                      Label="@MovieResources.Duration" Class="flex-1">
-                        </MudTextField>
+                        <MudNumericField @bind-Value="@MovieData.Duration" HideSpinButtons="true" Min="0"
+                                         Variant="Variant.Outlined" Margin="Margin.Dense"
+                                         Label="@($"{MovieResources.Duration} (phút)")" Class="flex-1" />
+
                         <MudDatePicker @bind-Date="@MovieData.ReleaseDate"
                                        Variant="Variant.Outlined" Margin="Margin.Dense"
                                        MinDate="DateTime.Now" DisableToolbar="true"

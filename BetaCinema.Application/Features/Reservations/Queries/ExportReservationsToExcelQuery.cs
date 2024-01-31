@@ -12,11 +12,7 @@ namespace BetaCinema.Application.Features.Reservations.Queries
     public class ExportReservationsToExcelQuery : IRequest<byte[]>
     {
         public string? Keyword { get; set; } = string.Empty;
-
-        public ExportReservationsToExcelQuery(string? keyword)
-        {
-            Keyword = keyword;
-        }
+        public List<Reservation>? SelectedItems { get; set; } = new();
     }
 
     /// <summary>
@@ -38,7 +34,8 @@ namespace BetaCinema.Application.Features.Reservations.Queries
         public async Task<byte[]> Handle(ExportReservationsToExcelQuery request, CancellationToken cancellationToken)
         {
             // Lấy dữ liệu từ database
-            var data = await _context.Reservations
+            var data = request.SelectedItems.Any() ? request.SelectedItems :
+                 _context.Reservations.AsNoTracking()
                     .Include(r => r.Showtime)
                         .ThenInclude(s => s.Movie)
                     .Include(r => r.Showtime)
@@ -46,9 +43,8 @@ namespace BetaCinema.Application.Features.Reservations.Queries
                     .Include(r => r.ReservationItems)
                         .ThenInclude(ri => ri.Seat)
                     .Include(r => r.User)
-                    .OrderBy(r => r.CreatedDate)
-                    .AsNoTracking()
-                    .ToListAsync(cancellationToken);
+                    .OrderBy(r => r.CreatedDate).ToList()
+                    .Where(x => string.IsNullOrWhiteSpace(request.Keyword) || x.User.UserName.ToLower().Contains(request.Keyword.ToLower()) || x.Showtime.Movie.MovieName.ToLower().Contains(request.Keyword.ToLower()) || x.Showtime.Cinema.CinemaName.ToLower().Contains(request.Keyword.ToLower()) || x.Showtime.StartTime.Value.ToString("dd/MM/yyyy HH:mm:ss").Contains(request.Keyword.ToLower()));
 
             // Lấy dữ liệu
             var dataExport = _mapper.Map<List<ReservationExport>>(data);

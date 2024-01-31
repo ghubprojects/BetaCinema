@@ -12,10 +12,10 @@
 
         <EditForm Model="@UserData" OnValidSubmit="@CreateUser" Context="formContext">
             <DataAnnotationsValidator />
-            <MudGrid xs="12">
-                <MudContainer MaxWidth="MaxWidth.Medium">
-                    <MudCard Class="p-4">
-                        <MudCardContent Class="p-0 mb-4 d-flex flex-column gap-2">
+            <MudContainer MaxWidth="MaxWidth.Small">
+                <MudCard Class="p-4">
+                    <MudCardContent Class="p-0 mb-4 d-flex flex-column gap-2">
+                        <MudStack Row>
                             <MudTextField @bind-Value="@UserData.UserName"
                                           Label="@UserResources.UserName"
                                           Variant="Variant.Outlined"
@@ -26,37 +26,41 @@
                                           Variant="Variant.Outlined"
                                           Margin="Margin.Dense">
                             </MudTextField>
+                        </MudStack>
+                        <MudStack Row>
                             <MudTextField @bind-Value="@UserData.Email"
                                           Label="@UserResources.Email"
                                           Variant="Variant.Outlined"
                                           Margin="Margin.Dense">
                             </MudTextField>
-                            <MudTextField @bind-Value="@UserData.Password"
-                                          Label="@UserResources.Password"
-                                          Variant="Variant.Outlined"
-                                          Margin="Margin.Dense">
-                            </MudTextField>
-                            <MudSelect @bind-Value="@UserData.Role"
-                                       T="string"
-                                       Label="@UserResources.Role"
-                                       AnchorOrigin="Origin.BottomCenter"
-                                       Variant="Variant.Outlined"
-                                       Margin="Margin.Dense">
-                                <MudSelectItem Value="UserRole.Admin.ToString()" />
-                                <MudSelectItem Value="UserRole.Customer.ToString()" />
-                            </MudSelect>
-                        </MudCardContent>
-                        <MudCardActions Class="p-0">
-                            <MudButton ButtonType="ButtonType.Submit"
-                                       Variant="Variant.Filled"
-                                       Color="Color.Primary"
-                                       Class="ml-auto">
-                                @SharedResources.Create
-                            </MudButton>
-                        </MudCardActions>
-                    </MudCard>
-                </MudContainer>
-            </MudGrid>
+                        </MudStack>
+                        <MudTextField @bind-Value="@UserData.Password"
+                                      InputType="@PasswordInput" Label="@UserResources.Password"
+                                      Variant="Variant.Outlined" Margin="Margin.Dense"
+                                      Adornment="Adornment.End" Class="flex-1"
+                                      AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="@ToggleShowPassword"
+                                      AdornmentAriaLabel="Show Password">
+                        </MudTextField>
+                        <MudSelect @bind-Value="@UserData.Role"
+                                   T="string"
+                                   Label="@UserResources.Role"
+                                   AnchorOrigin="Origin.BottomCenter"
+                                   Variant="Variant.Outlined"
+                                   Margin="Margin.Dense">
+                            <MudSelectItem Value="UserRole.Admin.ToString()" />
+                            <MudSelectItem Value="UserRole.Customer.ToString()" />
+                        </MudSelect>
+                    </MudCardContent>
+                    <MudCardActions Class="p-0">
+                        <MudButton ButtonType="ButtonType.Submit"
+                                   Variant="Variant.Filled"
+                                   Color="Color.Primary"
+                                   Class="ml-auto">
+                            @SharedResources.Create
+                        </MudButton>
+                    </MudCardActions>
+                </MudCard>
+            </MudContainer>
         </EditForm>
     </Authorized>
 </AuthorizeView>

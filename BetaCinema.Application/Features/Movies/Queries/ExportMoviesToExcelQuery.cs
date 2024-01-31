@@ -12,11 +12,7 @@ namespace BetaCinema.Application.Features.Movies.Queries
     public class ExportMoviesToExcelQuery : IRequest<byte[]>
     {
         public string? Keyword { get; set; } = string.Empty;
-
-        public ExportMoviesToExcelQuery(string? keyword)
-        {
-            Keyword = keyword;
-        }
+        public List<Movie>? SelectedItems { get; set; } = new();
     }
 
     /// <summary>
@@ -38,12 +34,13 @@ namespace BetaCinema.Application.Features.Movies.Queries
         public async Task<byte[]> Handle(ExportMoviesToExcelQuery request, CancellationToken cancellationToken)
         {
             // Lấy dữ liệu từ database
-            var data = await _context.Movies
+            var data = request.SelectedItems.Any() ? request.SelectedItems :
+                _context.Movies.AsNoTracking()
                 .Include(m => m.MovieCategories)
                     .ThenInclude(mc => mc.Category)
-                .OrderByDescending(m => m.ReleaseDate)
-                .AsNoTracking()
-                .ToListAsync(cancellationToken);
+                .OrderByDescending(m => m.ReleaseDate).ToList()
+                .Where(m => string.IsNullOrWhiteSpace(request.Keyword) || m.MovieName.ToLower().Contains(request.Keyword.ToLower()) ||
+                string.Join(", ", m.MovieCategories.Select(mc => mc.Category.CategoryName)).ToLower().Contains(request.Keyword.ToLower()) || m.ReleaseDate.Value.ToString("dd/MM/yyyy").Contains(request.Keyword));
 
             // Lấy dữ liệu
             var dataExport = _mapper.Map<List<MovieExport>>(data);

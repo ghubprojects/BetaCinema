@@ -12,11 +12,7 @@ namespace BetaCinema.Application.Features.Users.Queries
     public class ExportUsersToExcelQuery : IRequest<byte[]>
     {
         public string? Keyword { get; set; } = string.Empty;
-
-        public ExportUsersToExcelQuery(string? keyword)
-        {
-            Keyword = keyword;
-        }
+        public List<User>? SelectedItems { get; set; } = new();
     }
 
     /// <summary>
@@ -38,7 +34,9 @@ namespace BetaCinema.Application.Features.Users.Queries
         public async Task<byte[]> Handle(ExportUsersToExcelQuery request, CancellationToken cancellationToken)
         {
             // Lấy dữ liệu từ database
-            var data = await _context.Users
+            var data = request.SelectedItems.Any() ? request.SelectedItems :
+                await _context.Users
+                .Where(x => string.IsNullOrWhiteSpace(request.Keyword) || x.UserName.ToLower().Contains(request.Keyword.ToLower()) || x.FullName.ToLower().Contains(request.Keyword.ToLower()) || x.Email.ToLower().Contains(request.Keyword.ToLower()) || x.Role.ToLower().Contains(request.Keyword.ToLower()))
                 .OrderBy(u => u.Role)
                 .ThenBy(u => u.UserName)
                 .AsNoTracking()

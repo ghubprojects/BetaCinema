@@ -101,13 +101,11 @@ namespace BetaCinema.ServerUI.Pages.Admin.Movies
                 };
 
                 var result = await Mediator.Send(new UploadPosterMovieCommand()
-                {
-                    MovieData = MovieData,
-                    UploadRequest = uploadRequest
-                });
+                { UploadRequest = uploadRequest });
 
                 if (result.IsSuccess)
                 {
+                    MovieData.Poster = result.Data;
                     SnackBar.Add(SnackbarResources.UploadSuccess, Severity.Success);
                 }
                 else

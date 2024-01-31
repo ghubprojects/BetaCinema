@@ -12,32 +12,28 @@
 
         <EditForm Model="@SeatData" OnValidSubmit="@SaveChanges" Context="formContext">
             <DataAnnotationsValidator />
-            <MudGrid xs="12">
-                <MudContainer MaxWidth="MaxWidth.Medium">
-                    <MudCard Class="p-4">
-                        <MudCardContent Class="p-0 mb-4 d-flex flex-column gap-2">
-                            <MudTextField @bind-Value="@SeatData.RowNum"
-                                          Label="@SeatResources.RowNum"
-                                          Variant="Variant.Outlined"
-                                          Margin="Margin.Dense">
-                            </MudTextField>
-                            <MudTextField @bind-Value="@SeatData.SeatNum"
-                                          Label="@SeatResources.SeatNum"
-                                          Variant="Variant.Outlined"
-                                          Margin="Margin.Dense">
-                            </MudTextField>
-                        </MudCardContent>
-                        <MudCardActions Class="p-0">
-                            <MudButton ButtonType="ButtonType.Submit"
-                                       Variant="Variant.Filled"
-                                       Color="Color.Primary"
-                                       Class="ml-auto">
-                                @SharedResources.Update
-                            </MudButton>
-                        </MudCardActions>
-                    </MudCard>
-                </MudContainer>
-            </MudGrid>
+            <MudContainer MaxWidth="MaxWidth.Small">
+                <MudCard Class="p-4">
+                    <MudCardContent Class="p-0 mb-4 d-flex flex-column gap-2">
+                        <MudTextField @bind-Value="@SeatData.RowNum"
+                                      Label="@SeatResources.RowNum"
+                                      Variant="Variant.Outlined"
+                                      Margin="Margin.Dense">
+                        </MudTextField>
+                        <MudNumericField @bind-Value="@SeatData.SeatNum" HideSpinButtons="true" Min="1"
+                                         Variant="Variant.Outlined" Margin="Margin.Dense"
+                                         Label="@SeatResources.SeatNum" />
+                    </MudCardContent>
+                    <MudCardActions Class="p-0">
+                        <MudButton ButtonType="ButtonType.Submit"
+                                   Variant="Variant.Filled"
+                                   Color="Color.Primary"
+                                   Class="ml-auto">
+                            @SharedResources.Update
+                        </MudButton>
+                    </MudCardActions>
+                </MudCard>
+            </MudContainer>
         </EditForm>
     </Authorized>
 </AuthorizeView>

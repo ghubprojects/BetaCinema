@@ -25,6 +25,12 @@ namespace BetaCinema.ServerUI.Pages.Admin.Payments
             if (string.IsNullOrWhiteSpace(_searchString))
                 return true;
 
+            if (x.Reservation.User.UserName.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+                return true;
+
+            if (x.Reservation.User.Email.ToString().Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+                return true;
+
             if (x.TotalPrice.ToString().Contains(_searchString, StringComparison.OrdinalIgnoreCase))
                 return true;
 
@@ -54,7 +60,8 @@ namespace BetaCinema.ServerUI.Pages.Admin.Payments
 
         protected async Task DownloadExcelFile()
         {
-            var excelBytes = await Mediator.Send(new ExportPaymentsToExcelQuery(""));
+            var excelBytes = await Mediator.Send(new ExportPaymentsToExcelQuery()
+            { Keyword = _searchString });
 
             // Tạo 1 unique filename cho file excel
             string fileName = $"{typeof(Payment).Name}_{DateTime.Now:yyyyMMddHHmmss}.xlsx";

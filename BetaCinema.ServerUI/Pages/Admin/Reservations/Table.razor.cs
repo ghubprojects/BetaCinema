@@ -36,9 +36,6 @@ namespace BetaCinema.ServerUI.Pages.Admin.Reservations
             if (x.Showtime.StartTime.Value.ToString("dd/MM/yyyy HH:mm:ss").Contains(_searchString, StringComparison.OrdinalIgnoreCase))
                 return true;
 
-            if ($"{x.User.UserName} {x.Showtime.Movie.MovieName} {x.Showtime.Cinema.CinemaName} {x.Showtime.StartTime.Value.ToString("dd/MM/yyyy HH:mm:ss")}".Contains(_searchString))
-                return true;
-
             return false;
         };
 
@@ -62,7 +59,8 @@ namespace BetaCinema.ServerUI.Pages.Admin.Reservations
 
         protected async Task DownloadExcelFile()
         {
-            var excelBytes = await Mediator.Send(new ExportReservationsToExcelQuery(""));
+            var excelBytes = await Mediator.Send(new ExportReservationsToExcelQuery()
+            { Keyword = _searchString });
 
             // Tạo 1 unique filename cho file excel
             string fileName = $"{typeof(Domain.Models.Reservation).Name}_{DateTime.Now:yyyyMMddHHmmss}.xlsx";

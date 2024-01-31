@@ -12,11 +12,7 @@ namespace BetaCinema.Application.Features.Payments.Queries
     public class ExportPaymentsToExcelQuery : IRequest<byte[]>
     {
         public string? Keyword { get; set; } = string.Empty;
-
-        public ExportPaymentsToExcelQuery(string? keyword)
-        {
-            Keyword = keyword;
-        }
+        public List<Payment>? SelectedItems { get; set; } = new();
     }
 
     /// <summary>
@@ -38,12 +34,12 @@ namespace BetaCinema.Application.Features.Payments.Queries
         public async Task<byte[]> Handle(ExportPaymentsToExcelQuery request, CancellationToken cancellationToken)
         {
             // Lấy dữ liệu từ database
-            var data = await _context.Payments
+            var data = request.SelectedItems.Any() ? request.SelectedItems :
+                _context.Payments.AsNoTracking()
                 .Include(p => p.Reservation)
                     .ThenInclude(r => r.User)
-                .OrderByDescending(p => p.CreatedDate)
-                .AsNoTracking()
-                .ToListAsync(cancellationToken);
+                .OrderByDescending(p => p.CreatedDate).ToList()
+                .Where(x => string.IsNullOrWhiteSpace(request.Keyword) || x.Reservation.User.UserName.ToLower().Contains(request.Keyword.ToLower()) || x.Reservation.User.Email.ToLower().ToString().Contains(request.Keyword.ToLower()) || x.TotalPrice.ToString().Contains(request.Keyword.ToLower()) || x.CreatedDate.ToString("dd/MM/yyyy HH:mm:ss").Contains(request.Keyword.ToLower()));
 
             // Lấy dữ liệu
             var dataExport = _mapper.Map<List<PaymentExport>>(data);

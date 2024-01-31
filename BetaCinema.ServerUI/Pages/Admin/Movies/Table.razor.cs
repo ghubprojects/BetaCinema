@@ -101,7 +101,8 @@ namespace BetaCinema.ServerUI.Pages.Admin.Movies
 
         protected async Task DownloadExcelFile()
         {
-            var excelBytes = await Mediator.Send(new ExportMoviesToExcelQuery(""));
+            var excelBytes = await Mediator.Send(new ExportMoviesToExcelQuery()
+            { Keyword = _searchString, SelectedItems = selectedItems.ToList() });
 
             // Tạo 1 unique filename cho file excel
             string fileName = $"{typeof(Movie).Name}_{DateTime.Now:yyyyMMddHHmmss}.xlsx";

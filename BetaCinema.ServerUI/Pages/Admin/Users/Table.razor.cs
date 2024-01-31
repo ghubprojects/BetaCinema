@@ -40,9 +40,6 @@ namespace BetaCinema.ServerUI.Pages.Admin.Users
             if (x.Role.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
                 return true;
 
-            if ($"{x.UserName} {x.FullName} {x.Email} {x.Role}".Contains(_searchString))
-                return true;
-
             return false;
         };
 
@@ -107,7 +104,8 @@ namespace BetaCinema.ServerUI.Pages.Admin.Users
 
         protected async Task DownloadExcelFile()
         {
-            var excelBytes = await Mediator.Send(new ExportUsersToExcelQuery(""));
+            var excelBytes = await Mediator.Send(new ExportUsersToExcelQuery()
+            { Keyword = _searchString, SelectedItems = selectedItems.ToList() });
 
             // Tạo 1 unique filename cho file excel
             string fileName = $"{typeof(User).Name}_{DateTime.Now:yyyyMMddHHmmss}.xlsx";
