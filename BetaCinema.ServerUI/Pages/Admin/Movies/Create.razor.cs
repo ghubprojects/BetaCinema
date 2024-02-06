@@ -69,6 +69,7 @@ namespace BetaCinema.ServerUI.Pages.Admin.Movies
         /// </summary>
 
         protected IList<IBrowserFile> files = new List<IBrowserFile>();
+        private readonly long maxFileSize = 1024 * 1024 * 3;
 
         protected async Task UploadPoster(IBrowserFile file)
         {
@@ -78,25 +79,36 @@ namespace BetaCinema.ServerUI.Pages.Admin.Movies
             {
                 var uploadRequest = new UploadRequest()
                 {
-                    MaxFileSize = 1024 * 1024 * 3,
+                    MaxFileSize = maxFileSize,
                     UploadedFiles = files
                 };
 
-                var result = await Mediator.Send(new UploadPosterMovieCommand()
-                { UploadRequest = uploadRequest });
-
-                if (result.IsSuccess)
-                {
-                    MovieData.Poster = result.Data;
-                    SnackBar.Add(SnackbarResources.UploadSuccess, Severity.Success);
-                }
-                else
+                if (files.Any(f => f.Size > maxFileSize))
                 {
                     DialogService.Show<ErrorMessageDialog>(SharedResources.Error,
                         new DialogParameters<ErrorMessageDialog>
                         {
-                            { x => x.ContentText, result.Message },
+                            { x => x.ContentText, "Kích cỡ file tối đa là 3MB. Vui lòng kiểm tra lại." },
                         }, new DialogOptions() { MaxWidth = MaxWidth.ExtraSmall });
+                }
+                else
+                {
+                    var result = await Mediator.Send(new UploadPosterMovieCommand()
+                    { UploadRequest = uploadRequest });
+
+                    if (result.IsSuccess)
+                    {
+                        MovieData.Poster = result.Data;
+                        SnackBar.Add(SnackbarResources.UploadSuccess, Severity.Success);
+                    }
+                    else
+                    {
+                        DialogService.Show<ErrorMessageDialog>(SharedResources.Error,
+                            new DialogParameters<ErrorMessageDialog>
+                            {
+                                { x => x.ContentText, result.Message },
+                            }, new DialogOptions() { MaxWidth = MaxWidth.ExtraSmall });
+                    }
                 }
             }
 

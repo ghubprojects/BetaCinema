@@ -10,7 +10,7 @@
     <Authorized>
         <MudPaper Elevation="0">
             <MudPaper Elevation="0" Class="d-flex gap-4 justify-space-between align-items-center admin-table-title">
-                <h4 class="mb-0">@string.Format(SharedResources.TableTitle, "giờ chiếu")</h4>
+                <h4 class="mb-0">@string.Format(SharedResources.TableTitle, ShowtimeResources.Showtime)</h4>
 
                 <div class="form-group d-flex gap-2">
                     <MudButton Size="Size.Small" Variant="@Variant.Filled" Color="@Color.Primary"
@@ -83,10 +83,26 @@
                  </ColGroup>
 
                  <HeaderContent>
-                     <MudTh>@MovieResources.MovieName</MudTh>
-                     <MudTh>@CinemaResources.CinemaName</MudTh>
-                     <MudTh>@ShowtimeResources.StartTime</MudTh>
-                     <MudTh>@ShowtimeResources.TicketPrice</MudTh>
+                     <MudTh>
+                         <MudTableSortLabel SortBy="new Func<Showtime, object>(x=>x.Movie.MovieName)">
+                             @MovieResources.MovieName
+                         </MudTableSortLabel>
+                     </MudTh>
+                     <MudTh>
+                         <MudTableSortLabel SortBy="new Func<Showtime, object>(x=>x.Cinema.CinemaName)">
+                             @CinemaResources.CinemaName
+                         </MudTableSortLabel>
+                     </MudTh>
+                     <MudTh>
+                         <MudTableSortLabel SortBy="new Func<Showtime, object>(x=>x.StartTime)">
+                             @ShowtimeResources.StartTime
+                         </MudTableSortLabel>
+                     </MudTh>
+                     <MudTh>
+                         <MudTableSortLabel SortBy="new Func<Showtime, object>(x=>x.TicketPrice)">
+                             @ShowtimeResources.TicketPrice
+                         </MudTableSortLabel>
+                     </MudTh>
                      <MudTh>@SharedResources.OptionsColumnTitle</MudTh>
                  </HeaderContent>
 

@@ -1,18 +1,14 @@
 ﻿using BetaCinema.Application.Interfaces;
 using BetaCinema.Application.Requests;
-using BetaCinema.Domain.Models;
 using BetaCinema.Domain.Resources;
 using BetaCinema.Domain.Wrappers;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
 namespace BetaCinema.Application.Features.Users.Commands
 {
     public class UploadAvatarUserCommand : IRequest<ServiceResult>
     {
-        public User UserData { get; set; }
-
         public UploadRequest UploadRequest { get; set; }
 
         /// <summary>
@@ -36,7 +32,6 @@ namespace BetaCinema.Application.Features.Users.Commands
                 {
                     var avatarFile = request.UploadRequest.UploadedFiles[0];
 
-
                     // create file name
                     string newFileName = Path.ChangeExtension(Path.GetRandomFileName(), Path.GetExtension(avatarFile.Name));
 
@@ -50,11 +45,7 @@ namespace BetaCinema.Application.Features.Users.Commands
                     await using FileStream fs = new(path, FileMode.Create);
                     await avatarFile.OpenReadStream(request.UploadRequest.MaxFileSize).CopyToAsync(fs);
 
-                    // update to database
-                    request.UserData.Avatar = newFileName;
-                    _context.Entry(request.UserData).State = EntityState.Modified;
-                    await _context.SaveChangesAsync(cancellationToken);
-                    return new ServiceResult(true);
+                    return new ServiceResult(true, "", newFileName);
                 }
                 catch (Exception)
                 {

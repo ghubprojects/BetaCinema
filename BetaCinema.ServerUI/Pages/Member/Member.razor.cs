@@ -9,6 +9,8 @@ namespace BetaCinema.ServerUI.Pages.Member
     {
         [Inject] private AuthenticationStateProvider AuthenticationStateProvider { get; set; }
 
+        [Inject] protected NavigationManager Navigation { get; set; }
+
         [Inject] private IConfiguration Configuration { get; set; }
 
         [Inject] private IMediator Mediator { get; set; }
@@ -20,6 +22,8 @@ namespace BetaCinema.ServerUI.Pages.Member
         public string UserId { get; set; }
 
         public User UserData { get; set; }
+
+        protected User OldData { get; set; } = new();
 
         private async Task<string> RetrieveUserId()
         {
@@ -41,6 +45,7 @@ namespace BetaCinema.ServerUI.Pages.Member
             if (result.IsSuccess)
             {
                 UserData = result.Data;
+                OldData = result.Data;
             }
             else
             {
@@ -53,9 +58,25 @@ namespace BetaCinema.ServerUI.Pages.Member
 
         protected async Task SaveChanges()
         {
-            await Mediator.Send(new UpdateUserCommand() { Data = UserData });
+            var result = await Mediator.Send(new UpdateUserCommand()
+            {
+                Data = UserData,
+                OldData = OldData,
+            });
 
-            SnackBar.Add(SnackbarResources.UpdateSuccess, Severity.Success);
+            if (result.IsSuccess)
+            {
+                SnackBar.Add(SnackbarResources.UpdateSuccess, Severity.Success);
+                Navigation.NavigateTo("member", true);
+            }
+            else
+            {
+                DialogService.Show<ErrorMessageDialog>(SharedResources.Error,
+                    new DialogParameters<ErrorMessageDialog>
+                    {
+                        { x => x.ContentText, result.Message },
+                    }, new DialogOptions() { MaxWidth = MaxWidth.ExtraSmall });
+            }
         }
 
         /// <summary>
@@ -63,6 +84,7 @@ namespace BetaCinema.ServerUI.Pages.Member
         /// </summary>
 
         protected IList<IBrowserFile> files = new List<IBrowserFile>();
+        private readonly long maxFileSize = 1024 * 1024 * 3;
 
         protected async Task UploadAvatar(IBrowserFile avatarFile)
         {
@@ -72,19 +94,36 @@ namespace BetaCinema.ServerUI.Pages.Member
             {
                 var uploadRequest = new UploadRequest()
                 {
-                    MaxFileSize = 1024 * 1024 * 3,
+                    MaxFileSize = maxFileSize,
                     UploadedFiles = files
                 };
 
-                var result = await Mediator.Send(new UploadAvatarUserCommand()
+                if (files.Any(f => f.Size > maxFileSize))
                 {
-                    UserData = UserData,
-                    UploadRequest = uploadRequest
-                });
+                    DialogService.Show<ErrorMessageDialog>(SharedResources.Error,
+                        new DialogParameters<ErrorMessageDialog>
+                        {
+                            { x => x.ContentText, "Kích cỡ file tối đa là 3MB. Vui lòng kiểm tra lại." },
+                        }, new DialogOptions() { MaxWidth = MaxWidth.ExtraSmall });
+                }
+                else
+                {
+                    var result = await Mediator.Send(new UploadAvatarUserCommand()
+                    { UploadRequest = uploadRequest });
 
-                if (result.IsSuccess)
-                {
-                    SnackBar.Add("Upload avatar successfully", Severity.Success);
+                    if (result.IsSuccess)
+                    {
+                        UserData.Avatar = result.Data;
+                        SnackBar.Add(SnackbarResources.UploadSuccess, Severity.Success);
+                    }
+                    else
+                    {
+                        DialogService.Show<ErrorMessageDialog>(SharedResources.Error,
+                            new DialogParameters<ErrorMessageDialog>
+                            {
+                                { x => x.ContentText, result.Message },
+                            }, new DialogOptions() { MaxWidth = MaxWidth.ExtraSmall });
+                    }
                 }
             }
 

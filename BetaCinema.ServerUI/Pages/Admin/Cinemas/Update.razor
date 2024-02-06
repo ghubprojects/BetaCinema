@@ -8,7 +8,7 @@
         <RedirectToLogin />
     </NotAuthorized>
     <Authorized>
-        <h3 class="mb-8">@string.Format(SharedResources.UpdateTitle, "rạp phim")</h3>
+        <h3 class="mb-8">@string.Format(SharedResources.UpdateTitle, CinemaResources.CinemaName)</h3>
 
         <EditForm Model="@CinemaData" OnValidSubmit="@SaveChanges" Context="formContext">
             <DataAnnotationsValidator />

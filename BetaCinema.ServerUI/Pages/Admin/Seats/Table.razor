@@ -10,7 +10,7 @@
     <Authorized>
         <MudPaper Elevation="0">
             <MudPaper Elevation="0" Class="d-flex gap-4 justify-space-between align-items-center admin-table-title">
-                <h4 class="mb-0">@string.Format(SharedResources.TableTitle, "ghế")</h4>
+                <h4 class="mb-0">@string.Format(SharedResources.TableTitle, SeatResources.Seat)</h4>
                 <div class="form-group d-flex gap-2">
                     <MudButton Size="Size.Small" Variant="@Variant.Filled" Color="@Color.Primary"
                                OnClick="@(()=> Navigation.NavigateTo("admin/seats/create"))">
@@ -57,8 +57,16 @@
                  </ColGroup>
 
                  <HeaderContent>
-                     <MudTh>@SeatResources.RowNum</MudTh>
-                     <MudTh>@SeatResources.SeatNum</MudTh>
+                     <MudTh>
+                         <MudTableSortLabel SortBy="new Func<Seat, object>(x=>x.RowNum)">
+                             @SeatResources.RowNum
+                         </MudTableSortLabel>
+                     </MudTh>
+                     <MudTh>
+                         <MudTableSortLabel SortBy="new Func<Seat, object>(x=>x.SeatNum)">
+                             @SeatResources.SeatNum
+                         </MudTableSortLabel>
+                     </MudTh>
                      <MudTh>@SharedResources.OptionsColumnTitle</MudTh>
                  </HeaderContent>
 

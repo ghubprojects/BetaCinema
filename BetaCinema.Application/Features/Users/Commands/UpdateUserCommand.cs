@@ -63,7 +63,7 @@ namespace BetaCinema.Application.Features.Users.Commands
             {
                 var searchResult = await _context.Users
                    .Where(u => !u.DeleteFlag)
-                   .FirstOrDefaultAsync(u => u.UserName.ToLower() == user.UserName.ToLower() && u.UserName.ToLower() == old.UserName.ToLower());
+                   .FirstOrDefaultAsync(u => u.UserName.ToLower() == user.UserName.ToLower() && u.UserName.ToLower() != old.UserName.ToLower());
 
                 if (searchResult != null)
                     errors.Add(string.Format(MessageResouces.Duplicated, UserResources.UserName));

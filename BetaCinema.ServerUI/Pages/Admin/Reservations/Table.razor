@@ -10,7 +10,7 @@
     <Authorized>
         <MudPaper Elevation="0">
             <MudPaper Elevation="0" Class="d-flex gap-4 justify-space-between align-items-center admin-table-title">
-                <h4 class="mb-0">@string.Format(SharedResources.TableTitle, "đặt chỗ")</h4>
+                <h4 class="mb-0">@string.Format(SharedResources.TableTitle, ReservationResources.Reservation)</h4>
 
                 <div class="form-group d-flex gap-2">
                     <MudButton Size="Size.Small" Variant="@Variant.Filled" Color="@Color.Primary"
@@ -54,9 +54,21 @@
 
                  <HeaderContent>
                      <MudTh>@UserResources.UserName</MudTh>
-                     <MudTh>@MovieResources.MovieName</MudTh>
-                     <MudTh>@CinemaResources.CinemaName</MudTh>
-                     <MudTh>@ShowtimeResources.StartTime</MudTh>
+                     <MudTh>
+                         <MudTableSortLabel SortBy="new Func<Reservation, object>(x=>x.Showtime.Movie.MovieName)">
+                             @MovieResources.MovieName
+                         </MudTableSortLabel>
+                     </MudTh>
+                     <MudTh>
+                         <MudTableSortLabel SortBy="new Func<Reservation, object>(x=>x.Showtime.Cinema.CinemaName)">
+                             @CinemaResources.CinemaName
+                         </MudTableSortLabel>
+                     </MudTh>
+                     <MudTh>
+                         <MudTableSortLabel SortBy="new Func<Reservation, object>(x=>x.Showtime.StartTime)">
+                             @ShowtimeResources.StartTime
+                         </MudTableSortLabel>
+                     </MudTh>
                      <MudTh>@SeatResources.Seat</MudTh>
                  </HeaderContent>
 
@@ -65,14 +77,16 @@
                      <MudTd>@tableContext.Showtime.Movie.MovieName</MudTd>
                      <MudTd>@tableContext.Showtime.Cinema.CinemaName</MudTd>
                      <MudTd>@tableContext.Showtime.StartTime.Value.ToString("dd/MM/yyyy HH:mm:ss")</MudTd>
-                     <MudTd>@(string.Join(", ",
-                         tableContext.ReservationItems.Select(ri => $"{ri.Seat.RowNum}{ri.Seat.SeatNum}")))</MudTd>
-                 </RowTemplate>
+                     <MudTd>
+                         @(string.Join(", ",
+                        tableContext.ReservationItems.Select(ri => $"{ri.Seat.RowNum}{ri.Seat.SeatNum}")))
+                    </MudTd>
+                </RowTemplate>
 
-                 <PagerContent>
-                     <MudTablePager RowsPerPageString="Số bản ghi mỗi trang" PageSizeOptions="new int[] { 20, 30, 50, 80, 100 }" />
-                 </PagerContent>
-             </MudTable>
+                <PagerContent>
+                    <MudTablePager RowsPerPageString="Số bản ghi mỗi trang" PageSizeOptions="new int[] { 20, 30, 50, 80, 100 }" />
+                </PagerContent>
+            </MudTable>
         }
     </Authorized>
 </AuthorizeView>

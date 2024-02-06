@@ -10,12 +10,12 @@
     <Authorized>
         <MudPaper Elevation="0">
             <MudPaper Elevation="0" Class="d-flex gap-4 justify-space-between align-items-center admin-table-title">
-                <h4 class="mb-0">@string.Format(SharedResources.TableTitle, "phim")</h4>
+                <h4 class="mb-0">@string.Format(SharedResources.TableTitle, MovieResources.Movie)</h4>
                 <div class="form-group d-flex gap-2">
                     <MudButton Size="Size.Small" Variant="@Variant.Filled" Color="@Color.Primary"
                                OnClick="@(()=> Navigation.NavigateTo("admin/movies/create"))">
                         @SharedResources.Create
-                        <MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.Add" Class="ml-1"/>
+                        <MudIcon Size="Size.Small" Icon="@Icons.Material.Filled.Add" Class="ml-1" />
                     </MudButton>
                     <MudButton Size="Size.Small" Variant="@Variant.Filled" Color="@Color.Primary"
                                OnClick="@DownloadExcelFile">
@@ -85,10 +85,22 @@
                  </ColGroup>
 
                  <HeaderContent>
-                     <MudTh>@MovieResources.MovieName</MudTh>
+                     <MudTh>
+                         <MudTableSortLabel SortBy="new Func<Movie, object>(x=>x.MovieName)">
+                             @MovieResources.MovieName
+                         </MudTableSortLabel>
+                     </MudTh>
                      <MudTh>@CategoryResources.CategoryName</MudTh>
-                     <MudTh>@MovieResources.Duration</MudTh>
-                     <MudTh>@MovieResources.ReleaseDate</MudTh>
+                     <MudTh>
+                         <MudTableSortLabel SortBy="new Func<Movie, object>(x=>x.Duration)">
+                             @MovieResources.Duration
+                         </MudTableSortLabel>
+                     </MudTh>
+                     <MudTh>
+                         <MudTableSortLabel SortBy="new Func<Movie, object>(x=>x.ReleaseDate)">
+                             @MovieResources.ReleaseDate
+                         </MudTableSortLabel>
+                     </MudTh>
                      <MudTh>@MovieResources.Director</MudTh>
                      <MudTh>@SharedResources.OptionsColumnTitle</MudTh>
                  </HeaderContent>

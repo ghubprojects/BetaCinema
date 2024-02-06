@@ -10,7 +10,7 @@
     <Authorized>
         <MudPaper Elevation="0">
             <MudPaper Elevation="0" Class="d-flex gap-4 justify-space-between align-items-center admin-table-title">
-                <h4 class="mb-0">@string.Format(SharedResources.TableTitle, "người dùng")</h4>
+                <h4 class="mb-0">@string.Format(SharedResources.TableTitle, UserResources.User)</h4>
                 <div class="form-group d-flex gap-2">
                     <MudButton Size="Size.Small" Variant="@Variant.Filled" Color="@Color.Primary"
                                OnClick="@(()=>Navigation.NavigateTo("admin/users/create"))">
@@ -79,16 +79,30 @@
                      <col />
                      <col />
                      <col />
-                     <col />
                      <col style="width: 10%;" />
                  </ColGroup>
 
                  <HeaderContent>
-                     <MudTh>@UserResources.UserName</MudTh>
-                     <MudTh>@UserResources.FullName</MudTh>
-                     <MudTh>@UserResources.Email</MudTh>
-                     <MudTh>@UserResources.Password</MudTh>
-                     <MudTh>@UserResources.Role</MudTh>
+                     <MudTh>
+                         <MudTableSortLabel SortBy="new Func<User, object>(x=>x.UserName)">
+                             @UserResources.UserName
+                         </MudTableSortLabel>
+                     </MudTh>
+                     <MudTh>
+                         <MudTableSortLabel SortBy="new Func<User, object>(x=>x.FullName)">
+                             @UserResources.FullName
+                         </MudTableSortLabel>
+                     </MudTh>
+                     <MudTh>
+                         <MudTableSortLabel SortBy="new Func<User, object>(x=>x.Email)">
+                             @UserResources.Email
+                         </MudTableSortLabel>
+                     </MudTh>
+                     <MudTh>
+                         <MudTableSortLabel SortBy="new Func<User, object>(x=>x.Role)">
+                             @UserResources.Role
+                         </MudTableSortLabel>
+                     </MudTh>
                      <MudTh>@SharedResources.OptionsColumnTitle</MudTh>
                  </HeaderContent>
 
@@ -96,7 +110,6 @@
                      <MudTd>@tableContext.UserName</MudTd>
                      <MudTd>@tableContext.FullName</MudTd>
                      <MudTd>@tableContext.Email</MudTd>
-                     <MudTd>@tableContext.Password</MudTd>
                      <MudTd>@tableContext.Role</MudTd>
                      <MudTd>
                          <MudStack Row Spacing="2">

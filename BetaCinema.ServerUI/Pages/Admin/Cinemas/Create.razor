@@ -8,7 +8,7 @@
         <RedirectToLogin />
     </NotAuthorized>
     <Authorized>
-        <h3 class="mb-8">@string.Format(SharedResources.CreateTitle, "phim")</h3>
+        <h3 class="mb-8">@string.Format(SharedResources.CreateTitle, CinemaResources.CinemaName)</h3>
 
         <EditForm Model="@CinemaData" OnValidSubmit="@CreateCinema" Context="formContext">
             <DataAnnotationsValidator />

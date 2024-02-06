@@ -8,7 +8,7 @@
         <RedirectToLogin />
     </NotAuthorized>
     <Authorized>
-        <h3 class="mb-8">@string.Format(SharedResources.UpdateTitle, "ghế")</h3>
+        <h3 class="mb-8">@string.Format(SharedResources.UpdateTitle, SeatResources.Seat)</h3>
 
         <EditForm Model="@SeatData" OnValidSubmit="@SaveChanges" Context="formContext">
             <DataAnnotationsValidator />

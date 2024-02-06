@@ -9,7 +9,7 @@
     <Authorized>
         <MudPaper Elevation="0">
             <MudPaper Elevation="0" Class="d-flex gap-4 justify-space-between align-items-center admin-table-title">
-                <h4 class="mb-0">@string.Format(SharedResources.TableTitle, "hóa đơn")</h4>
+                <h4 class="mb-0">@string.Format(SharedResources.TableTitle, PaymentResources.Payment)</h4>
                 <div class="form-group d-flex gap-2">
                     <MudButton Size="Size.Small" Variant="@Variant.Filled" Color="@Color.Primary" OnClick="@DownloadExcelFile">
                         @SharedResources.ExportExcel
@@ -51,8 +51,16 @@
                  <HeaderContent>
                      <MudTh>@UserResources.UserName</MudTh>
                      <MudTh>@UserResources.Email</MudTh>
-                     <MudTh>@PaymentResources.TotalPrice</MudTh>
-                     <MudTh>@PaymentResources.PaymentTime</MudTh>
+                     <MudTh>
+                         <MudTableSortLabel SortBy="new Func<Payment, object>(x=>x.TotalPrice)">
+                             @PaymentResources.TotalPrice
+                         </MudTableSortLabel>
+                     </MudTh>
+                     <MudTh>
+                         <MudTableSortLabel SortBy="new Func<Payment, object>(x=>x.CreatedDate)">
+                             @PaymentResources.PaymentTime
+                         </MudTableSortLabel>
+                     </MudTh>
                  </HeaderContent>
 
                  <RowTemplate>

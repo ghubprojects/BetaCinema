@@ -42,7 +42,7 @@ namespace BetaCinema.ServerUI.Pages.Admin.Slides
             var dialog = DialogService.Show<DeleteConfirmation>(DialogResources.DeleteTitle, new DialogParameters<DeleteConfirmation>
             {
                 { x => x.Command,  new DeleteSlideCommand() { FileName = fileName } },
-                { x => x.ContentText, string.Format(DialogResources.ConfirmDelete, "slide", "đã chọn") }
+                { x => x.ContentText, string.Format(DialogResources.ConfirmDelete, "slide", "Đã chọn") }
             }, new DialogOptions
             {
                 MaxWidth = MaxWidth.ExtraSmall,

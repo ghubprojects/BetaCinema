@@ -10,7 +10,7 @@
     <Authorized>
         <MudPaper Elevation="0">
             <MudPaper Elevation="0" Class="d-flex gap-4 justify-space-between align-items-center admin-table-title">
-                <h4 class="mb-0">@string.Format(SharedResources.TableTitle, "rạp phim")</h4>
+                <h4 class="mb-0">@string.Format(SharedResources.TableTitle, CinemaResources.CinemaName)</h4>
                 <div class="form-group d-flex gap-2">
                     <MudButton Size="Size.Small" Variant="@Variant.Filled" Color="@Color.Primary"
                                OnClick="@(()=> Navigation.NavigateTo("admin/cinemas/create"))">

@@ -74,6 +74,10 @@
     padding: 6px 6px 6px 0 !important;
 }
 
+.admin-table.toolbar .mud-table-container thead .mud-table-sort-label {
+    font-weight: 500 !important;
+}
+
 /* Home page */
 .location-menu {
     min-width: 150px !important;

@@ -7,7 +7,7 @@
         <RedirectToLogin />
     </NotAuthorized>
     <Authorized>
-        <h3 class="mb-8">@string.Format(SharedResources.CreateTitle, "thể loại")</h3>
+        <h3 class="mb-8">@string.Format(SharedResources.CreateTitle, CategoryResources.CategoryName)</h3>
 
         <EditForm Model="@CategoryData" OnValidSubmit="@CreateCategory" Context="formContext">
             <DataAnnotationsValidator />
