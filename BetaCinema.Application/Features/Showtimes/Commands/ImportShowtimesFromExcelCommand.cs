@@ -123,29 +123,11 @@ namespace BetaCinema.Application.Features.Showtimes.Commands
             {
                 errors.Add(string.Format(MessageResouces.Required, MovieResources.MovieName));
             }
-            else
-            {
-                var searchResult = await _context.Movies
-                   .Where(m => !m.DeleteFlag)
-                   .FirstOrDefaultAsync(m => m.MovieName.ToLower() == showtimeImport.MovieName.ToLower());
-
-                if (searchResult == null)
-                    errors.Add(string.Format(MessageResouces.NotExisted, MovieResources.MovieName));
-            }
 
             // Validate CinemaName
             if (string.IsNullOrWhiteSpace(showtimeImport.CinemaName))
             {
                 errors.Add(string.Format(MessageResouces.Required, CinemaResources.CinemaName));
-            }
-            else
-            {
-                var searchResult = await _context.Cinemas
-                   .Where(c => !c.DeleteFlag)
-                   .FirstOrDefaultAsync(c => c.CinemaName.ToLower() == showtimeImport.CinemaName.ToLower());
-
-                if (searchResult == null)
-                    errors.Add(string.Format(MessageResouces.NotExisted, CinemaResources.CinemaName));
             }
 
             // Check duplicated showtime by movieId and cinemaId
@@ -155,16 +137,29 @@ namespace BetaCinema.Application.Features.Showtimes.Commands
                     .Where(m => !m.DeleteFlag)
                     .FirstOrDefaultAsync(m => m.MovieName.ToLower() == showtimeImport.MovieName.ToLower());
 
+                if (movie == null)
+                {
+                    errors.Add(string.Format(MessageResouces.NotExisted, MovieResources.MovieName));
+                }
+
                 var cinema = await _context.Cinemas
                     .Where(c => !c.DeleteFlag)
                     .FirstOrDefaultAsync(c => c.CinemaName.ToLower() == showtimeImport.CinemaName.ToLower());
 
-                var showtimeExists = _context.Showtimes
-                    .Any(s => s.MovieId == movie.Id && s.CinemaId == cinema.Id && s.StartTime == showtimeImport.StartTime);
-
-                if (showtimeExists)
+                if (cinema == null)
                 {
-                    errors.Add(string.Format(MessageResouces.Duplicated, ShowtimeResources.StartTime));
+                    errors.Add(string.Format(MessageResouces.NotExisted, CinemaResources.CinemaName));
+                }
+
+                if (movie != null && cinema != null)
+                {
+                    var showtimeExists = _context.Showtimes
+                                        .Any(s => s.MovieId == movie.Id && s.CinemaId == cinema.Id && s.StartTime == showtimeImport.StartTime);
+
+                    if (showtimeExists)
+                    {
+                        errors.Add(string.Format(MessageResouces.Duplicated, ShowtimeResources.StartTime));
+                    }
                 }
             }
 
