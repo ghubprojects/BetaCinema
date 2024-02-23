@@ -123,6 +123,9 @@
   <data name="Duplicated" xml:space="preserve">
     <value>{0} đã tồn tại</value>
   </data>
+  <data name="ExistedReference" xml:space="preserve">
+    <value>Tồn tại {0} tham chiếu đến {1}</value>
+  </data>
   <data name="GreaterThan0" xml:space="preserve">
     <value>{0} phải lớn hơn 0</value>
   </data>

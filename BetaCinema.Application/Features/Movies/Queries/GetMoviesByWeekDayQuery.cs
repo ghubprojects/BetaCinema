@@ -23,7 +23,7 @@ namespace BetaCinema.Application.Features.Movies.Commands
 
         public async Task<List<Movie>> Handle(GetMoviesByWeekDayQuery request, CancellationToken cancellationToken)
         {
-            return _context.Movies
+            return await _context.Movies
                 .Include(m => m.MovieCategories)
                     .ThenInclude(mc => mc.Category)
                 .Where(m => !m.DeleteFlag && m.ReleaseDate <= DateTime.Today)
@@ -33,7 +33,7 @@ namespace BetaCinema.Application.Features.Movies.Commands
                     s.StartTime.Value.Date == request.ShowDate.Date))
                 .OrderByDescending(m => m.ReleaseDate)
                 .ThenBy(m => m.MovieName)
-                .ToList();
+                .ToListAsync(cancellationToken);
         }
     }
 }

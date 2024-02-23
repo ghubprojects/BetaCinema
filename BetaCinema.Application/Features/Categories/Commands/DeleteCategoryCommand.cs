@@ -30,6 +30,13 @@ namespace BetaCinema.Application.Features.Categories.Commands
         {
             try
             {
+                // Validate
+                var validateResult = await ValidateAsync(request.Id);
+
+                // If errors, return false
+                if (validateResult.Any())
+                    return new ServiceResult(false, validateResult.First());
+
                 var category = await _context.Categories
                     .Where(c => !c.DeleteFlag)
                     .FirstOrDefaultAsync(c => c.Id == request.Id, cancellationToken);
@@ -48,6 +55,32 @@ namespace BetaCinema.Application.Features.Categories.Commands
             {
                 return new ServiceResult(false, ErrorResources.UnhandledError);
             }
+        }
+
+        /// <summary>
+        /// Validate Category before deleting
+        /// </summary>
+        /// <param name="category"></param>
+        /// <returns></returns>
+        private async Task<List<string>> ValidateAsync(string categoryId)
+        {
+            var errors = new List<string>();
+
+            // Check if exists any movie use this category or not
+            var searchResult = await _context.MovieCategories
+                .Where(x => !x.DeleteFlag)
+                .FirstOrDefaultAsync(x => x.CategoryId == categoryId);
+
+            if (searchResult != null)
+            {
+                var category = await _context.Categories
+                    .Where(c => !c.DeleteFlag)
+                    .FirstOrDefaultAsync(c => c.Id == categoryId);
+
+                errors.Add(string.Format(MessageResouces.ExistedReference, MovieResources.Movie, $"{CategoryResources.CategoryName} \"{category.CategoryName}\""));
+            }
+
+            return errors;
         }
     }
 }

@@ -61,6 +61,15 @@ namespace BetaCinema.Domain.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Tồn tại {0} tham chiếu đến {1}.
+        /// </summary>
+        public static string ExistedReference {
+            get {
+                return ResourceManager.GetString("ExistedReference", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Lỗi khi xuất dữ liệu.
         /// </summary>
         public static string ExportError {

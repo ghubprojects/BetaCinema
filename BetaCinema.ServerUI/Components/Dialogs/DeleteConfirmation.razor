@@ -39,6 +39,7 @@
         }
         else
         {
+            MudDialog.Cancel();
             Snackbar.Add($"{result.Message}", Severity.Error);
         }
     }
