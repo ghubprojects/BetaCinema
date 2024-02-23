@@ -26,5 +26,7 @@ public partial class Showtime
 
     public virtual Movie Movie { get; set; } = null!;
 
+    public virtual ICollection<ProcessSeat> ProcessSeats { get; set; } = new List<ProcessSeat>();
+
     public virtual ICollection<Reservation> Reservations { get; set; } = new List<Reservation>();
 }

@@ -1,6 +1,7 @@
 ﻿using BetaCinema.Application;
 using BetaCinema.Infrastructure;
 using BetaCinema.Infrastructure.Persistence;
+using BetaCinema.ServerUI.Hubs;
 using BetaCinema.ServerUI.Middlewares;
 using MudBlazor.Services;
 
@@ -9,6 +10,8 @@ var builder = WebApplication.CreateBuilder(args);
     // Add services to the container.
     builder.Services.AddRazorPages();
     builder.Services.AddServerSideBlazor();
+
+    builder.Services.AddSignalR();
 
     builder.Services.AddMudServices(config =>
     {
@@ -59,6 +62,7 @@ var app = builder.Build();
     app.UseAuthorization();
 
     app.MapBlazorHub();
+    app.MapHub<ProcessSeatHub>("/signalRHub");
     app.MapFallbackToPage("/_Host");
 
     app.UseMiddleware<ErrorHandlerMiddleware>();

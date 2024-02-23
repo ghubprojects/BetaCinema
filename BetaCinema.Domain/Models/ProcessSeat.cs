@@ -1,14 +1,12 @@
 ﻿namespace BetaCinema.Domain.Models;
 
-public partial class Reservation
+public partial class ProcessSeat
 {
     public string Id { get; set; } = null!;
 
     public string ShowtimeId { get; set; } = null!;
 
-    public string UserId { get; set; } = null!;
-
-    public bool DeleteFlag { get; set; }
+    public string SeatId { get; set; } = null!;
 
     public DateTime CreatedDate { get; set; }
 
@@ -18,11 +16,9 @@ public partial class Reservation
 
     public string? ModifiedBy { get; set; }
 
-    public virtual ICollection<Payment> Payments { get; set; } = new List<Payment>();
+    public bool DeleteFlag { get; set; }
 
-    public virtual ICollection<ReservationItem> ReservationItems { get; set; } = new List<ReservationItem>();
+    public virtual Seat Seat { get; set; } = null!;
 
     public virtual Showtime Showtime { get; set; } = null!;
-
-    public virtual User User { get; set; } = null!;
 }

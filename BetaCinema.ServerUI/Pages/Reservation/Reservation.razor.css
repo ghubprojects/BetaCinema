@@ -78,6 +78,12 @@
         cursor: not-allowed;
     }
 
+    .seat.process {
+        color: #fff;
+        background-image: url("/assets/images/seat-process.png");
+        cursor: not-allowed;
+    }
+
 .submit-button {
     font-family: Oswald, sans-serif;
     font-size: 14px;
@@ -92,10 +98,11 @@
 
 .seat-status {
     font-family: Oswald, sans-serif;
-    font-size: 18px;
+    font-size: 16px;
 }
 
-.total-price-title {
+.total-price-title,
+.timer-title {
     font-family: Oswald, sans-serif;
     font-size: 18px;
 }
@@ -104,6 +111,13 @@
     font-family: Oswald, sans-serif;
     font-size: 18px;
     color: #03599d;
+    text-align: right;
+}
+
+.timer-count {
+    font-family: Oswald, sans-serif;
+    font-size: 38px;
+    color: #000;
     text-align: right;
 }
 

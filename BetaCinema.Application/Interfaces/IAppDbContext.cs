@@ -16,6 +16,8 @@ namespace BetaCinema.Application.Interfaces
 
         DbSet<Payment> Payments { get; set; }
 
+        DbSet<ProcessSeat> ProcessSeats { get; set; }
+
         DbSet<Reservation> Reservations { get; set; }
 
         DbSet<ReservationItem> ReservationItems { get; set; }

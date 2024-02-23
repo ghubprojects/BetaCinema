@@ -18,5 +18,7 @@ public partial class Seat
 
     public string? ModifiedBy { get; set; }
 
+    public virtual ICollection<ProcessSeat> ProcessSeats { get; set; } = new List<ProcessSeat>();
+
     public virtual ICollection<ReservationItem> ReservationItems { get; set; } = new List<ReservationItem>();
 }

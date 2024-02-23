@@ -21,6 +21,8 @@ namespace BetaCinema.Infrastructure.Persistence
 
         public virtual DbSet<Payment> Payments { get; set; }
 
+        public virtual DbSet<ProcessSeat> ProcessSeats { get; set; }
+
         public virtual DbSet<Reservation> Reservations { get; set; }
 
         public virtual DbSet<ReservationItem> ReservationItems { get; set; }
@@ -165,6 +167,28 @@ namespace BetaCinema.Infrastructure.Persistence
                     .HasConstraintName("payment_fk");
             });
 
+            modelBuilder.Entity<ProcessSeat>(entity =>
+            {
+                entity.HasKey(e => e.Id).HasName("processseat_pk");
+
+                entity.ToTable("ProcessSeat");
+
+                entity.Property(e => e.CreatedBy).HasMaxLength(100);
+                entity.Property(e => e.CreatedDate).HasColumnType("timestamp without time zone");
+                entity.Property(e => e.ModifiedBy).HasMaxLength(100);
+                entity.Property(e => e.ModifiedDate).HasColumnType("timestamp without time zone");
+
+                entity.HasOne(d => d.Seat).WithMany(p => p.ProcessSeats)
+                    .HasForeignKey(d => d.SeatId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("processseat_fk_1");
+
+                entity.HasOne(d => d.Showtime).WithMany(p => p.ProcessSeats)
+                    .HasForeignKey(d => d.ShowtimeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("processseat_fk");
+            });
+
             modelBuilder.Entity<Reservation>(entity =>
             {
                 entity.HasKey(e => e.Id).HasName("reservation_pkey");
@@ -293,7 +317,6 @@ namespace BetaCinema.Infrastructure.Persistence
                 entity.Property(e => e.Role)
                     .HasMaxLength(25);
             });
-
 
             OnModelCreatingPartial(modelBuilder);
         }

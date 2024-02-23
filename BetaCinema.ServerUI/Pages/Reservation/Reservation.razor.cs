@@ -1,9 +1,11 @@
-﻿using BetaCinema.Application.Features.Seats.Commands;
+﻿using BetaCinema.Application.Features.ProcessSeats.Commands;
+using BetaCinema.Application.Features.Seats.Commands;
 using BetaCinema.Application.Features.Showtimes.Commands;
 using BetaCinema.Application.Features.Users.Commands;
 using BetaCinema.ServerUI.Store.ReservationUseCase;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
+using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Primitives;
 
@@ -25,16 +27,20 @@ namespace BetaCinema.ServerUI.Pages.Reservation
 
         [Inject] IDialogService DialogService { get; set; }
 
+        private HubConnection hubConnection;
+
         protected List<Seat>? seats = new();
         protected List<RowSeat> roomSeats = new() { };
         protected List<Seat>? selectedSeats = new();
         protected List<Seat>? soldSeats = new();
+        protected List<Seat>? processSeats = new();
         protected int totalPrice = 0;
 
         protected List<SeatStatus> seatStatusList = new()
         {
             new SeatStatus("Ghế trống", "seat-unselected.png"),
             new SeatStatus("Ghế đang chọn", "seat-selected.png"),
+            new SeatStatus("Ghế đang được giữ", "seat-process.png"),
             new SeatStatus("Ghế đã bán", "seat-sold.png"),
         };
 
@@ -45,23 +51,36 @@ namespace BetaCinema.ServerUI.Pages.Reservation
 
         protected async override Task OnInitializedAsync()
         {
-            await GetAllSeats();
-
             var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
             if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("id", out StringValues id))
             {
                 // get showtime data by id and assign to ShowtimeData
                 await GetShowtimeById(id);
 
-                // get sold seats
+                await GetAllSeats();
                 await GetSoldSeats(ShowtimeData.Id);
+                await GetAllProcessSeats();
             }
+
+            // init hub
+            hubConnection = new HubConnectionBuilder()
+                .WithUrl(Navigation.ToAbsoluteUri("/signalRHub"))
+                .Build();
+            await hubConnection.StartAsync();
+
+            // get changes in signalR hub
+            hubConnection.On<string>("ReceiveProcessSeats", async (id) =>
+            {
+                if (ShowtimeData.Id == id)
+                {
+                    await GetAllProcessSeats();
+                }
+            });
         }
 
         /// <summary>
-        /// 
+        /// Get all seats
         /// </summary>
-        /// <param name="weekDay"></param>
         /// <returns></returns>
         protected async Task GetAllSeats()
         {
@@ -70,6 +89,30 @@ namespace BetaCinema.ServerUI.Pages.Reservation
             if (result.IsSuccess)
             {
                 seats = result.Data;
+            }
+            else
+            {
+                DialogService.Show<ErrorMessageDialog>(SharedResources.Error,
+                    new DialogParameters<ErrorMessageDialog>
+                    {
+                        { x => x.ContentText, result.Message },
+                    }, new DialogOptions() { MaxWidth = MaxWidth.ExtraSmall });
+            }
+        }
+
+        /// <summary>
+        /// Get all process seats by showtime data and user ID
+        /// </summary>
+        /// <returns></returns>
+        protected async Task GetAllProcessSeats()
+        {
+            var result = await Mediator.Send(new GetProcessSeatsByShowtime()
+            { ShowtimeData = ShowtimeData });
+
+            if (result.IsSuccess)
+            {
+                processSeats = result.Data;
+                StateHasChanged();
             }
             else
             {
@@ -140,11 +183,11 @@ namespace BetaCinema.ServerUI.Pages.Reservation
             });
 
             showtimeInfos.AddRange(new List<InfoItem>()
-                {
-                    new InfoItem(CinemaResources.CinemaName, ShowtimeData.Cinema.CinemaName, "fas fa-landmark"),
-                    new InfoItem(ShowtimeResources.ShowDate, ShowtimeData.StartTime.Value.ToString("dd/MM/yyyy"), "far fa-calendar-days"),
-                    new InfoItem(ShowtimeResources.StartTime, ShowtimeData.StartTime.Value.ToString("HH:mm"), "far fa-clock")
-                });
+            {
+                new InfoItem(CinemaResources.CinemaName, ShowtimeData.Cinema.CinemaName, "fas fa-landmark"),
+                new InfoItem(ShowtimeResources.ShowDate, ShowtimeData.StartTime.Value.ToString("dd/MM/yyyy"), "far fa-calendar-days"),
+                new InfoItem(ShowtimeResources.StartTime, ShowtimeData.StartTime.Value.ToString("HH:mm"), "far fa-clock")
+            });
         }
 
         private List<RowSeat> BuildRoomSeats(List<Seat> seats)
@@ -175,10 +218,16 @@ namespace BetaCinema.ServerUI.Pages.Reservation
             return roomSeats;
         }
 
-        protected void ToggleSelectSeat(Seat seat)
+        protected async void ToggleSelectSeat(Seat seat)
         {
             var seatIsSold = soldSeats.Find(s => s.Id == seat.Id);
             if (seatIsSold != null)
+            {
+                return;
+            }
+
+            var seatIsProcess = processSeats.Find(s => s.Id == seat.Id);
+            if (seatIsProcess != null)
             {
                 return;
             }
@@ -189,11 +238,51 @@ namespace BetaCinema.ServerUI.Pages.Reservation
             {
                 selectedSeats.Add(seat);
                 totalPrice += ShowtimeData.TicketPrice;
+
+                var result = await Mediator.Send(new CreateProcessSeatCommand()
+                {
+                    SeatData = seat,
+                    ShowtimeData = ShowtimeData,
+                });
+
+                if (result.IsSuccess)
+                {
+                    // notify to all client
+                    await hubConnection.SendAsync("SendUpdateProcessSeatsAsync", ShowtimeData.Id);
+                }
+                else
+                {
+                    DialogService.Show<ErrorMessageDialog>(SharedResources.Error,
+                        new DialogParameters<ErrorMessageDialog>
+                        {
+                            { x => x.ContentText, result.Message },
+                        }, new DialogOptions() { MaxWidth = MaxWidth.ExtraSmall });
+                }
             }
             else
             {
                 selectedSeats.Remove(seat);
                 totalPrice -= ShowtimeData.TicketPrice;
+
+                var result = await Mediator.Send(new DeleteProcessSeatCommand()
+                {
+                    SeatData = seat,
+                    ShowtimeData = ShowtimeData,
+                });
+
+                if (result.IsSuccess)
+                {
+                    // notify to all client
+                    await hubConnection.SendAsync("SendUpdateProcessSeatsAsync", ShowtimeData.Id);
+                }
+                else
+                {
+                    DialogService.Show<ErrorMessageDialog>(SharedResources.Error,
+                        new DialogParameters<ErrorMessageDialog>
+                        {
+                            { x => x.ContentText, result.Message },
+                        }, new DialogOptions() { MaxWidth = MaxWidth.ExtraSmall });
+                }
             }
         }
 
@@ -203,6 +292,12 @@ namespace BetaCinema.ServerUI.Pages.Reservation
             if (seatIsSold != null)
             {
                 return "seat sold";
+            }
+
+            var seatIsProcess = processSeats.Find(s => s.Id == seat.Id);
+            if (seatIsProcess != null)
+            {
+                return "seat process";
             }
 
             var seatIsSelected = selectedSeats.Find(s => s.Id == seat.Id);
