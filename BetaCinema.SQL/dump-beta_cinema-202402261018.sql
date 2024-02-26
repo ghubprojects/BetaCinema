@@ -5,7 +5,7 @@
 -- Dumped from database version 16.0
 -- Dumped by pg_dump version 16.0
 
--- Started on 2024-02-22 14:11:54
+-- Started on 2024-02-26 10:18:54
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -29,7 +29,7 @@ CREATE SCHEMA public;
 ALTER SCHEMA public OWNER TO pg_database_owner;
 
 --
--- TOC entry 5014 (class 0 OID 0)
+-- TOC entry 5023 (class 0 OID 0)
 -- Dependencies: 5
 -- Name: SCHEMA public; Type: COMMENT; Schema: -; Owner: pg_database_owner
 --
@@ -140,6 +140,25 @@ CREATE TABLE public."Payment" (
 
 
 ALTER TABLE public."Payment" OWNER TO postgres;
+
+--
+-- TOC entry 235 (class 1259 OID 52720)
+-- Name: ProcessSeat; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public."ProcessSeat" (
+    "Id" text NOT NULL,
+    "ShowtimeId" text NOT NULL,
+    "SeatId" text NOT NULL,
+    "CreatedDate" timestamp without time zone NOT NULL,
+    "CreatedBy" character varying(100),
+    "ModifiedDate" timestamp without time zone NOT NULL,
+    "ModifiedBy" character varying(100),
+    "DeleteFlag" boolean NOT NULL
+);
+
+
+ALTER TABLE public."ProcessSeat" OWNER TO postgres;
 
 --
 -- TOC entry 232 (class 1259 OID 36009)
@@ -386,7 +405,7 @@ CREATE TABLE public."__EFMigrationsHistory" (
 ALTER TABLE public."__EFMigrationsHistory" OWNER TO postgres;
 
 --
--- TOC entry 4991 (class 0 OID 35846)
+-- TOC entry 4999 (class 0 OID 35846)
 -- Dependencies: 217
 -- Data for Name: Category; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -403,11 +422,12 @@ COPY public."Category" ("Id", "CategoryName", "DeleteFlag", "CreatedDate", "Crea
 97bd07ba-1470-49d7-b455-f237392b4dae	Tình cảm	f	2024-01-18 16:36:27.849747	\N	2024-01-18 16:36:27.849747	\N
 a7c7b61c-26e4-4260-8f1b-417c393d44c1	Kinh dị	f	2024-01-18 16:36:27.849747	\N	2024-01-18 16:36:27.849747	\N
 dedbc97e-a553-410b-81f5-7871cea02288	Hồi hộp	f	2024-01-18 16:36:27.849747	\N	2024-01-18 16:36:27.849747	\N
+c6041c74-17cc-4ea8-ad72-5682390ec86c	Lịch sử	t	2024-02-22 15:45:22.424715	\N	2024-02-22 15:45:22.424803	\N
 \.
 
 
 --
--- TOC entry 4992 (class 0 OID 35855)
+-- TOC entry 5000 (class 0 OID 35855)
 -- Dependencies: 218
 -- Data for Name: Cinema; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -435,7 +455,7 @@ dac58b9b-f8f7-4f75-8586-2b43fb8824c0	Beta Lào Cai	Lào Cai	f	2024-01-04 10:35:5
 
 
 --
--- TOC entry 4993 (class 0 OID 35864)
+-- TOC entry 5001 (class 0 OID 35864)
 -- Dependencies: 219
 -- Data for Name: Movie; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -443,19 +463,22 @@ dac58b9b-f8f7-4f75-8586-2b43fb8824c0	Beta Lào Cai	Lào Cai	f	2024-01-04 10:35:5
 COPY public."Movie" ("Id", "MovieName", "Poster", "Duration", "ReleaseDate", "Director", "Actor", "Description", "DeleteFlag", "CreatedDate", "CreatedBy", "ModifiedDate", "ModifiedBy") FROM stdin;
 76a3f26d-22ee-46b4-8377-ea17757ebd06	Nàng Thơ Của Miller	iajuuou1.jpg	93	2024-02-16 00:00:00	Jade Halley Bartlett	Christine Adams, Jenna Ortega, Dagmara Dominczyk, Bashir Salahuddin,...	Chuyện phim kể về 1 nữ sinh học giỏi nhưng đầy bí ẩn (Jenna Ortega) phải hoàn thành 1 dự án với giáo sư của mình (Martin Freeman). Giữa họ dần hình thành mối quan hệ phức tạp buộc cả 2 phải đấu tranh nhằm giữ vững những gì họ yêu quý khỏi trước những hành động sai lầm của bản thân.	f	2024-02-22 11:43:02.77372	\N	2024-02-22 11:43:37.028377	\N
 253b1ac6-7619-491c-a60e-dddcbcaae135	Trốn Tìm Với Quỷ	zutenwgh.jpg	76	2024-01-26 00:00:00	Eren Celeboglu, Ari Costa	Asa Butterfield, Natalia Dyer, Benjamin Ainsworth, Laurel Marsden, Kolton Stewart, Annabeth Gish,..	Trốn Tìm Với Quỷ theo chân 3 anh chị em khi họ bắt đầu vén màn một bí mật về sự hiện diện của quỷ dữ. Tin rằng đó chỉ là những trò trẻ con, cả nhóm gồm Jo, Billie và Marcus quyết định đọc lại câu chú và vô tình triệu hồi con quỷ, khiến cho Marcus bị chiếm xác và buộc 3 anh em phải tham gia trò chơi. Theo truyền thuyết, cách duy nhất để kết thúc trò chơi là khi quỷ dữ chiến thắng và mọi người chơi đều mất mạng.	t	2024-01-18 15:15:40.128766	\N	2024-02-06 20:44:24.731201	\N
-4f296c4d-be10-4161-942d-161e8ceb21fa	Đào, Phở và Piano	2dxsriuy.jpg	100	2024-02-21 00:00:00	Phi Tiến Sơn	NSƯT Trần Lực, NSND Trung Hiếu, Doãn Quốc Đam, Tuấn Hưng, Nguyệt Hằng, Anh Tuấn...	Lấy bối cảnh trận chiến đông xuân kéo dài 60 ngày đêm từ cuối năm 1946 đến đầu năm 1947 ở Hà Nội. Câu chuyện theo chân chàng dân quân Văn Dân (Doãn Quốc Đam đóng) và chuyện tình với nàng tiểu thư đam mê dương cầm Thục Hương (Cao Thị Thùy Linh thủ vai). Khi những người khác đã di tản lên chiến khu, họ quyết định cố thủ lại mảnh đất thủ đô đã tan hoang vì bom đạn, mặc cho những hiểm nguy đang chờ đợi trước mắt.	f	2024-02-22 11:48:05.899917	\N	2024-02-22 11:48:05.899918	\N
+4f296c4d-be10-4161-942d-161e8ceb21fa	Đào, Phở và Piano	2dxsriuy.jpg	100	2024-02-21 00:00:00	Phi Tiến Sơn	NSƯT Trần Lực, NSND Trung Hiếu, Doãn Quốc Đam, Tuấn Hưng, Nguyệt Hằng...	Lấy bối cảnh trận chiến đông xuân kéo dài 60 ngày đêm từ cuối năm 1946 đến đầu năm 1947 ở Hà Nội. Câu chuyện theo chân chàng dân quân Văn Dân (Doãn Quốc Đam đóng) và chuyện tình với nàng tiểu thư đam mê dương cầm Thục Hương (Cao Thị Thùy Linh thủ vai). Khi những người khác đã di tản lên chiến khu, họ quyết định cố thủ lại mảnh đất thủ đô đã tan hoang vì bom đạn, mặc cho những hiểm nguy đang chờ đợi trước mắt.	f	2024-02-22 11:48:05.899917	\N	2024-02-26 10:14:22.248256	\N
 663eb791-e46c-4103-a0f2-75a9101ef83a	Kẻ Thế Thân	hzavz3qu.jpg	114	2024-05-03 00:00:00	David Leitch	Ryan Gosling, Emily Blunt, Aaron Taylor-Johnson, Hannah Waddingham	Colt Seavers là một diễn viên đóng thế “lão làng. Bất ngờ, anh được mời làm “bản sao” cho một nhân vật nổi tiếng trong phim do người yêu cũ  – Jody (Emily Blunt) đạo diễn. Mọi chuyện dần chệch hướng khi ngôi sao của bộ phim bỗng mất tích, không ai có thể liên lạc được. Để cứu lấy công việc và giành lại tình yêu của đời mình, Colt vướng vào âm mưu khó lường khi cố gắng đi tìm diễn viên đó.	f	2024-01-18 15:15:40.128766	\N	2024-02-06 20:42:29.040996	\N
 116b341f-1aaa-4750-bb64-a9af906e416c	Aquaman và Vương Quốc Thất Lạc	tmixk1fg.jpg	124	2023-12-22 00:00:00	James Wan	Jason Momoa, Ben Affleck, Patrick Wilson...	Aquaman Và Vương Quốc Thất Lạc là phần hậu truyện của Aquaman năm 2018 khi Arthur lên ngôi vua của Atlantis.  Giờ đây, Arthur Curry ngày nào đã trở thành ông bố bỉm sữa ngày ngày chăm con kiêm cai quản cả vùng Atlantis rộng lớn. Thế nhưng, kẻ thù cũ đời nào để cho nhà vua biển cả yên ổn. Nhờ sự trợ giúp của công nghệ, Black Manta lần nữa trỗi dậy với sức mạnh kinh khủng hơn xưa. Không thể chiến đấu một mình, Arthur đành phải nhờ sự trợ giúp của một kẻ thù khác - đứa em cùng mẹ khác cha Orm. Cùng chống lại kẻ thù chung, liệu cặp anh em chẳng đội chung trời này có thể hàn gắn tình cảm?	t	2024-01-18 15:15:40.128766	\N	2024-02-06 20:46:55.069968	\N
 3c3ccbb7-61a2-4296-a2a5-55252f89b900	Mật Vụ Ong	1rapnuck.jpg	105	2024-01-12 00:00:00	David Ayer	Jason Statham, Emmy Raver-Lampman, Bobby Naderi,...	Jason Statham vào vai Adam Clay, một người nuôi ong cần mẫn và đơn độc. Anh có mối quan hệ tốt với bà chủ nhà, thậm chí coi bà như người thân duy nhất của mình. Thế nhưng, một sự kiện xảy ra khiến bà qua đời, và “người nuôi ong” Adam Clay quyết định bắt đầu kế hoạch trả thù tàn bạo của mình. Trong khi Clay vạch trần bí mật đằng sau đường dây lừa đảo cỡ lớn và bắt những kẻ có tội phải trả giá, thân phận thật của anh cũng dần được hé lộ.	t	2024-01-18 15:15:40.128766	\N	2024-01-26 17:03:32.616407	\N
 51ae6fef-e45c-46df-9a5f-a0bdc2b58b2f	Quỷ Cẩu	nc1grm5l.jpg	99	2023-12-29 00:00:00	Lưu Thành Luân	Quang Tuấn, NSND Kim Xuân, Vân Dung, Quốc Quân, Nam Thư, Mie….	Nam về quê để lo đám tang cho bố sau cái chết kinh hoàng của ông, trong khi phải che giấu bạn gái đang mang thai. Nam mơ thấy gia đình bị giết sau khi mai táng bố, và Mít – con chó trắng của gia đình có biểu hiện kì lạ. Ông Quyết, bà Thúy, và bà Liễu thì tin vào thầy cúng, còn Nam nghi ngờ về lò mổ chó truyền thống của gia đình và phải điều tra để giải quyết sự kiện kỳ lạ đang diễn ra.	t	2024-01-18 15:15:40.128766	\N	2024-01-26 17:04:29.633979	\N
+2ac5fade-52ff-4482-8e53-7804feef97a0	Sen Boss Sum Vầy	bvwwsela.jpg	120	2024-02-23 00:00:00	Kim Douck-min	Youn Yuh-jung, Yoo Hai-jin, Kim Yun-jin , Chung Sung-hwa, Kim Seo-hyung, Daniel Philip Henney, Lee Hyun-woo, Tang Joon-sang, Yoon Chae-na	Bộ phim xoay quanh những tình huống dở khóc dở cười của những con người khác biệt và những người bạn lông xù, Hàng loạt những sự sắp đặt trời định sẽ đưa tất cả họ xích lại gần nhau hơn.	f	2024-02-22 15:43:49.87297	\N	2024-02-23 16:29:51.884717	\N
 4d9cd279-1ef2-4cbb-9a7b-467a326990bc	Arkie và Ngày Mặt Trời Mất Tích	c04xrcw1.jpg	93	2024-01-05 00:00:00	Ricard Cussó, Tania Vincent	Anna Torv, Sam Neill, Tim Minchin,...	Khi thế giới của cô bị đe dọa bởi mất ánh sáng mặt trời, một cô gái trẻ phải vượt qua nỗi sợ hãi và hành trình đến một thành phố kỳ ảo để cứu cha cô khỏi một nhà khoa học bí ẩn và ngăn chặn sự hủy diệt hành tinh của cô.	t	2024-01-18 15:15:40.128766	\N	2024-01-18 15:15:40.128766	\N
 31b05358-8084-4918-a9c4-05e76a162510	Điệp Vụ Cuối Cùng	badscmac.jpg	110	2024-01-05 00:00:00	Renny Harlin	Aaron Eckhart, Nina Dobrev, Clifton Collins Jr.....	Trong The Bricklayer, một thế lực bí ẩn tống tiền CIA—ám sát các nhà báo nước ngoài và làm ra vẻ như cơ quan này phải chịu trách nhiệm. Khi thế giới bắt đầu chống lại Hoa Kỳ, CIA phải lôi kéo một đặc vụ cũ của mình — tuy nổi loạn — và đã nghỉ hưu, nhưng lại là người xuất sắc nhất, buộc anh ta phải đối mặt với quá khứ của mình trong khi cố gắng làm sáng tỏ một âm mưu tầm cỡ quốc tế.	t	2024-01-18 15:15:40.128766	\N	2024-01-18 15:15:40.128766	\N
 6ec2252e-7940-4298-a6df-c822392a1044	Kung Fu Panda 4	dpd24wtg.png	92	2024-03-08 00:00:00	Mike Mitchell	Jack Black, Dustin Hoffman, James Hong, Awkwafina,...	Sau khi Po được chọn trở thành Thủ lĩnh tinh thần của Thung lũng Bình Yên, Po cần tìm và huấn luyện một Chiến binh Rồng mới, trong khi đó một mụ phù thủy độc ác lên kế hoạch triệu hồi lại tất cả những kẻ phản diện mà Po đã đánh bại về cõi linh hồn.	f	2024-01-18 15:15:40.128766	\N	2024-02-06 20:43:07.199579	\N
 60093677-5aac-4207-ada4-1a76012fff2f	Bơi Đêm	tajwt1x0.jpg	98	2024-02-23 00:00:00	Bryce McGuire	Wyatt Russell, Kerry Condon, Gavin Warren, Jodi Long, Nancy Lenehan,...	Từ câu chuyện về cuộc sống gia đình bình thường đã biến thành một nỗi ám ảnh kinh hoàng. Không chạy, không lặn, không cứu hộ và không bơi sau khi màn đêm buông xuống. Bơi Đêm chạm đến nỗi sợ hãi sâu thẳm của bất kỳ ai mỗi khi bước xuống hồ bơi rằng họ sẽ bị mắc kẹt dưới nước.	f	2024-01-18 15:15:40.128766	\N	2024-02-06 20:43:31.785817	\N
 3c4007ee-a12d-4a0b-b92a-1e40eca0b447	Argylle Siêu Điệp Viên	jnwsy14x.png	135	2024-02-10 00:00:00	Matthew Vaughn	Sofia Boutella, Henry Cavill, Catherine O'Hara,...	Elly một tiểu thuyết gia nổi tiếng, trở thành một điệp viên bất đắc dĩ khi bị lôi kéo vào các hoạt động của một tập đoàn ngầm nham hiểm.	f	2024-01-18 15:15:40.128766	\N	2024-02-06 20:43:46.205858	\N
+13541362-df47-4393-b1b4-39a631472a01	Godzilla x Kong: The New Empire	ncba4n5x.jpg	121	2024-03-29 00:00:00	Adam Wingard	Rebecca Hall; Brian Tyree Henry; Dan Stevens; Kaylee Hottle; Alex Ferns; Fala Chen,...	Kong và Godzilla - hai sinh vật vĩ đại huyền thoại, hai kẻ thủ truyền kiếp sẽ cùng bắt tay thực thi một sứ mệnh chung mang tính sống còn để bảo vệ nhân loại, và trận chiến gắn kết chúng với loài người mãi mãi sẽ bắt đầu.	f	2024-02-22 15:43:49.904717	\N	2024-02-23 16:39:14.940186	\N
 36eaf3ec-a347-4749-9cc7-11557d176b32	Trên Bàn Nhậu Dưới Bàn Mưu	1ixhjv3t.jpg	116	2023-12-29 00:00:00	TIEN M.NGUYEN	Kiều Minh Tuấn, Diệu Nhi, Khả Như, Thúy Ngân, Trần Ngọc Vàng, Xuân Nghị,...	Trên Bàn Nhậu Dưới Bàn Mưu là câu chuyện về tình bạn đầy thú vị của một hội bạn thân. Trong hành trình tìm kiếm những ước mơ và kế hoạch cuộc sống, họ đã vô tình bị kéo vào một âm mưu đen tối ngoài ý muốn. Sự vô tri của Gạo (Diệu Nhi), sự hậu đậu của Du Lai (Khả Như) và sự nóng nảy của Triệu (Thúy Ngân), kết hợp cùng những sáng kiến bá đạo của Trí (Kiều Minh Tuấn), đã mang đến một màn "trả thù" có một không hai dành cho Trực (Trần Ngọc Vàng) - một tên siêu lừa đội lốt doanh nhân và cũng là kẻ khiến cho Gạo gặp nhiều khốn đốn...	t	2024-01-18 15:15:40.128766	\N	2024-02-06 20:45:21.34745	\N
 76cf2797-f1b1-49a3-8f8a-ea34f91feb43	Siêu Khỉ Cuồng Nộ	ajvymw0o.jpg	86	2024-01-12 00:00:00	Marc Gottlieb	Tom Arnold, Anna Telfer, Lisa Lee,...	Thử nghiệm Siêu Khỉ robot đã tạo ra sai lầm khủng khiếp, quân đội không còn lựa chọn nào khác ngoài việc đưa Vua Khỉ khổng lồ trở về. Cuộc đại chiến giữa những sinh vật khổng lồ với sức mạnh khủng khiếp, hứa hẹn những màn giao đấu bùng nổ và nghẹt thở.	t	2024-01-18 15:15:40.128766	\N	2024-01-26 01:49:46.574116	\N
 b8539ffb-749a-435a-830c-b126caa27a9b	Trú Quỷ: Truyền Thuyết Ma Kéo Giò	4qk5amfp.jpg	86	2024-01-26 00:00:00	Jiro Nagae	Rikka Ihara, Taiyu Fujiwara, Shiori Akita,...	Lần đầu tiên truyền thuyết đô thị Nhật Bản về nữ quỷ Hasshaku-sama chuyên bắt cóc trẻ em từng làm rúng động cõi mạng những năm 2000 được đưa lên màn ảnh rộng	t	2024-01-18 15:15:40.128766	\N	2024-01-26 01:59:26.231499	\N
+7d09b7f4-223a-465e-a5e6-64f0098bd3e1	Thanh Gươm Diệt Quỷ: Phép Màu Tình Thân, Cho Đến Chuyến Đặc Huấn Của Đại Trụ	32zerlft.jpg	103	2024-02-23 00:00:00	Haruo Sotozaki	Natsuki Hanae, Akari Kitô, Yoshitsugu Matsuoka	Phim lấy bối cảnh ở làng thợ rèn, kể về hồi kết của trận ác chiến giữa Tanjiro với Thượng Huyền Tứ Hantengu, và việc Nezuko khắc chế được mặt trời. Thêm vào đó, tập đầu tiên của phần "Đại Trụ Đặc Huấn", mở màn cho khóa đặc huấn của các Đại Trụ cho cuộc quyết chiến với Kibutsuji Muzan.	f	2024-02-22 15:43:49.854306	\N	2024-02-23 16:29:31.926352	\N
 abd03ced-dae2-4b75-b57a-35ebd7cd03e8	Gặp Lại Chị Bầu	5ofamgrv.jpg	110	2024-02-10 00:00:00	Nhất Trung	Anh Tú, Diệu Nhi, Kiều Minh Tuấn, Lê Giang,..	Một chàng trai với với niềm đam mê diễn xuất nhưng lại có một quá khứ không bình yên, cùng cuộc gặp gỡ định mệnh với một cô giáo hơi "lố tuổi" , với câu chào đầu đầy ấn tượng "Em có ý gì với chị không?"	f	2024-01-18 15:15:40.128766	\N	2024-02-06 20:35:35.070697	\N
 98944c73-f47c-455a-a3f5-3c111d278fd0	Katak và Sứ Mệnh Chinh Phục Đại Dương	1c1fsqme.jpg	78	2024-01-26 00:00:00	Christine Dallaire-Dupont, Nicola Lemay	Robert Naylor, Skyler Clark, Eleanor Noble,..	Trong khi các bạn đồng trang lứa đều đã chuyển sang màu trắng thì chú cá voi Katak vẫn còn nhỏ bé và xám xịt. Để chứng minh rằng mình đã trưởng thành và thực hiện ước nguyện cuối cùng của người bà yêu quý, Katak khởi hành chuyến hành trình đầy nguy hiểm đến Great North. Trong chuyến đi cậu đã học nhiều bài học quý giá và trở thành một chú cá voi dũng cảm.	t	2024-01-18 15:15:40.128766	\N	2024-01-30 05:15:21.555081	\N
 fa6bea21-353a-4aba-9635-297d30fdbefe	Alienoid 2: Đa Chiều Hỗn Chiến	t3cswhbi.jpg	122	2024-01-12 00:00:00	Choi Dong-hoon	Ryu Jun-Yeol, Kim Tae-ri, Kim Woo-bin,...	Phần thứ hai của Alienoid, sẽ tập trung vào các Đạo giáo cổ đại du hành xuyên thời gian và không gian với nỗ lực giành được Thanh kiếm thần thánh.	t	2024-01-18 15:15:40.128766	\N	2024-01-26 17:04:09.506854	\N
@@ -464,10 +487,12 @@ b5d730ce-563f-42d6-94c5-f12b8c272e1c	Giao Ước Quỷ	1zyugsrq.jpg	97	2024-01-0
 cb4f08f2-0379-4b40-9d1f-b27ae8c7a9a7	Mai	ddlz4qej.jpg	125	2024-02-10 00:00:00	Trấn Thành	Phương Anh Đào, Tuấn Trần, Trấn Thành, Hồng Đào, Uyển n, Ngọc Giàu, Việt Anh, Quỳnh Anh, Anh Thư,..	MAI xoay quanh câu chuyện về cuộc đời của một người phụ nữ cùng tên với bộ phim. Trên First-look Poster, Phương Anh Đào tạo ấn tượng mạnh với cái nhìn tĩnh lặng, xuyên thấu, đặc biệt, trên bờ môi nữ diễn viên là hình ảnh cô đang nằm nghiêng trên mặt nước. Được phủ một màn sương mờ ảo, poster đậm chất nghệ thuật của Mai gây tò mò với lời tựa: “Quá khứ chưa ngủ yên, ngày mai liệu sẽ đến?”.	f	2024-01-18 15:15:40.128766	\N	2024-02-06 20:35:07.492281	\N
 a0ede518-5ae0-4209-b8c5-934773791e56	Kinh Cầu Ma	v1jbwpkc.jpg	100	2024-01-12 00:00:00	Takashi Shimizu	Alan Shirahama, Ryôta Katayose, Hayato Komori,..	Không dừng lại ở đó, năm 2019 Takashi Shimizu tiếp tục làm chấn động màn ảnh rộng với tác phẩm kinh dị Ngôi Làng Tử Khí. Và trong lần trở lại mới nhất, Takashi Shimizu sẽ đem đến hình ảnh một ma nữ cũng bí ẩn và đáng sợ chẳng kém Sana trong Kinh Cầu Ma. Đây là một cô gái trẻ nắm giữ trong tay một giai điệu bị nguyền rủa. Nếu bất cứ ai nghe thấy nó, họ đều sẽ nhận kết cục thảm khốc.	t	2024-01-18 15:15:40.128766	\N	2024-02-06 20:45:08.566649	\N
 aaaf2ce8-83d9-4ab9-80ef-518c12fff65b	Rượu Cốt Người	cc5vp4fr.jpg	89	2024-01-19 00:00:00	Sầm Gia Ngạn	Lư Hãn Đình, Viên Lễ Lâm, Khương Đại Vệ,…	Nhân vật chính trong Rượu Cốt Người là Trương Tử Kiệt (Lư Hãn Đình), một chàng trai quyết định tham gia tour du lịch trên đảo hoang cùng bạn bè để quên đi nỗi đau trước cái chết đột ngột của bạn gái Ava (Viên Lễ Lâm). Nhưng chuyến hành trình về miền hoang dã lại không vui như kì vọng. Bốn người bạn bắt đầu gặp thấy những điều kì lạ, rồi những sự kiện siêu nhiên đáng sợ lần lượt xảy ra. Không lâu sau, họ phát hiện sự tồn tại của một thế lực tà ác cổ xưa và nó đang rình rập, theo dõi họ mọi lúc mọi nơi. Chuyến đi tưởng chừng rất vui vẻ lại trở thành nỗi kinh hoàng chết chóc.	t	2024-01-18 15:15:40.128766	\N	2024-02-06 20:41:41.760523	\N
+a6fc3905-9277-447c-b171-acc9bbde56f5	Bà Thím Báo Thù	gwyv4arn.jpg	114	2024-03-01 00:00:00	Young-ju Park	Park Byeong-eun, Ahn Eun-jin, Myoung Gong,..	Đang chật vật vay mượn khắp nơi để tiếp tục duy trì cửa tiệm giặt ủi sau hoả hoạn, Duk Hee nhận được cú điện thoại từ Son, tự xưng là nhân viên ngân hàng với lời hứa hẹn sẽ cấp cho cô một khoản vay với lãi suất ưu đãi. Sau khi chuyển tiền, người phụ nữ mới nhận ra mình vừa trở thành nạn nhân của một kẻ chuyên lừa đảo qua điện thoại di động (a voice phishing scam). Cho tới một ngày nọ, Son bỗng chủ động liên lạc với Duk Hee và đưa ra một lời cầu cứu thảm thiết…	f	2024-02-22 15:43:49.888841	\N	2024-02-23 16:31:00.036431	\N
 8e84dbd4-f888-42f8-9232-a4ec7f6753a8	Pororo: Hành Trình Siêu Sao Âm Nhạc	njrqaasf.jpg	77	2024-02-20 00:00:00	Yoon Je-wan	Jung Mi-sook, Hong So-young, Lee Sun, Imiza,...	Pororo và những người bạn của anh ấy sắp sửa chiến thắng trong một cuộc thi ca hát mà họ tham gia cho vui. Liệu Pororo và những người bạn của anh ấy có thoát khỏi sự phiền nhiễu của Big Ben và cuối cùng giành chiến thắng trong cuộc thi siêu sao âm nhạc?	f	2024-01-30 03:19:32.212497	\N	2024-02-22 11:45:52.847024	\N
 dec3b3d5-8c78-4fa9-9489-d23a9905e4d7	Kẻ Ăn Hồn	r1qkpi4l.jpg	110	2023-12-15 00:00:00	Trần Hữu Tấn	Hoàng Hà, Võ Điền Gia Huy, Huỳnh Thanh Trực, NSƯT Chiều Xuân,...	Phim về hàng loạt cái chết bí ẩn ở Làng Địa Ngục, nơi có ma thuật cổ xưa: 5 mạng đổi bình Rượu Sọ Người. Thập Nương - cô gái áo đỏ là kẻ nắm giữ bí thuật luyện nên loại rượu mạnh nhất!	t	2024-01-18 15:15:40.128766	\N	2024-01-18 15:15:40.128766	\N
 88072e16-0264-4498-ab30-ce5a67d5106e	Cún Cưng Đại Náo Nhà Hát	1wsuxv0s.jpg	98	2024-02-16 00:00:00	Vasiliy Rovenskiy	Anna Starshenbaum, Diomid Vinogradov, Garik Kharlamov	Chú chó lang tham Samson vô tình lạc vào nhà hát opera Bolshoi nổi tiếng bậc nhất thủ đô Moscow hoa lệ. Vướng vào vụ trộm chiếc vương miện kim cương của nữ diễn viên Anastasia; Samson cùng nàng cún Margot xinh đẹp của Anastasia dấn thân vào cuộc phiêu lưu đại náo nhà hát, truy lùng bọn cướp và giành lại món nữ trang quý giá.	f	2024-01-30 03:19:32.20128	\N	2024-01-30 03:25:50.338304	\N
 a61eafa6-3170-42b5-b1ab-42afaea7cd41	Gia Đình Điệp Viên Mã: Trắng	53y3ztic.jpg	110	2024-02-10 00:00:00	Kazuhiro Furuhashi	Atsumi Tanezaki, Takuya Eguchi, Saori Hayami,…	Bộ phim là phần phim điện ảnh của series anime nổi tiếng Spy x Family. Trong bộ phim lần này, sau khi nhận được yêu cầu thay thế mình trong Chiến dịch Strix, Loid Forger quyết định giúp con gái Anya chiến thắng trong cuộc thi nấu ăn tại Học viện Eden bằng cách nấu bữa ăn yêu thích của hiệu trưởng để tránh bị thay thế khỏi nhiệm vụ mật. Nhưng từ đây, gia đình Forger phát hiện ra bí mật kinh hoàng ảnh hưởng đến hòa bình thế giới.	f	2024-01-30 03:19:32.0605	\N	2024-01-30 03:31:04.397425	\N
+9a09b6c6-92b4-4fd8-ad57-2927f08d2b2e	Dune: Hành tinh cát - Phần Hai	kipnv5ao.jpg	166	2024-03-01 00:00:00	Denis Villeneuve	Denis Villeneuve, Jon Spaihts, Frank Herbert	“Dune: Hành Tinh Cát – Phần 2” sẽ tiếp tục khám phá hành trình đậm chất thần thoại của Paul Atreides khi anh đồng hành cùng Chani và những người Fremen trên chặng đường trả thù những kẻ đã hủy hoại gia đình mình. Đối mặt với những lựa chọn giữa tình yêu của cuộc đời mình và số phận của vũ trụ, Paul phải ngăn chặn viễn cảnh tương lai tồi tệ chỉ mình anh nhìn thấy.	f	2024-02-22 15:43:49.919259	\N	2024-02-23 16:39:21.566017	\N
 bdea8635-5b88-4002-bb05-d12a09d7016f	Hành Trình Digimon 02: Khởi Đầu	e5siazyk.jpg	80	2024-01-19 00:00:00	Tomohisa Taguchi	Fukujurou Katayama, Junko Noda, Arthur Lounsbery	Phần phim này kể về vài năm sau Sự Kiện của Movie [ Kizuna ] - Khi 1 quả DigiEgg khổng lồ xuất hiện, chuyện gì sẽ   xảy đến trên toàn Thế Giới.... Trong khi họ đã dấn thân vào con đường riêng của mình, Daisuke và các "DigiDestined" khác cùng cộng sự Digimon của họ vẫn bị r ràng buộc với nhau bởi cùng một mối liên kết. Rồi một ngày nọ, một Digitama khổng lồ bất ngờ xuất hiện trên bầu trời Tokyo Tower và gửi một thông điệp tới thế giới. Liệu Daisuke và đội ngũ "02" sẽ chọn con đường nào?	t	2024-01-18 15:15:40.128766	\N	2024-02-06 20:45:02.184947	\N
 cfb12716-5f9d-43f4-a2b0-72a09c3d10ad	Tee Yod: Quỷ Ăn Tạng	qpoqfiyb.jpg	119	2023-12-29 00:00:00	Taweewat Wantha	Nadech Kugimiya, Denise Jelilcha Kapaun, Mim Rattawadee Wongthong, Junior Kajbhunditt Jaidee,..	Vào năm 1972, một sự việc kinh hoàng nhất đã xảy ra. Một cô gái trẻ ở một ngôi làng hẻo lánh ở tỉnh Kanchanaburi đã qua đời một cách bí ẩn. Mọi chuyện phải kể từ lúc Yam (Mim Rattanawadee Wongthong) bị ốm thì những bí ẩn cũng bắt đầu xuất hiện.  Và người ta tin rằng, Yam đã bị "ma cà rồng" nhập, nó ăn mòn nội tạng. Khiến cơ thể của Yam dần yếu đi. Cứ đêm xuống, là nghe thấy tiếng rên rỉ cùng với từ "Tee Yod". Dẫn đến một câu chuyện bí ẩn đầy ám ảnh, dù đã hơn 50 năm trôi qua nhưng vẫn khiến người nghe khiếp sợ.	t	2024-01-18 15:15:40.128766	\N	2024-02-06 20:45:41.581351	\N
 c474761c-c5cf-41b4-8dea-7a04c244ac4e	Madame Web	pt2s2emg.jpg	116	2024-02-14 00:00:00	S.J. Clarkson	Dakota Johnson, Sydney Sweeney, Emma Roberts, Adam Scott,...	Bộ phim kể về nguồn gốc của một đồng minh Người Nhện, một nhân vật trong truyện tranh Marvel có sức mạnh liên kết đa vũ trụ - Madame Web. Sở hữu khả năng và giác quan nhạy bén của loài nhện, Cassandra có khả năng thấu thị, thần giao cách cảm và nhìn trước tương lai.	f	2024-01-30 03:19:32.164997	\N	2024-01-30 03:26:21.412389	\N
@@ -485,7 +510,7 @@ f0b35534-869a-474e-b9ff-68b0eaf1e733	Nhà Vịt Di Cư	mjj3u4xc.jpg	83	2023-12-2
 
 
 --
--- TOC entry 4997 (class 0 OID 35903)
+-- TOC entry 5005 (class 0 OID 35903)
 -- Dependencies: 223
 -- Data for Name: MovieCategory; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -544,12 +569,21 @@ bf7d6dc9-0138-49ad-a1af-d869c023ed35	d85e8011-4d65-480e-bcd6-6970cf5df040	a7c7b6
 a924b90c-c166-45f0-8418-81c012cae251	76a3f26d-22ee-46b4-8377-ea17757ebd06	379546d5-2639-4c1c-bc3b-fd155e5e6bf7	f	2024-02-22 11:43:37.070514	\N	2024-02-22 11:43:37.070516	\N
 bf6df707-868e-4057-a1bb-e7d08479d471	8e84dbd4-f888-42f8-9232-a4ec7f6753a8	5dee9be2-3be5-4bbc-b724-9bf159b97861	f	2024-02-22 11:45:52.853698	\N	2024-02-22 11:45:52.853701	\N
 eeac6807-f8e2-4b03-8533-4d5d80134fb7	8e84dbd4-f888-42f8-9232-a4ec7f6753a8	865d55e5-25e8-4d61-a755-bb3710f19010	f	2024-02-22 11:45:52.858848	\N	2024-02-22 11:45:52.85885	\N
-569b0653-69ed-4829-bc09-4ab1ef25efd3	4f296c4d-be10-4161-942d-161e8ceb21fa	97bd07ba-1470-49d7-b455-f237392b4dae	f	2024-02-22 11:48:05.904497	\N	2024-02-22 11:48:05.904498	\N
+67ece3e5-60a5-42bc-a589-2aff0de4fc6a	7d09b7f4-223a-465e-a5e6-64f0098bd3e1	5dee9be2-3be5-4bbc-b724-9bf159b97861	f	2024-02-23 16:29:31.95893	\N	2024-02-23 16:29:31.958932	\N
+6b1ee0b1-42fd-4610-806e-d0df4793c0da	7d09b7f4-223a-465e-a5e6-64f0098bd3e1	77799d5b-2e98-4952-9b7c-3a99a98db412	f	2024-02-23 16:29:31.95114	\N	2024-02-23 16:29:31.95117	\N
+7e629996-6a5b-49d0-a179-c3ab4d0d7092	2ac5fade-52ff-4482-8e53-7804feef97a0	379546d5-2639-4c1c-bc3b-fd155e5e6bf7	f	2024-02-23 16:29:51.889175	\N	2024-02-23 16:29:51.889176	\N
+99733fa7-e1f3-4245-8bcb-c68e7617c212	a6fc3905-9277-447c-b171-acc9bbde56f5	379546d5-2639-4c1c-bc3b-fd155e5e6bf7	f	2024-02-23 16:31:00.043108	\N	2024-02-23 16:31:00.04311	\N
+d83e3a70-e16b-4555-ac23-05899d9129da	a6fc3905-9277-447c-b171-acc9bbde56f5	77799d5b-2e98-4952-9b7c-3a99a98db412	f	2024-02-23 16:31:00.045485	\N	2024-02-23 16:31:00.045487	\N
+b5cbd335-43c4-4bf6-8eac-05ee18656ac5	13541362-df47-4393-b1b4-39a631472a01	865d55e5-25e8-4d61-a755-bb3710f19010	f	2024-02-23 16:39:14.943458	\N	2024-02-23 16:39:14.943459	\N
+c7af66e2-cb38-4860-89ae-d6bb309e2933	13541362-df47-4393-b1b4-39a631472a01	77799d5b-2e98-4952-9b7c-3a99a98db412	f	2024-02-23 16:39:14.945924	\N	2024-02-23 16:39:14.945926	\N
+1b4accd5-4754-4166-b5a2-46fe92e116d9	9a09b6c6-92b4-4fd8-ad57-2927f08d2b2e	77799d5b-2e98-4952-9b7c-3a99a98db412	f	2024-02-23 16:39:21.570291	\N	2024-02-23 16:39:21.570292	\N
+314dc6e3-dedd-40bb-9c51-1ca993448e38	9a09b6c6-92b4-4fd8-ad57-2927f08d2b2e	865d55e5-25e8-4d61-a755-bb3710f19010	f	2024-02-23 16:39:21.572381	\N	2024-02-23 16:39:21.572382	\N
+b79fffb8-ef7b-474a-8862-1725321d8860	4f296c4d-be10-4161-942d-161e8ceb21fa	97bd07ba-1470-49d7-b455-f237392b4dae	f	2024-02-26 10:14:22.286064	\N	2024-02-26 10:14:22.28624	\N
 \.
 
 
 --
--- TOC entry 5007 (class 0 OID 36028)
+-- TOC entry 5015 (class 0 OID 36028)
 -- Dependencies: 233
 -- Data for Name: Payment; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -557,11 +591,31 @@ eeac6807-f8e2-4b03-8533-4d5d80134fb7	8e84dbd4-f888-42f8-9232-a4ec7f6753a8	865d55
 COPY public."Payment" ("Id", "ReservationId", "TotalPrice", "PaymentMethod", "DeleteFlag", "CreatedDate", "CreatedBy", "ModifiedDate", "ModifiedBy") FROM stdin;
 695498e1-4ad9-4497-b879-8ee4ec17fe91	7105fe58-b56c-41dc-88b2-51f42d2618f3	80000	Ví VnPay	f	2024-02-22 14:07:39.73526	\N	2024-02-22 14:07:39.735327	\N
 3aee393e-7ea4-4c6c-8486-8bd98c4b2667	157db1cc-57b5-4330-ada1-e51f92848581	120000	Ví VnPay	f	2024-02-22 14:09:21.115479	\N	2024-02-22 14:09:21.11548	\N
+308e0835-e490-4ef4-a8d6-cb802e41e482	a2ed1a2a-0989-4cda-8e7d-76d29ff69b13	80000	Ví VnPay	f	2024-02-22 15:38:01.928372	\N	2024-02-22 15:38:01.928402	\N
+f24f624c-9bb1-4c54-b1a6-a2ac3529ab0e	a3cc3c06-223a-4730-83d9-00bd6ccd8cd8	120000	Ví VnPay	f	2024-02-22 15:39:09.786176	\N	2024-02-22 15:39:09.786177	\N
+97618503-eb0d-47c6-95ae-d21c7f504721	d6f129b6-4b0e-4eba-a3ca-adfc096a9791	100000	Ví VnPay	f	2024-02-22 15:50:45.601527	\N	2024-02-22 15:50:45.601528	\N
+88e8593f-e86e-4a3f-8203-82ac14d9768b	19272748-d78c-4fb8-b66e-0b6f08a48017	80000	Ví VnPay	f	2024-02-22 15:54:27.660293	\N	2024-02-22 15:54:27.660295	\N
 \.
 
 
 --
--- TOC entry 5006 (class 0 OID 36009)
+-- TOC entry 5017 (class 0 OID 52720)
+-- Dependencies: 235
+-- Data for Name: ProcessSeat; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."ProcessSeat" ("Id", "ShowtimeId", "SeatId", "CreatedDate", "CreatedBy", "ModifiedDate", "ModifiedBy", "DeleteFlag") FROM stdin;
+6f91da6e-7e63-46b0-97ce-f835986be522	f00a4d53-d14a-11ee-a723-c03eba28a56c	af5ce027-8e55-36f2-8416-f79116a6b0a9	2024-02-26 10:11:40.986442	\N	2024-02-26 10:11:40.986444	\N	t
+c7a4dc1a-d288-4177-a372-25f33fa5f12e	f00a4d53-d14a-11ee-a723-c03eba28a56c	2dfb1d34-fb0e-a2b5-180d-3e93184c79eb	2024-02-26 10:11:41.670781	\N	2024-02-26 10:11:41.670783	\N	t
+811daeac-aae3-4ef0-afb4-941868b95fb6	f00a4d53-d14a-11ee-a723-c03eba28a56c	6e1a07c6-215f-ad63-24e4-16f7669dfe16	2024-02-26 10:11:42.429566	\N	2024-02-26 10:11:42.429568	\N	t
+b7966b36-314d-4dc7-840e-3b40ab837753	f00a4d53-d14a-11ee-a723-c03eba28a56c	eac7e4a1-1f7c-cfc3-8e4a-cc9e2a5502ac	2024-02-26 10:13:27.90929	\N	2024-02-26 10:13:27.909291	\N	t
+50ce5a05-ead9-4569-84bb-8facf3b0f649	f00a4d53-d14a-11ee-a723-c03eba28a56c	f241f904-96b7-7b6b-ec23-998dfc27ae59	2024-02-26 10:13:28.686229	\N	2024-02-26 10:13:28.686232	\N	t
+ab0c2ab5-d972-4e6a-9c0a-aa242c8fe6a0	f00a4d53-d14a-11ee-a723-c03eba28a56c	e22436a8-5ace-b087-998e-9ff616dc742a	2024-02-26 10:13:31.258369	\N	2024-02-26 10:13:31.25837	\N	t
+\.
+
+
+--
+-- TOC entry 5014 (class 0 OID 36009)
 -- Dependencies: 232
 -- Data for Name: Reservation; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -569,11 +623,15 @@ COPY public."Payment" ("Id", "ReservationId", "TotalPrice", "PaymentMethod", "De
 COPY public."Reservation" ("Id", "ShowtimeId", "UserId", "DeleteFlag", "CreatedDate", "CreatedBy", "ModifiedDate", "ModifiedBy") FROM stdin;
 7105fe58-b56c-41dc-88b2-51f42d2618f3	f015f73d-d14a-11ee-a723-c03eba28a56c	bde51f66-8ea7-473a-b96c-64eb479ef294	f	2024-02-22 14:07:39.556718	\N	2024-02-22 14:07:39.556745	\N
 157db1cc-57b5-4330-ada1-e51f92848581	f015f73d-d14a-11ee-a723-c03eba28a56c	bde51f66-8ea7-473a-b96c-64eb479ef294	f	2024-02-22 14:09:21.097564	\N	2024-02-22 14:09:21.097565	\N
+a2ed1a2a-0989-4cda-8e7d-76d29ff69b13	f0090ccf-d14a-11ee-a723-c03eba28a56c	16415794-faab-4b48-a61e-e3a11be4f14d	f	2024-02-22 15:38:01.803091	\N	2024-02-22 15:38:01.80315	\N
+a3cc3c06-223a-4730-83d9-00bd6ccd8cd8	f0090ccf-d14a-11ee-a723-c03eba28a56c	16415794-faab-4b48-a61e-e3a11be4f14d	f	2024-02-22 15:39:09.765696	\N	2024-02-22 15:39:09.765698	\N
+d6f129b6-4b0e-4eba-a3ca-adfc096a9791	f007ccae-d14a-11ee-a723-c03eba28a56c	a6d1e91f-ef87-4635-93be-c6fc9fb6e3c6	f	2024-02-22 15:50:45.573777	\N	2024-02-22 15:50:45.57378	\N
+19272748-d78c-4fb8-b66e-0b6f08a48017	f0090ccf-d14a-11ee-a723-c03eba28a56c	a6d1e91f-ef87-4635-93be-c6fc9fb6e3c6	f	2024-02-22 15:54:27.640672	\N	2024-02-22 15:54:27.640673	\N
 \.
 
 
 --
--- TOC entry 5008 (class 0 OID 36042)
+-- TOC entry 5016 (class 0 OID 36042)
 -- Dependencies: 234
 -- Data for Name: ReservationItem; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -584,11 +642,20 @@ c1b9fdf2-f78a-4d2e-b235-996f12afb342	7105fe58-b56c-41dc-88b2-51f42d2618f3	6e1a07
 2c7ecb9b-0efb-4792-a7e5-840ee6ab3319	157db1cc-57b5-4330-ada1-e51f92848581	586ffbb9-c764-711e-3e14-ff34e57a0b9e	f	2024-02-22 14:09:21.104875	\N	2024-02-22 14:09:21.104877	\N
 c429fb4a-befc-4733-9d5f-d33601c9cf9d	157db1cc-57b5-4330-ada1-e51f92848581	6f1e560a-691c-b849-2788-181f4353bb5d	f	2024-02-22 14:09:21.108915	\N	2024-02-22 14:09:21.108917	\N
 f675f092-39a2-4c63-989e-d2433c1952ff	157db1cc-57b5-4330-ada1-e51f92848581	1e926d71-b430-008b-317b-af44259b24d8	f	2024-02-22 14:09:21.106817	\N	2024-02-22 14:09:21.106818	\N
+227fc44b-d743-4350-811c-1939d0839027	a2ed1a2a-0989-4cda-8e7d-76d29ff69b13	6e1a07c6-215f-ad63-24e4-16f7669dfe16	f	2024-02-22 15:38:01.88024	\N	2024-02-22 15:38:01.880241	\N
+4abe5079-e3ef-45d7-8bdb-b041736c663a	a2ed1a2a-0989-4cda-8e7d-76d29ff69b13	2dfb1d34-fb0e-a2b5-180d-3e93184c79eb	f	2024-02-22 15:38:01.878587	\N	2024-02-22 15:38:01.878617	\N
+8caf0497-9140-43a8-85fa-ce81dc619a5b	a3cc3c06-223a-4730-83d9-00bd6ccd8cd8	1e926d71-b430-008b-317b-af44259b24d8	f	2024-02-22 15:39:09.77687	\N	2024-02-22 15:39:09.776872	\N
+a20ae191-54ac-4df3-9a60-4fab6913f37c	a3cc3c06-223a-4730-83d9-00bd6ccd8cd8	6f1e560a-691c-b849-2788-181f4353bb5d	f	2024-02-22 15:39:09.77946	\N	2024-02-22 15:39:09.779461	\N
+e3727b1c-1fc1-4ff4-bc8f-b33ca388915f	a3cc3c06-223a-4730-83d9-00bd6ccd8cd8	586ffbb9-c764-711e-3e14-ff34e57a0b9e	f	2024-02-22 15:39:09.775207	\N	2024-02-22 15:39:09.775208	\N
+24198923-532c-4ec1-b49d-2f3dd4270b98	d6f129b6-4b0e-4eba-a3ca-adfc096a9791	2dfb1d34-fb0e-a2b5-180d-3e93184c79eb	f	2024-02-22 15:50:45.592266	\N	2024-02-22 15:50:45.592267	\N
+f86ebb6f-f778-426f-80bf-7b3c50835adb	d6f129b6-4b0e-4eba-a3ca-adfc096a9791	af5ce027-8e55-36f2-8416-f79116a6b0a9	f	2024-02-22 15:50:45.589802	\N	2024-02-22 15:50:45.589805	\N
+4ffebd8a-bd21-40cd-857d-c98522685e29	19272748-d78c-4fb8-b66e-0b6f08a48017	223ac2a9-d65b-9ba5-c5c1-0cb34fe5fafb	f	2024-02-22 15:54:27.65291	\N	2024-02-22 15:54:27.652911	\N
+74eba404-d16b-4d8c-9731-e8c9c8869dbd	19272748-d78c-4fb8-b66e-0b6f08a48017	dffc3239-c87b-ec72-e265-79845384df2c	f	2024-02-22 15:54:27.650848	\N	2024-02-22 15:54:27.65085	\N
 \.
 
 
 --
--- TOC entry 5000 (class 0 OID 35943)
+-- TOC entry 5008 (class 0 OID 35943)
 -- Dependencies: 226
 -- Data for Name: RoleClaims; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -598,7 +665,7 @@ COPY public."RoleClaims" ("Id", "RoleId", "ClaimType", "ClaimValue") FROM stdin;
 
 
 --
--- TOC entry 4994 (class 0 OID 35876)
+-- TOC entry 5002 (class 0 OID 35876)
 -- Dependencies: 220
 -- Data for Name: Roles; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -610,7 +677,7 @@ e989c4ca-e1e7-4f7e-9e6c-a014e87e89fc	Admin	ADMIN	dea2237f-0d72-41f8-afbb-8cd3864
 
 
 --
--- TOC entry 4995 (class 0 OID 35883)
+-- TOC entry 5003 (class 0 OID 35883)
 -- Dependencies: 221
 -- Data for Name: Seat; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -622,7 +689,6 @@ c6b7845d-72cf-a57b-7a10-d03d1f20cf12	C	3	f	2024-01-11 14:57:22.505058	\N	2024-01
 5efed4e9-4072-cb20-f131-2da9bdecaeef	E	5	f	2024-01-11 14:57:22.505058	\N	2024-01-11 14:57:22.505058	\N
 bd33fb71-66a3-cb98-385c-f381ec17c934	F	6	f	2024-01-11 14:57:22.505058	\N	2024-01-11 14:57:22.505058	\N
 c29bcf7a-15ad-bdad-5520-26c762d3d46b	G	7	f	2024-01-11 14:57:22.505058	\N	2024-01-11 14:57:22.505058	\N
-75f9bfc2-ec62-f0df-d62b-a3dd1dc13a6d	H	8	f	2024-01-11 14:57:22.505058	\N	2024-01-11 14:57:22.505058	\N
 e73d39f8-08ab-e663-3d50-8a26498b4e05	I	9	f	2024-01-11 14:57:22.505058	\N	2024-01-11 14:57:22.505058	\N
 ed389011-2aab-c4a1-d873-39e2723af753	J	10	f	2024-01-11 14:57:22.505058	\N	2024-01-11 14:57:22.505058	\N
 4b24b981-3604-54ae-72df-42807e56e5ab	K	11	f	2024-01-11 14:57:22.505058	\N	2024-01-11 14:57:22.505058	\N
@@ -666,7 +732,6 @@ c4cd76c7-cb8b-9c25-057f-f14779499bf1	C	2	f	2024-01-11 14:57:22.505058	\N	2024-01
 f479e3c0-1cd0-99c9-5719-98118e15f5c7	E	4	f	2024-01-11 14:57:22.505058	\N	2024-01-11 14:57:22.505058	\N
 b98fc675-18f8-8322-90b4-33a244276209	F	5	f	2024-01-11 14:57:22.505058	\N	2024-01-11 14:57:22.505058	\N
 f91a4bac-ccf9-6003-1076-7c2076e75314	G	6	f	2024-01-11 14:57:22.505058	\N	2024-01-11 14:57:22.505058	\N
-652017d6-5259-5492-27dd-b13ceb883c79	H	7	f	2024-01-11 14:57:22.505058	\N	2024-01-11 14:57:22.505058	\N
 6f7e14e5-8b8f-2e5f-bff9-69eda1e92161	I	8	f	2024-01-11 14:57:22.505058	\N	2024-01-11 14:57:22.505058	\N
 41ac3600-aa0c-2de1-68ff-efed39149101	J	9	f	2024-01-11 14:57:22.505058	\N	2024-01-11 14:57:22.505058	\N
 8deb2a0c-be5c-b767-778a-828230d13d81	K	10	f	2024-01-11 14:57:22.505058	\N	2024-01-11 14:57:22.505058	\N
@@ -710,7 +775,6 @@ f92e4669-4d5f-e4a7-620c-239a7f404d79	D	2	f	2024-01-11 14:57:22.505058	\N	2024-01
 be9a83f0-74fd-e086-d1f3-236f9156892c	E	3	f	2024-01-11 14:57:22.505058	\N	2024-01-11 14:57:22.505058	\N
 63fcd089-8850-e28d-2e04-e1fd8269b63b	F	4	f	2024-01-11 14:57:22.505058	\N	2024-01-11 14:57:22.505058	\N
 ad57cb58-fc10-1681-072b-3c8a2e1bdd37	G	5	f	2024-01-11 14:57:22.505058	\N	2024-01-11 14:57:22.505058	\N
-db4e20ed-c553-d371-5ec2-f277fa35358c	H	6	f	2024-01-11 14:57:22.505058	\N	2024-01-11 14:57:22.505058	\N
 121238cc-8c35-8ce1-45ef-6c78e5caa24f	I	7	f	2024-01-11 14:57:22.505058	\N	2024-01-11 14:57:22.505058	\N
 268257ef-eb22-e8e8-94ea-18b464146585	J	8	f	2024-01-11 14:57:22.505058	\N	2024-01-11 14:57:22.505058	\N
 f3f77826-9339-9e07-921f-f85ed8406df2	K	9	f	2024-01-11 14:57:22.505058	\N	2024-01-11 14:57:22.505058	\N
@@ -743,7 +807,6 @@ ca938e22-9178-425b-1a0b-b6c9c9611a46	D	5	f	2024-01-11 14:57:22.505058	\N	2024-01
 af5ce027-8e55-36f2-8416-f79116a6b0a9	E	6	f	2024-01-11 14:57:22.505058	\N	2024-01-11 14:57:22.505058	\N
 586ffbb9-c764-711e-3e14-ff34e57a0b9e	F	7	f	2024-01-11 14:57:22.505058	\N	2024-01-11 14:57:22.505058	\N
 1c9b6e25-2d47-6d9f-ae49-603f0f6238d7	G	8	f	2024-01-11 14:57:22.505058	\N	2024-01-11 14:57:22.505058	\N
-8230ad74-5b00-d8cd-afd1-b9ff3da093b7	H	9	f	2024-01-11 14:57:22.505058	\N	2024-01-11 14:57:22.505058	\N
 478290de-a415-8726-4d8b-a756d0654c16	I	10	f	2024-01-11 14:57:22.505058	\N	2024-01-11 14:57:22.505058	\N
 d4d6afef-d802-1180-e580-2c64d3660e4b	J	11	f	2024-01-11 14:57:22.505058	\N	2024-01-11 14:57:22.505058	\N
 5f27e9f6-e69a-1815-2dd2-e4850a6b378e	K	12	f	2024-01-11 14:57:22.505058	\N	2024-01-11 14:57:22.505058	\N
@@ -754,7 +817,6 @@ bb22243f-6e89-a74d-d67f-7efe91aeae24	D	1	f	2024-01-11 14:57:22.505058	\N	2024-01
 920115e0-35af-6b05-1bed-3ed6c6bbe094	E	2	f	2024-01-11 14:57:22.505058	\N	2024-01-11 14:57:22.505058	\N
 278607df-30c1-a447-4291-c508d54e655c	F	3	f	2024-01-11 14:57:22.505058	\N	2024-01-11 14:57:22.505058	\N
 223ac2a9-d65b-9ba5-c5c1-0cb34fe5fafb	G	4	f	2024-01-11 14:57:22.505058	\N	2024-01-11 14:57:22.505058	\N
-bcd1a059-1d94-d08e-7054-436a03c3184d	H	5	f	2024-01-11 14:57:22.505058	\N	2024-01-11 14:57:22.505058	\N
 7d25edd9-93b7-4ae9-c68e-20a1c42e1462	I	6	f	2024-01-11 14:57:22.505058	\N	2024-01-11 14:57:22.505058	\N
 86073c64-4594-296c-3f3a-eb954a5d2c9a	J	7	f	2024-01-11 14:57:22.505058	\N	2024-01-11 14:57:22.505058	\N
 995b872a-4cb5-e195-0f61-6186e9e595de	K	8	f	2024-01-11 14:57:22.505058	\N	2024-01-11 14:57:22.505058	\N
@@ -781,12 +843,16 @@ b12d30e5-6bba-3dd8-991e-67a65913e482	I	13	f	2024-01-11 14:57:22.505058	\N	2024-0
 1e480a89-d5f2-4b37-9de3-1d9fdfcefb35	J	14	f	2024-01-11 14:57:22.505058	\N	2024-01-11 14:57:22.505058	\N
 982e3621-28c4-80c7-bc63-ed2b97c60a25	K	15	f	2024-01-11 14:57:22.505058	\N	2024-01-11 14:57:22.505058	\N
 86a3fef7-0e3a-1a00-fcbe-159e2fb387b5	A	1	f	2024-01-11 14:57:22.505058	\N	2024-01-11 14:57:22.505058	\N
-3d973b66-6fb3-4f7e-84d8-abab8f4acc75	F	16	t	-infinity	\N	-infinity	\N
+bcd1a059-1d94-d08e-7054-436a03c3184d	H	5	f	2024-01-11 14:57:22.505058	\N	2024-01-11 14:57:22.505058	\N
+db4e20ed-c553-d371-5ec2-f277fa35358c	H	6	f	2024-01-11 14:57:22.505058	\N	2024-01-11 14:57:22.505058	\N
+75f9bfc2-ec62-f0df-d62b-a3dd1dc13a6d	H	8	f	2024-01-11 14:57:22.505058	\N	2024-01-11 14:57:22.505058	\N
+652017d6-5259-5492-27dd-b13ceb883c79	H	7	f	2024-01-11 14:57:22.505058	\N	2024-01-11 14:57:22.505058	\N
+8230ad74-5b00-d8cd-afd1-b9ff3da093b7	H	9	f	2024-01-11 14:57:22.505058	\N	2024-01-11 14:57:22.505058	\N
 \.
 
 
 --
--- TOC entry 4998 (class 0 OID 35922)
+-- TOC entry 5006 (class 0 OID 35922)
 -- Dependencies: 224
 -- Data for Name: Showtime; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -827,6 +893,7 @@ f016e35a-d14a-11ee-a723-c03eba28a56c	cb4f08f2-0379-4b40-9d1f-b27ae8c7a9a7	b0e45e
 f016e42e-d14a-11ee-a723-c03eba28a56c	cb4f08f2-0379-4b40-9d1f-b27ae8c7a9a7	b0e45ea2-443f-404f-9412-b97a6001f157	2024-02-23 19:20:00	40000	f	2024-02-22 13:23:46	NULL::character varying	2024-02-22 13:23:46	NULL::character varying
 f016e503-d14a-11ee-a723-c03eba28a56c	cb4f08f2-0379-4b40-9d1f-b27ae8c7a9a7	b0e45ea2-443f-404f-9412-b97a6001f157	2024-02-23 14:45:00	40000	f	2024-02-22 13:23:46	NULL::character varying	2024-02-22 13:23:46	NULL::character varying
 f016e7bd-d14a-11ee-a723-c03eba28a56c	cb4f08f2-0379-4b40-9d1f-b27ae8c7a9a7	b0e45ea2-443f-404f-9412-b97a6001f157	2024-02-23 19:25:00	40000	f	2024-02-22 13:23:46	NULL::character varying	2024-02-22 13:23:46	NULL::character varying
+f007ccae-d14a-11ee-a723-c03eba28a56c	4f296c4d-be10-4161-942d-161e8ceb21fa	0fdbe392-734d-402b-9399-d22bd37b6cee	2024-02-27 13:20:00	50000	f	2024-02-22 13:23:46	NULL::character varying	2024-02-22 15:49:48.217117	NULL::character varying
 b859737f-7e45-4a63-891d-fee01d8cd9bb	88072e16-0264-4498-ab30-ce5a67d5106e	ed75f9eb-4f2c-4448-aef8-7804178df564	2024-02-25 20:00:00	60000	f	2024-02-22 13:44:28.191035	\N	2024-02-22 13:44:28.191036	\N
 f016e8f7-d14a-11ee-a723-c03eba28a56c	cb4f08f2-0379-4b40-9d1f-b27ae8c7a9a7	b0e45ea2-443f-404f-9412-b97a6001f157	2024-02-27 10:35:00	40000	f	2024-02-22 13:23:46	NULL::character varying	2024-02-22 13:23:46	NULL::character varying
 f016e9ea-d14a-11ee-a723-c03eba28a56c	cb4f08f2-0379-4b40-9d1f-b27ae8c7a9a7	b0e45ea2-443f-404f-9412-b97a6001f157	2024-02-28 12:00:00	40000	f	2024-02-22 13:23:46	NULL::character varying	2024-02-22 13:23:46	NULL::character varying
@@ -1132,7 +1199,6 @@ f007cac3-d14a-11ee-a723-c03eba28a56c	3c4007ee-a12d-4a0b-b92a-1e40eca0b447	ed75f9
 f007cb16-d14a-11ee-a723-c03eba28a56c	3c4007ee-a12d-4a0b-b92a-1e40eca0b447	ed75f9eb-4f2c-4448-aef8-7804178df564	2024-02-27 16:00:00	40000	f	2024-02-22 13:23:46	NULL::character varying	2024-02-22 13:23:46	NULL::character varying
 f007cb69-d14a-11ee-a723-c03eba28a56c	3c4007ee-a12d-4a0b-b92a-1e40eca0b447	ed75f9eb-4f2c-4448-aef8-7804178df564	2024-02-22 09:15:00	40000	f	2024-02-22 13:23:46	NULL::character varying	2024-02-22 13:23:46	NULL::character varying
 f007cbbc-d14a-11ee-a723-c03eba28a56c	3c4007ee-a12d-4a0b-b92a-1e40eca0b447	ed75f9eb-4f2c-4448-aef8-7804178df564	2024-02-25 13:35:00	60000	f	2024-02-22 13:23:46	NULL::character varying	2024-02-22 13:23:46	NULL::character varying
-f007ccae-d14a-11ee-a723-c03eba28a56c	4f296c4d-be10-4161-942d-161e8ceb21fa	0fdbe392-734d-402b-9399-d22bd37b6cee	2024-02-27 13:20:00	40000	f	2024-02-22 13:23:46	NULL::character varying	2024-02-22 13:23:46	NULL::character varying
 f007cd2e-d14a-11ee-a723-c03eba28a56c	4f296c4d-be10-4161-942d-161e8ceb21fa	0fdbe392-734d-402b-9399-d22bd37b6cee	2024-02-25 17:10:00	60000	f	2024-02-22 13:23:46	NULL::character varying	2024-02-22 13:23:46	NULL::character varying
 f007cd95-d14a-11ee-a723-c03eba28a56c	4f296c4d-be10-4161-942d-161e8ceb21fa	0fdbe392-734d-402b-9399-d22bd37b6cee	2024-02-26 15:40:00	40000	f	2024-02-22 13:23:46	NULL::character varying	2024-02-22 13:23:46	NULL::character varying
 f007ce08-d14a-11ee-a723-c03eba28a56c	4f296c4d-be10-4161-942d-161e8ceb21fa	0fdbe392-734d-402b-9399-d22bd37b6cee	2024-02-28 18:25:00	40000	f	2024-02-22 13:23:46	NULL::character varying	2024-02-22 13:23:46	NULL::character varying
@@ -3824,20 +3890,22 @@ f016c78b-d14a-11ee-a723-c03eba28a56c	cb4f08f2-0379-4b40-9d1f-b27ae8c7a9a7	8f2c1f
 
 
 --
--- TOC entry 4996 (class 0 OID 35892)
+-- TOC entry 5004 (class 0 OID 35892)
 -- Dependencies: 222
 -- Data for Name: User; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public."User" ("Id", "FullName", "Password", "Role", "Avatar", "DeleteFlag", "CreatedDate", "CreatedBy", "ModifiedDate", "ModifiedBy", "UserName", "NormalizedUserName", "Email", "NormalizedEmail", "EmailConfirmed", "PasswordHash", "SecurityStamp", "ConcurrencyStamp", "PhoneNumber", "PhoneNumberConfirmed", "TwoFactorEnabled", "LockoutEnd", "LockoutEnabled", "AccessFailedCount") FROM stdin;
 a6d1e91f-ef87-4635-93be-c6fc9fb6e3c6	Admin	000000	Admin	hknbmqu1.jpg	f	2023-12-29 15:16:32.915467	\N	2023-12-29 15:16:32.915467	\N	Admin	ADMIN	kiaisoft.anh.tang@gmail.com	KIAISOFT.ANH.TANG@GMAIL.COM	f	AQAAAAEAACcQAAAAEBlwxq4+Vg2Wa2FAqAkgUE77BX1VakNo84I3/+EJC2U7ZbIUR329fMYtkSH3Aooolw==	4X6CCTXQY77LAAMD3AU6IKXTLAB7DWWE	e5935268-0dfd-479e-9c82-c8104e649274	\N	f	f	\N	t	0
+31512bef-a7d1-41b7-b18a-bd189462f8e5	anhtheit2002@gmail.com	anhtheit2002@gmail.com	Customer	v5whr5ub.png	f	2024-02-22 15:39:33.32779	\N	2024-02-22 15:39:53.245816	\N	anhtheit2002@gmail.com	ANHTHEIT2002@GMAIL.COM	anhtheit2002@gmail.com	ANHTHEIT2002@GMAIL.COM	f	\N	XLFWANOAREN6MAUTWDBGOUKHJLFAJFAU	f42e8a0f-cf92-4471-b214-d062e9854798	\N	f	f	\N	t	0
 14b86ecb-6a86-4299-b794-963dfbe5a193	Test User	123456	Customer	\N	f	2024-02-22 11:38:14.1877	\N	2024-02-22 11:38:14.1877	\N	testuser	TESTUSER	tangtheanh123456789@gmail.com	TANGTHEANH123456789@GMAIL.COM	f	AQAAAAEAACcQAAAAEPqiR7MFoWUBc/QxhLA8BcC/N2dM5vBZwflEF213GAHtdvaCnhvgzh031Od7s0gj5A==	RQGMUV2N2Q4TLIA63BPSKFTE5QVXFOJ5	60569c1a-9dde-4f02-bbce-a9b6271061c7	\N	f	f	\N	t	0
 bde51f66-8ea7-473a-b96c-64eb479ef294	tangtheanh123456789@gmail.com	tangtheanh123456789@gmail.com	Customer	\N	f	2024-02-22 14:02:10.923338	\N	2024-02-22 14:02:10.923338	\N	tangtheanh123456789@gmail.com	TANGTHEANH123456789@GMAIL.COM	tangtheanh123456789@gmail.com	TANGTHEANH123456789@GMAIL.COM	f	\N	HR44WFMNHAQHDN42EJ25FNDLS2EFEPEZ	72b3bd7b-1844-40e9-8a6c-f2dcdbcef749	\N	f	f	\N	t	0
+16415794-faab-4b48-a61e-e3a11be4f14d	Thế Anh	123456	Customer	\N	f	2024-02-22 15:36:35.080318	\N	2024-02-22 15:36:35.080318	\N	theanh	THEANH	kiaisoft.anh.tang@gmail.com	KIAISOFT.ANH.TANG@GMAIL.COM	f	AQAAAAEAACcQAAAAEKC/iaYgFemnTkb4Na0dl14YWWCOcUoF3tdrZ4DHG65DQ07MDoOQDYSpvABSUiKQfw==	HBNTTS3K2FHUPXI5Y7AHCRECFGU6JXXZ	780c1ba9-125d-4686-afb2-91279de99db0	\N	f	f	\N	t	0
 \.
 
 
 --
--- TOC entry 5002 (class 0 OID 35956)
+-- TOC entry 5010 (class 0 OID 35956)
 -- Dependencies: 228
 -- Data for Name: UserClaims; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -3847,18 +3915,19 @@ COPY public."UserClaims" ("Id", "UserId", "ClaimType", "ClaimValue") FROM stdin;
 
 
 --
--- TOC entry 5003 (class 0 OID 35968)
+-- TOC entry 5011 (class 0 OID 35968)
 -- Dependencies: 229
 -- Data for Name: UserLogins; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public."UserLogins" ("LoginProvider", "ProviderKey", "ProviderDisplayName", "UserId") FROM stdin;
 Google	105982558848847467093	Google	bde51f66-8ea7-473a-b96c-64eb479ef294
+Google	105847268326525868540	Google	31512bef-a7d1-41b7-b18a-bd189462f8e5
 \.
 
 
 --
--- TOC entry 5004 (class 0 OID 35980)
+-- TOC entry 5012 (class 0 OID 35980)
 -- Dependencies: 230
 -- Data for Name: UserRoles; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -3867,11 +3936,13 @@ COPY public."UserRoles" ("UserId", "RoleId") FROM stdin;
 a6d1e91f-ef87-4635-93be-c6fc9fb6e3c6	e989c4ca-e1e7-4f7e-9e6c-a014e87e89fc
 14b86ecb-6a86-4299-b794-963dfbe5a193	7a6f0e8b-0705-4eaf-9714-14819cef32e8
 bde51f66-8ea7-473a-b96c-64eb479ef294	7a6f0e8b-0705-4eaf-9714-14819cef32e8
+16415794-faab-4b48-a61e-e3a11be4f14d	7a6f0e8b-0705-4eaf-9714-14819cef32e8
+31512bef-a7d1-41b7-b18a-bd189462f8e5	7a6f0e8b-0705-4eaf-9714-14819cef32e8
 \.
 
 
 --
--- TOC entry 5005 (class 0 OID 35997)
+-- TOC entry 5013 (class 0 OID 35997)
 -- Dependencies: 231
 -- Data for Name: UserTokens; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -3881,7 +3952,7 @@ COPY public."UserTokens" ("UserId", "LoginProvider", "Name", "Value") FROM stdin
 
 
 --
--- TOC entry 4990 (class 0 OID 35841)
+-- TOC entry 4998 (class 0 OID 35841)
 -- Dependencies: 216
 -- Data for Name: __EFMigrationsHistory; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -3892,7 +3963,7 @@ COPY public."__EFMigrationsHistory" ("MigrationId", "ProductVersion") FROM stdin
 
 
 --
--- TOC entry 5015 (class 0 OID 0)
+-- TOC entry 5024 (class 0 OID 0)
 -- Dependencies: 225
 -- Name: RoleClaims_Id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -3901,7 +3972,7 @@ SELECT pg_catalog.setval('public."RoleClaims_Id_seq"', 1, false);
 
 
 --
--- TOC entry 5016 (class 0 OID 0)
+-- TOC entry 5025 (class 0 OID 0)
 -- Dependencies: 227
 -- Name: UserClaims_Id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -3910,7 +3981,7 @@ SELECT pg_catalog.setval('public."UserClaims_Id_seq"', 1, false);
 
 
 --
--- TOC entry 4814 (class 2606 OID 35949)
+-- TOC entry 4818 (class 2606 OID 35949)
 -- Name: RoleClaims PK_RoleClaims; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3919,7 +3990,7 @@ ALTER TABLE ONLY public."RoleClaims"
 
 
 --
--- TOC entry 4800 (class 2606 OID 35882)
+-- TOC entry 4804 (class 2606 OID 35882)
 -- Name: Roles PK_Roles; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3928,7 +3999,7 @@ ALTER TABLE ONLY public."Roles"
 
 
 --
--- TOC entry 4817 (class 2606 OID 35962)
+-- TOC entry 4821 (class 2606 OID 35962)
 -- Name: UserClaims PK_UserClaims; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3937,7 +4008,7 @@ ALTER TABLE ONLY public."UserClaims"
 
 
 --
--- TOC entry 4820 (class 2606 OID 35974)
+-- TOC entry 4824 (class 2606 OID 35974)
 -- Name: UserLogins PK_UserLogins; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3946,7 +4017,7 @@ ALTER TABLE ONLY public."UserLogins"
 
 
 --
--- TOC entry 4823 (class 2606 OID 35986)
+-- TOC entry 4827 (class 2606 OID 35986)
 -- Name: UserRoles PK_UserRoles; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3955,7 +4026,7 @@ ALTER TABLE ONLY public."UserRoles"
 
 
 --
--- TOC entry 4825 (class 2606 OID 36003)
+-- TOC entry 4829 (class 2606 OID 36003)
 -- Name: UserTokens PK_UserTokens; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3964,7 +4035,7 @@ ALTER TABLE ONLY public."UserTokens"
 
 
 --
--- TOC entry 4791 (class 2606 OID 35845)
+-- TOC entry 4795 (class 2606 OID 35845)
 -- Name: __EFMigrationsHistory PK___EFMigrationsHistory; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3973,7 +4044,7 @@ ALTER TABLE ONLY public."__EFMigrationsHistory"
 
 
 --
--- TOC entry 4793 (class 2606 OID 35854)
+-- TOC entry 4797 (class 2606 OID 35854)
 -- Name: Category category_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3982,7 +4053,7 @@ ALTER TABLE ONLY public."Category"
 
 
 --
--- TOC entry 4795 (class 2606 OID 35863)
+-- TOC entry 4799 (class 2606 OID 35863)
 -- Name: Cinema cinema_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -3991,7 +4062,7 @@ ALTER TABLE ONLY public."Cinema"
 
 
 --
--- TOC entry 4809 (class 2606 OID 35911)
+-- TOC entry 4813 (class 2606 OID 35911)
 -- Name: MovieCategory movie_category_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -4000,7 +4071,7 @@ ALTER TABLE ONLY public."MovieCategory"
 
 
 --
--- TOC entry 4798 (class 2606 OID 35875)
+-- TOC entry 4802 (class 2606 OID 35875)
 -- Name: Movie movie_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -4009,7 +4080,7 @@ ALTER TABLE ONLY public."Movie"
 
 
 --
--- TOC entry 4829 (class 2606 OID 36036)
+-- TOC entry 4833 (class 2606 OID 36036)
 -- Name: Payment payment_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -4018,7 +4089,16 @@ ALTER TABLE ONLY public."Payment"
 
 
 --
--- TOC entry 4831 (class 2606 OID 36050)
+-- TOC entry 4837 (class 2606 OID 52726)
+-- Name: ProcessSeat processseat_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."ProcessSeat"
+    ADD CONSTRAINT processseat_pk PRIMARY KEY ("Id");
+
+
+--
+-- TOC entry 4835 (class 2606 OID 36050)
 -- Name: ReservationItem reservation_item_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -4027,7 +4107,7 @@ ALTER TABLE ONLY public."ReservationItem"
 
 
 --
--- TOC entry 4827 (class 2606 OID 36017)
+-- TOC entry 4831 (class 2606 OID 36017)
 -- Name: Reservation reservation_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -4036,7 +4116,7 @@ ALTER TABLE ONLY public."Reservation"
 
 
 --
--- TOC entry 4803 (class 2606 OID 35891)
+-- TOC entry 4807 (class 2606 OID 35891)
 -- Name: Seat seat_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -4045,7 +4125,7 @@ ALTER TABLE ONLY public."Seat"
 
 
 --
--- TOC entry 4811 (class 2606 OID 35931)
+-- TOC entry 4815 (class 2606 OID 35931)
 -- Name: Showtime showtime_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -4054,7 +4134,7 @@ ALTER TABLE ONLY public."Showtime"
 
 
 --
--- TOC entry 4807 (class 2606 OID 35902)
+-- TOC entry 4811 (class 2606 OID 35902)
 -- Name: User user_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -4063,7 +4143,7 @@ ALTER TABLE ONLY public."User"
 
 
 --
--- TOC entry 4804 (class 1259 OID 36063)
+-- TOC entry 4808 (class 1259 OID 36063)
 -- Name: EmailIndex; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -4071,7 +4151,7 @@ CREATE INDEX "EmailIndex" ON public."User" USING btree ("NormalizedEmail");
 
 
 --
--- TOC entry 4812 (class 1259 OID 36061)
+-- TOC entry 4816 (class 1259 OID 36061)
 -- Name: IX_RoleClaims_RoleId; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -4079,7 +4159,7 @@ CREATE INDEX "IX_RoleClaims_RoleId" ON public."RoleClaims" USING btree ("RoleId"
 
 
 --
--- TOC entry 4815 (class 1259 OID 36065)
+-- TOC entry 4819 (class 1259 OID 36065)
 -- Name: IX_UserClaims_UserId; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -4087,7 +4167,7 @@ CREATE INDEX "IX_UserClaims_UserId" ON public."UserClaims" USING btree ("UserId"
 
 
 --
--- TOC entry 4818 (class 1259 OID 36066)
+-- TOC entry 4822 (class 1259 OID 36066)
 -- Name: IX_UserLogins_UserId; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -4095,7 +4175,7 @@ CREATE INDEX "IX_UserLogins_UserId" ON public."UserLogins" USING btree ("UserId"
 
 
 --
--- TOC entry 4821 (class 1259 OID 36067)
+-- TOC entry 4825 (class 1259 OID 36067)
 -- Name: IX_UserRoles_RoleId; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -4103,7 +4183,7 @@ CREATE INDEX "IX_UserRoles_RoleId" ON public."UserRoles" USING btree ("RoleId");
 
 
 --
--- TOC entry 4801 (class 1259 OID 36062)
+-- TOC entry 4805 (class 1259 OID 36062)
 -- Name: RoleNameIndex; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -4111,7 +4191,7 @@ CREATE UNIQUE INDEX "RoleNameIndex" ON public."Roles" USING btree ("NormalizedNa
 
 
 --
--- TOC entry 4805 (class 1259 OID 36064)
+-- TOC entry 4809 (class 1259 OID 36064)
 -- Name: UserNameIndex; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -4119,7 +4199,7 @@ CREATE UNIQUE INDEX "UserNameIndex" ON public."User" USING btree ("NormalizedUse
 
 
 --
--- TOC entry 4796 (class 1259 OID 36069)
+-- TOC entry 4800 (class 1259 OID 36069)
 -- Name: movie_moviename_idx; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -4127,7 +4207,7 @@ CREATE INDEX movie_moviename_idx ON public."Movie" USING btree ("MovieName");
 
 
 --
--- TOC entry 4836 (class 2606 OID 35950)
+-- TOC entry 4842 (class 2606 OID 35950)
 -- Name: RoleClaims FK_RoleClaims_Roles_RoleId; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -4136,7 +4216,7 @@ ALTER TABLE ONLY public."RoleClaims"
 
 
 --
--- TOC entry 4837 (class 2606 OID 35963)
+-- TOC entry 4843 (class 2606 OID 35963)
 -- Name: UserClaims FK_UserClaims_User_UserId; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -4145,7 +4225,7 @@ ALTER TABLE ONLY public."UserClaims"
 
 
 --
--- TOC entry 4838 (class 2606 OID 35975)
+-- TOC entry 4844 (class 2606 OID 35975)
 -- Name: UserLogins FK_UserLogins_User_UserId; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -4154,7 +4234,7 @@ ALTER TABLE ONLY public."UserLogins"
 
 
 --
--- TOC entry 4839 (class 2606 OID 35987)
+-- TOC entry 4845 (class 2606 OID 35987)
 -- Name: UserRoles FK_UserRoles_Roles_RoleId; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -4163,7 +4243,7 @@ ALTER TABLE ONLY public."UserRoles"
 
 
 --
--- TOC entry 4840 (class 2606 OID 35992)
+-- TOC entry 4846 (class 2606 OID 35992)
 -- Name: UserRoles FK_UserRoles_User_UserId; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -4172,7 +4252,7 @@ ALTER TABLE ONLY public."UserRoles"
 
 
 --
--- TOC entry 4841 (class 2606 OID 36004)
+-- TOC entry 4847 (class 2606 OID 36004)
 -- Name: UserTokens FK_UserTokens_User_UserId; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -4181,7 +4261,7 @@ ALTER TABLE ONLY public."UserTokens"
 
 
 --
--- TOC entry 4832 (class 2606 OID 52492)
+-- TOC entry 4838 (class 2606 OID 52492)
 -- Name: MovieCategory moviecategory_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -4190,7 +4270,7 @@ ALTER TABLE ONLY public."MovieCategory"
 
 
 --
--- TOC entry 4833 (class 2606 OID 52497)
+-- TOC entry 4839 (class 2606 OID 52497)
 -- Name: MovieCategory moviecategory_fk_1; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -4199,7 +4279,7 @@ ALTER TABLE ONLY public."MovieCategory"
 
 
 --
--- TOC entry 4844 (class 2606 OID 52502)
+-- TOC entry 4850 (class 2606 OID 52502)
 -- Name: Payment payment_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -4208,7 +4288,25 @@ ALTER TABLE ONLY public."Payment"
 
 
 --
--- TOC entry 4842 (class 2606 OID 52507)
+-- TOC entry 4853 (class 2606 OID 52727)
+-- Name: ProcessSeat processseat_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."ProcessSeat"
+    ADD CONSTRAINT processseat_fk FOREIGN KEY ("ShowtimeId") REFERENCES public."Showtime"("Id");
+
+
+--
+-- TOC entry 4854 (class 2606 OID 52732)
+-- Name: ProcessSeat processseat_fk_1; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."ProcessSeat"
+    ADD CONSTRAINT processseat_fk_1 FOREIGN KEY ("SeatId") REFERENCES public."Seat"("Id");
+
+
+--
+-- TOC entry 4848 (class 2606 OID 52507)
 -- Name: Reservation reservation_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -4217,7 +4315,7 @@ ALTER TABLE ONLY public."Reservation"
 
 
 --
--- TOC entry 4843 (class 2606 OID 52512)
+-- TOC entry 4849 (class 2606 OID 52512)
 -- Name: Reservation reservation_fk_1; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -4226,7 +4324,7 @@ ALTER TABLE ONLY public."Reservation"
 
 
 --
--- TOC entry 4845 (class 2606 OID 52517)
+-- TOC entry 4851 (class 2606 OID 52517)
 -- Name: ReservationItem reservationitem_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -4235,7 +4333,7 @@ ALTER TABLE ONLY public."ReservationItem"
 
 
 --
--- TOC entry 4846 (class 2606 OID 52522)
+-- TOC entry 4852 (class 2606 OID 52522)
 -- Name: ReservationItem reservationitem_fk_1; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -4244,7 +4342,7 @@ ALTER TABLE ONLY public."ReservationItem"
 
 
 --
--- TOC entry 4834 (class 2606 OID 52527)
+-- TOC entry 4840 (class 2606 OID 52527)
 -- Name: Showtime showtime_fk_2; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -4253,7 +4351,7 @@ ALTER TABLE ONLY public."Showtime"
 
 
 --
--- TOC entry 4835 (class 2606 OID 52532)
+-- TOC entry 4841 (class 2606 OID 52532)
 -- Name: Showtime showtime_fk_3; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -4261,7 +4359,7 @@ ALTER TABLE ONLY public."Showtime"
     ADD CONSTRAINT showtime_fk_3 FOREIGN KEY ("CinemaId") REFERENCES public."Cinema"("Id");
 
 
--- Completed on 2024-02-22 14:11:55
+-- Completed on 2024-02-26 10:18:55
 
 --
 -- PostgreSQL database dump complete

@@ -3,6 +3,7 @@ using BetaCinema.Infrastructure;
 using BetaCinema.Infrastructure.Persistence;
 using BetaCinema.ServerUI.Hubs;
 using BetaCinema.ServerUI.Middlewares;
+using Hangfire;
 using MudBlazor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,8 +12,10 @@ var builder = WebApplication.CreateBuilder(args);
     builder.Services.AddRazorPages();
     builder.Services.AddServerSideBlazor();
 
+    // Add signalR hubs
     builder.Services.AddSignalR();
 
+    // Add Mudblazor
     builder.Services.AddMudServices(config =>
     {
         config.SnackbarConfiguration.PositionClass = Defaults.Classes.Position.BottomRight;
@@ -61,9 +64,14 @@ var app = builder.Build();
     app.UseAuthentication();
     app.UseAuthorization();
 
+    // Using hubs 
     app.MapBlazorHub();
     app.MapHub<ProcessSeatHub>("/signalRHub");
     app.MapFallbackToPage("/_Host");
+
+    // Using hangfire
+    app.UseHangfireDashboard(); //Will be available under http://localhost:5000/hangfire"
+    app.UseHangfireServer();
 
     app.UseMiddleware<ErrorHandlerMiddleware>();
 

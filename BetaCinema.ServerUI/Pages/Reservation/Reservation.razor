@@ -48,7 +48,7 @@
 
                             <span class="price-divider"></span>
 
-                            <MudStack Spacing="3" Class="px-2" Style="width:20%">
+                            <MudStack Spacing="3" Class="px-2 justify-content-between" Style="width:20%">
                                 <p class="total-price-title">Tổng tiền</p>
                                 <p class="total-price">@($"{totalPrice.ToString("#,##0")} vnđ")</p>
                             </MudStack>
@@ -57,7 +57,7 @@
 
                             <MudStack Spacing="3" Class="px-2" Style="width:28%">
                                 <p class="timer-title">Thời gian còn lại</p>
-                                <p class="timer-count">@($"{totalPrice.ToString("#,##0")}")</p>
+                                <p class="timer-count">@Time</p>
                             </MudStack>
                         </MudPaper>
 

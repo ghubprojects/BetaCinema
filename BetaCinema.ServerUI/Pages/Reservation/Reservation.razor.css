@@ -112,6 +112,7 @@
     font-size: 18px;
     color: #03599d;
     text-align: right;
+    line-height: 1.5;
 }
 
 .timer-count {

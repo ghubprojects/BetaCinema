@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Hangfire;
+using Hangfire.PostgreSql;
+using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
 namespace BetaCinema.Application
@@ -12,6 +14,9 @@ namespace BetaCinema.Application
 
             // DI mediator to implement CQRS
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
+
+            // Add Hangfire
+            services.AddHangfire(x => x.UsePostgreSqlStorage("Server=localhost;Port=5432;Database=beta_cinema.hangfire;Uid=postgres;Pwd=MyAl1705!!!;"));
 
             return services;
         }

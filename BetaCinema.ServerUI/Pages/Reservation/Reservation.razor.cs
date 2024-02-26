@@ -8,10 +8,11 @@ using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Primitives;
+using System.Timers;
 
 namespace BetaCinema.ServerUI.Pages.Reservation
 {
-    public class ReservationBase : ComponentBase
+    public class ReservationBase : ComponentBase, IDisposable
     {
         [Inject] private IMediator Mediator { get; set; }
 
@@ -216,6 +217,71 @@ namespace BetaCinema.ServerUI.Pages.Reservation
             }
 
             return roomSeats;
+        }
+
+        int countdownTime = 60;
+        protected override void OnAfterRender(bool firstRender)
+        {
+            if (firstRender)
+            {
+                Start(countdownTime);
+            }
+        }
+
+        /// <summary>
+        /// Countdown timer
+        /// </summary>
+        private System.Timers.Timer _timer = null!;
+        private int _secondsToRun = 0;
+
+        protected string Time { get; set; } = "00:00";
+
+        public void Start(int secondsToRun)
+        {
+            _secondsToRun = secondsToRun;
+
+            if (_secondsToRun > 0)
+            {
+                Time = TimeSpan.FromSeconds(_secondsToRun).ToString(@"mm\:ss");
+                StateHasChanged();
+                _timer.Start();
+            }
+        }
+
+        protected override void OnInitialized()
+        {
+            _timer = new System.Timers.Timer(1000);
+            _timer.Elapsed += OnTimedEvent;
+            _timer.AutoReset = true;
+        }
+
+        private async void OnTimedEvent(object? sender, ElapsedEventArgs e)
+        {
+            _secondsToRun--;
+
+            await InvokeAsync(() =>
+            {
+                Time = TimeSpan.FromSeconds(_secondsToRun).ToString(@"mm\:ss");
+                StateHasChanged();
+            });
+
+            if (_secondsToRun <= 0)
+            {
+                _timer.Stop();
+                await TimerOutCallback();
+            }
+        }
+
+        public void Dispose()
+        {
+            _timer.Dispose();
+        }
+
+        public async Task TimerOutCallback()
+        {
+            selectedSeats.Clear();
+            await hubConnection.SendAsync("SendUpdateProcessSeatsAsync", ShowtimeData.Id);
+            Navigation.NavigateTo("home");
         }
 
         protected async void ToggleSelectSeat(Seat seat)

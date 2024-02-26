@@ -2,7 +2,9 @@
 using BetaCinema.Domain.Models;
 using BetaCinema.Domain.Resources;
 using BetaCinema.Domain.Wrappers;
+using Hangfire;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace BetaCinema.Application.Features.ProcessSeats.Commands
 {
@@ -38,12 +40,22 @@ namespace BetaCinema.Application.Features.ProcessSeats.Commands
 
                 _context.ProcessSeats.Add(newItem);
                 await _context.SaveChangesAsync(cancellationToken);
+
+                BackgroundJob.Schedule(() => AutoDeleteAfterTimeout(newItem, cancellationToken), TimeSpan.FromSeconds(60));
+
                 return new ServiceResult(true);
             }
             catch (Exception)
             {
                 return new ServiceResult(false, ErrorResources.UnhandledError);
             }
+        }
+
+        public async Task AutoDeleteAfterTimeout(ProcessSeat item, CancellationToken cancellationToken)
+        {
+            item.DeleteFlag = true;
+            _context.Entry(item).State = EntityState.Modified;
+            await _context.SaveChangesAsync(cancellationToken);
         }
     }
 }
